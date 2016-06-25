@@ -45,7 +45,7 @@ namespace pmu {
       }
     }
 
-    void logger::set_name(const std::string name){
+    void logger::set_name(const std::string &name){
       _name = name ;
       _pattern = std::string(PMU_LOG_PATTERN) + _name + ": " ;
     };
@@ -57,17 +57,20 @@ namespace pmu {
     const std::string logger::date_time(){
       int  size = 100;
       char buffer[size];
+      char target[size];
 
       memset(buffer,0,size);
+      memset(target,0,size);
+
       timeval current_time;
       gettimeofday(&current_time, NULL);
       int millis = current_time.tv_usec / 1000;
 
       strftime(buffer, size-1, "%d/%m/%Y %Z %T", localtime(&current_time.tv_sec));
 
-      snprintf(buffer, size-1, "%s.%d", buffer, millis);
+      snprintf(target, size-1, "%s.%d", buffer, millis);
 
-      return std::string(buffer);
+      return std::string(target);
     }
 
   } // namespace log

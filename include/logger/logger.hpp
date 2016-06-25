@@ -60,15 +60,6 @@ namespace pmu {
     typedef std::shared_ptr<pmu::log::logger>      logger_ptr; //!< shared pointer to a logger instance
 #endif
 
-    /** Searches the registry for the wanted logger instance.
-     *
-     * If the logger doesn't exist, then a new one is created and registered.
-     *
-     * @param name logger name
-     * @return a logger instance
-     */
-    logger_ptr get (const std::string name );
-
     /** handles log messages.
      *
      * @author herbert koelman (herbert.koelman@pmu.fr)
@@ -81,7 +72,7 @@ namespace pmu {
        * @param fmt chaine de formattage (see printf for more informations)
        * @param args arguments sp.cifique . imprimer
        */
-      template<typename... Args> void debug( const std::string fmt, const Args&... args){
+      template<typename... Args> void debug( const std::string &fmt, const Args&... args){
           log(log_levels::debug, fmt, args...);
       };
 
@@ -90,7 +81,7 @@ namespace pmu {
        * @param fmt chaine de formattage (see printf for more informations)
        * @param args arguments specifying data to print.
        */
-      template<typename... Args> void info( const std::string fmt, const Args&... args){
+      template<typename... Args> void info( const std::string &fmt, const Args&... args){
           log(log_levels::info, fmt, args...);
       };
 
@@ -99,7 +90,7 @@ namespace pmu {
        * @param fmt chaine de formattage (see printf for more informations)
        * @param args arguments specifying data to print.
        */
-      template<typename... Args> void notice( const std::string fmt, const Args&... args){
+      template<typename... Args> void notice( const std::string &fmt, const Args&... args){
           log(log_levels::notice, fmt, args...);
       };
 
@@ -108,7 +99,7 @@ namespace pmu {
        * @param fmt chaine de formattage (see printf for more informations.
        * @param args arguments specifying data to print.
        */
-      template<typename... Args> void warning( const std::string fmt, const Args&... args){
+      template<typename... Args> void warning( const std::string &fmt, const Args&... args){
           log(log_levels::warning, fmt, args...);
       };
 
@@ -117,7 +108,7 @@ namespace pmu {
        * @param fmt chaine de formattage (see printf for more informations)
        * @param args arguments specifying data to print.
        */
-      template<typename... Args> void err( const std::string fmt, const Args&... args){
+      template<typename... Args> void err( const std::string &fmt, const Args&... args){
           log(log_levels::err, fmt, args...);
       };
 
@@ -126,7 +117,7 @@ namespace pmu {
        * @param fmt chaine de formattage (see printf for more informations)
        * @param args arguments specifying data to print.
        */
-      template<typename... Args> void crit( const std::string fmt, const Args&... args){
+      template<typename... Args> void crit( const std::string &fmt, const Args&... args){
           log(log_levels::crit, fmt, args...);
       };
 
@@ -135,7 +126,7 @@ namespace pmu {
        * @param fmt chaine de formattage (see printf for more informations)
        * @param args arguments specifying data to print.
        */
-      template<typename... Args> void alert( const std::string fmt, const Args&... args){
+      template<typename... Args> void alert( const std::string &fmt, const Args&... args){
           log(log_levels::alert, fmt, args...);
       };
 
@@ -144,7 +135,7 @@ namespace pmu {
        * @param fmt chaine de formattage (see printf for more informations)
        * @param args arguments specifying data to print.
        */
-      template<typename... Args> void emerg( const std::string fmt, const Args&... args){
+      template<typename... Args> void emerg( const std::string &fmt, const Args&... args){
           log(log_levels::emerg, fmt, args...);
       };
 
@@ -154,18 +145,18 @@ namespace pmu {
        * @param fmt formatting string (see printf for more informations)
        * @param args message arguments
        */
-      template<typename... Args> void log( log_level level, const std::string fmt, const Args&... args){
+      template<typename... Args> void log( log_level level, const std::string &fmt, const Args&... args){
         if ( _level >= level) {
 
           // we make a copy of the formatting string (fmt) because we receive a const string 
           // and want to change things in it
-          std::string _format = fmt; 
+          std::string format = fmt; 
 
           printf(
                 // first, we build a format pattern made of the current pattern (which will hold the prefix and the fmt received
                 (
                   _pattern +
-                  (_format.at(_format.size()-1) == '\n' ? _format : _format += '\n') // handle string termination
+                  (format.at(format.size()-1) == '\n' ? format : format += '\n') // handle string termination
                 ).c_str(),
               _level,
               date_time().c_str(),
@@ -239,7 +230,7 @@ namespace pmu {
        *
        * @param name logger name (i.e. some/thing)
        */
-       void set_name(const std::string name);
+       void set_name(const std::string &name);
 
       std::string  _name ;
       std::string  _pattern;

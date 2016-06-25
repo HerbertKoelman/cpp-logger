@@ -18,6 +18,16 @@
 namespace pmu {
   namespace log {
 
+
+    /** Searches the registry for the wanted logger instance.
+     *
+     * If the logger doesn't exist, then a new one is created and registered.
+     *
+     * @param name logger name
+     * @return a logger instance
+     */
+    logger_ptr get (const std::string &name );
+
     /** wraps a map of logger map
      */
     class registry {
@@ -31,7 +41,7 @@ namespace pmu {
          *
          * @param name name of the logger to unregister.
          */
-        void remove(const std::string name);
+        void remove(const std::string &name);
 
         /** set the log level of all registered loggers
          *
@@ -53,7 +63,7 @@ namespace pmu {
 
         /** @return a logger instance (if not found a new one is created)
          */
-        logger_ptr get(const std::string name);
+        logger_ptr get(const std::string &name);
 
         ~registry();
 
@@ -80,15 +90,6 @@ namespace pmu {
 
         static registry       _registry; //!< singleton
     };
-
-    /** Searches the registry for the wanted logger instance.
-     *
-     * If the logger doesn't exist, then a new one is created and registered.
-     *
-     * @param name logger name
-     * @return a logger instance
-     */
-    logger_ptr get (const std::string name );
     
   } // namespace log
 } // namespace pmu
