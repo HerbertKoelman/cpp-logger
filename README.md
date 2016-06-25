@@ -20,15 +20,15 @@ Doxygen [documentation]() can be generated with this command. I hope this help m
 
 The `make` target `pkg` will produce au tar.gz that can be distributed.
 
-  INFO On an Intel NUC, this library logs 200,000 messages/s
+> INFO On an Intel NUC, this library logs 200,000 messages/s
 
 ### How to use it
 
 Sample code can be found in the `tests` directory. To use it, run the following commands:
 
-  cd tests
-  ./configure
-  ./make
+    cd tests
+    ./configure
+    ./make
 
 ### Dependencies
 
