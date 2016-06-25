@@ -56,7 +56,7 @@ AC_SUBST(TARGETS,$TARGETS)
 AC_MSG_CHECKING([for specific $CXX compiler options])
 case "$CXX" in
   xlC_r | xlC)
-    CPPFLAGS="-qlanglvl=extended0x:decltype:static_assert:rvaluereferences $CPPFLAGS"
+    CPPFLAGS="-D__IBMCPP_TR1__ -qlanglvl=extended0x:decltype:static_assert:rvaluereferences $CPPFLAGS"
     CFLAGS="-qmaxmem=-1 -q$BITS $CFLAGS"
     CXXFLAGS="-O"
     LDFLAGS="$LDFLAGS -brtl -bmaxdata:0x80000000"

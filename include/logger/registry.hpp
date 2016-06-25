@@ -43,6 +43,10 @@ namespace pmu {
          */
         void reset();
 
+        /**  this is the log level that will be set when a new logger is instanciated.
+         *
+         * @return registry log level
+         */
         log_level level() const{
           return _level;
         }

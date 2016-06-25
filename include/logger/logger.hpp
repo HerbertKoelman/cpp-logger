@@ -69,18 +69,7 @@ namespace pmu {
      */
     logger_ptr get (const std::string name );
 
-    /** Impl.mentation C++ de la fonctionnalit. 
-     *
-     * Ci-apr.s un exemple d'utilisation.
-     *
-     * <pre><code>
-     * ...
-     * logger log;
-     * log.set_level(log_levels::debug);
-     * log.debug("DEBUG decimal: %d %ld [%10d], different radices:%d %x %o %#x %#o, Padding: [%15s] [%-15s]", 1977, 650000L, 1977,100, 100, 100, 100, 100, "right", "left");
-     * log.info("INFO decimal: %d %ld [%10d], different radices:%d %x %o %#x %#o, Padding: [%15s] [%-15s]", 1977, 650000L, 1977,100, 100, 100, 100, 100, "right", "left");
-     * ...
-     * </pre></code>
+    /** handles log messages.
      *
      * @author herbert koelman (herbert.koelman@pmu.fr)
      */
@@ -161,7 +150,9 @@ namespace pmu {
 
       /** log a message if current log level is >= level
        * 
-       * @param log level 
+       * @param level message logging level
+       * @param fmt formatting string (see printf for more informations)
+       * @param args message arguments
        */
       template<typename... Args> void log( log_level level, const std::string fmt, const Args&... args){
         if ( _level >= level) {
@@ -188,17 +179,18 @@ namespace pmu {
 
       /** instancie un objet pour journaliser
        *
-       * @param name nom du journal (imprim. ente [] si pr.sent)
+       * @param name nom du journal 
+       * @param level initial log level (defaults to pmu::log::info)
        */
-      logger( const std::string &name = "default", log_level = log_levels::info );
+      logger( const std::string &name = "default", log_level level = log_levels::info );
 
       /** dispose of logger instance ressources
        */
       virtual ~logger();
       
-      /** modifie le niveau de journalisation courrant
+      /** change the current log level.
        *
-       * @param level nouveau niveau de journalisation
+       * @param level new logging level
        */
       void set_log_level( log_levels level ){
         _level = level;
@@ -210,7 +202,8 @@ namespace pmu {
          return _level;
       };
       
-      std::string pattern() const{
+      /** @return loggers prefix pattern */
+      const std::string pattern() const{
         return _pattern;
       };
 
@@ -219,13 +212,14 @@ namespace pmu {
         return _name;
       };
 
+      /** @return logger's facility (see pmu::log::log_facility) 
       const std::string facility() const {
         return _facility;
       };
 
       /** modifie la facilit. . utiliser.
        *
-       * @param facility la facilit. . utiliser
+       * @param facility facility to use
        */
       void set_facility(log_facility facility);
 
