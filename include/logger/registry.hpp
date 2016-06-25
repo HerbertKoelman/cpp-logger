@@ -18,6 +18,9 @@
 namespace pmu {
   namespace log {
 
+   /** \addtogroup pmu_log 
+    * @{
+    */
 
     /** Searches the registry for the wanted logger instance.
      *
@@ -91,6 +94,7 @@ namespace pmu {
         static registry       _registry; //!< singleton
     };
     
+    /** @} */
   } // namespace log
 } // namespace pmu
 #endif
