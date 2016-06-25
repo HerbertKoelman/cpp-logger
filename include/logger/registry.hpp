@@ -8,14 +8,25 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <unordered_map>
+
 #include <pthread/pthread.hpp>
-#include <logger.hpp>
+#include <logger/logger.hpp>
 
 #ifndef PMU_LOGGER_REGISTRY_HPP
 #define PMU_LOGGER_REGISTRY_HPP
 
 namespace pmu {
   namespace log {
+
+
+    /** Searches the registry for the wanted logger instance.
+     *
+     * If the logger doesn't exist, then a new one is created and registered.
+     *
+     * @param name logger name
+     * @return a logger instance
+     */
+    logger_ptr get (const std::string &name );
 
     /** wraps a map of logger map
      */
@@ -30,7 +41,7 @@ namespace pmu {
          *
          * @param name name of the logger to unregister.
          */
-        void remove(const std::string name);
+        void remove(const std::string &name);
 
         /** set the log level of all registered loggers
          *
@@ -42,13 +53,17 @@ namespace pmu {
          */
         void reset();
 
+        /**  this is the log level that will be set when a new logger is instanciated.
+         *
+         * @return registry log level
+         */
         log_level level() const{
           return _level;
         }
 
         /** @return a logger instance (if not found a new one is created)
          */
-        logger_ptr get(const std::string name);
+        logger_ptr get(const std::string &name);
 
         ~registry();
 
@@ -75,15 +90,6 @@ namespace pmu {
 
         static registry       _registry; //!< singleton
     };
-
-    /** Searches the registry for the wanted logger instance.
-     *
-     * If the logger doesn't exist, then a new one is created and registered.
-     *
-     * @param name logger name
-     * @return a logger instance
-     */
-    logger_ptr get (const std::string name );
     
   } // namespace log
 } // namespace pmu

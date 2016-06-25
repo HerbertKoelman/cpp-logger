@@ -2,9 +2,9 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.69)
-AC_INIT([cpp-pthread],[1.0.0],[herbert.koelman@pmu.fr])
+AC_INIT([cpp-logger-tests],[m4_esyscmd_s(echo $(git describe --always --abbrev=0))],[herbert.koelman@pmu.fr])
 AC_LANG(C++)
-AC_CONFIG_SRCDIR([without-cpp11-pthread-tests.cpp])
+AC_CONFIG_SRCDIR([logger-test.cpp])
 AC_CONFIG_AUX_DIR([/usr/bin ../ ../bin])
 
 # Checks for programs.
@@ -14,8 +14,21 @@ AC_CHECK_PROG([AR],[ar],[ar -rv])
 AC_CHECK_PROG([MV],[mv],[mv],[echo "no mv command found"])
 AC_PROG_RANLIB
 
-CFLAGS="-I ../include -I ./"
+CXXFLAGS=""
+CFLAGS="-I../include"
 LDFLAGS="$LDFLAGS -L ../lib"
+
+AC_ARG_VAR([AUXDIR], [auxiliary include and lib directories])
+AC_ARG_ENABLE([auxdir], AS_HELP_STRING([--enable-auxdir=PATH],[set AUXDIR to point to this path]), AUXDIR=$enable_auxdir)
+
+AC_ARG_ENABLE([localdir], AS_HELP_STRING([--enable-localdir],[adds -I and -L to /usr/local include and lib respectively.]), CFLAGS="-I /usr/local/include" LDFLAGS=" -L /usr/local/lib" )
+
+if test -n "$AUXDIR"
+then
+  CFLAGS="$CFLAGS -I$AUXDIR/include"
+  LDFLAGS="$LDFLAGS -L$AUXDIR/lib"
+  AC_MSG_NOTICE([WARNING using auxiliary directory $AUXDIR (CFLAGS=$CFLAGS, LDFLAGS=$LDFLAGS)])
+fi
 
 AC_CHECK_SIZEOF([long])
 if test $ac_cv_sizeof_long == "8" 
@@ -33,14 +46,18 @@ for src in *.cpp
 do
   obj=`basename $src .cpp`.o
   OBJECTS="$OBJECTS $obj"
+
+  target=`basename $src .cpp`
+  TARGETS="$TARGETS $target"
 done
 AC_SUBST(OBJECTS,$OBJECTS)
+AC_SUBST(TARGETS,$TARGETS)
 
 AC_MSG_CHECKING([for specific $CXX compiler options])
 case "$CXX" in
   xlC_r | xlC)
-    CPPFLAGS="-qlanglvl=extended0x:decltype:static_assert:rvaluereferences:rvaluereferences -qsourcetype=c++ -O $CPPFLAGS"
-    CFLAGS="-bh:5 -qmaxmem=-1 -q$BITS $CFLAGS"
+    CPPFLAGS="-D__IBMCPP_TR1__ -qlanglvl=extended0x:decltype:static_assert:rvaluereferences $CPPFLAGS"
+    CFLAGS="-qmaxmem=-1 -q$BITS $CFLAGS"
     CXXFLAGS="-O"
     LDFLAGS="$LDFLAGS -brtl -bmaxdata:0x80000000"
     AC_MSG_RESULT([using large memory model (maxdata:0x80000000), optimising level 2 (-O),using run-time link method (-brtl)])
@@ -56,27 +73,14 @@ esac
 
 # Checks for libraries.
 AC_CHECK_LIB([pthread], [pthread_create],[],[AC_ERROR([missing pthread library.])])
-AC_CHECK_LIB([cpp-pthread], [cpp_pthread_version],[],[AC_ERROR([missing cpp-thread library.])])
+AC_CHECK_LIB([cpp-pthread], [cpp_pthread_version],[],[AC_ERROR([missing cpp-pthread library.])])
+AC_CHECK_LIB([cpp-logger], [cpp_logger_version],[],[AC_ERROR([missing cpp-logger library.])])
 
 # Checks for header files.
-#AC_HEADER_STDC
-#AC_CHECK_HEADERS([nl_types.h stdlib.h string.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
-#AC_C_CONST
-#AC_C_INLINE
-#AC_HEADER_TIME
 
 # Checks for library functions.
-#AC_TYPE_SIGNAL
-
-# Checks for typedefs, structures, and compiler characteristics.
-#AC_HEADER_STDBOOL
-
-# Checks for library functions.
-#AC_FUNC_ERROR_AT_LINE
-#AC_FUNC_MALLOC
-AC_CHECK_FUNCS([gettimeofday])
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

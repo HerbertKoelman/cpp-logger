@@ -5,7 +5,7 @@
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
-INCLUDEDIR=@includedir@/pthread
+INCLUDEDIR=@includedir@/logger
 LIBDIR=@libdir@
 LOCALEDIR=@localedir@
 
@@ -17,7 +17,7 @@ HEADERS=@HEADERS@
 DOXYGEN=@DOXYGEN@
 CODECHECK=@CODECHECK@
 
-PTHREADLIB=libcpp-pthread.a
+TARGET_LIBS=libcpp-logger.a
 
 all: 
 	cd src && $(MAKE)
@@ -27,7 +27,7 @@ pkg:
 	tar cf - `git ls-files`  | gzip -c > distrib/$(PACKAGE)
 
 globber:clean
-	-$(RM) -R Makefile autom4te.cache config.log config.status 
+	-$(RM) -R Makefile autom4te.cache config.log config.status lib distrib
 
 clean:
 	-(cd src && $(MAKE) clean)
@@ -44,9 +44,9 @@ doxygen:
 
 install:
 	$(MKDIR) $(INCLUDEDIR)
-	cd include/pthread && $(INSTALL) *.hpp *.h $(INCLUDEDIR)
-	$(INSTALL) lib/$(PTHREADLIB) @libdir@
+	cd include/logger && $(INSTALL) *.hpp *.h $(INCLUDEDIR)
+	cd lib && $(INSTALL) $(TARGET_LIBS) @libdir@
 
 uninstall:
 	$(RM) -R  $(INCLUDEDIR)
-	$(RM) @libdir@/$(PTHREADLIB)
+	cd @libdir@ && $(RM) $(TARGET_LIBS)

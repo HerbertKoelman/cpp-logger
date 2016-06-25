@@ -34,11 +34,11 @@ LIBS=@LIBS@
 
 OBJECTS=@OBJECTS@
 
-TARGETS=libcpp-pthread.a
+TARGETS=libcpp-logger.a
 
 all:${TARGETS}
 
-libcpp-pthread.a: $(OBJECTS)
+libcpp-logger.a: $(OBJECTS)
 	${AR} ${LIBDIR}/$@ $(OBJECTS)
 	$(RANLIB) ${LIBDIR}/$@
 
@@ -47,14 +47,10 @@ globber: clean
 
 clean:
 	${RM} *.o core *.a
-	${RM} $(LIBDIR)/libcpp-pthread.a ${TARGETS}
-	$(RM) *unc-backup*~ *unc-backup*~
+	cd $(LIBDIR) && ${RM} ${TARGETS}
 
 cxref:
 	cxref *.c -xref -index-all -latex209 -O${XREFDIR} -I${INCDIR} -I${INCTUX}
-
-beautifull:
-	${BEAUTIFIER} *.bcl *.bsr
 
 # cpp build rule
 .cpp.o:

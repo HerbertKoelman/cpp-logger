@@ -1,13 +1,13 @@
 //
 //  registry.cpp
-//  substation
 //
 //  Created by herbert koelman on 01/07/2016.
 //  Copyright © 2016 urbix-software. All rights reserved.
 //
 
 
-#include "registry.hpp"
+#include <pthread/pthread.hpp>
+#include "logger/registry.hpp"
 
 namespace pmu {
   namespace log {
@@ -24,7 +24,7 @@ namespace pmu {
     std::unordered_map <std::string, logger_ptr>      registry::_loggers;
 #endif
     
-    logger_ptr get (const std::string name ){
+    logger_ptr get (const std::string &name ){
 
       return registry::instance().get(name);
     }
@@ -35,7 +35,7 @@ namespace pmu {
       return _registry;
     }
 
-    logger_ptr registry::get(const std::string name){
+    logger_ptr registry::get(const std::string &name){
       pthread::lock_guard<pthread::mutex> lck(_mutex);
 
       // TODO remove this  printf("pmu::log::registry.get(%s);\n", name.c_str());
@@ -76,7 +76,7 @@ namespace pmu {
       }
     }
 
-    void registry::remove(const std::string name){
+    void registry::remove(const std::string &name){
       pthread::lock_guard<pthread::mutex> lck(_mutex);
 
       _loggers.erase(name);
