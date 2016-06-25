@@ -32,7 +32,7 @@ Sample code can be found in the `tests` directory. To use it, run the following 
 
 ### Dependencies
 
-* [cpp-pthread](https://github.com/HerbertKoelman/cpp-pthread)
+* [cpp-pthread](https://github.com/HerbertKoelman/cpp-pthread): used to protected shared data access (static registry instance)
 
 ### Usefull links
 
