@@ -26,6 +26,9 @@
 
 namespace pmu {
   namespace log {
+   /** \addtogroup pmu_log 
+    * @{
+    */
 
     class logger;
 
@@ -52,6 +55,7 @@ namespace pmu {
       sic_tux  //!< (non encore utilis.)
     };
 
+    /** used to define method paramters */
     typedef log_facilities log_facility;
 
 #if __IBMCPP_TR1__
@@ -239,6 +243,8 @@ namespace pmu {
       pid_t        _pid;
     }; // logger
     
+    /** @} */
+
   } // namespace log
 } // namespace pmu
 #endif
