@@ -1,13 +1,13 @@
 //
 //  registry.cpp
-//  substation
 //
 //  Created by herbert koelman on 01/07/2016.
 //  Copyright © 2016 urbix-software. All rights reserved.
 //
 
 
-#include "registry.hpp"
+#include <pthread/pthread.hpp>
+#include "logger/registry.hpp"
 
 namespace pmu {
   namespace log {

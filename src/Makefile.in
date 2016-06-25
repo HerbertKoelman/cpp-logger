@@ -34,11 +34,11 @@ LIBS=@LIBS@
 
 OBJECTS=@OBJECTS@
 
-TARGETS=libcpp-pthread.a
+TARGETS=libcpp-logger.a
 
 all:${TARGETS}
 
-libcpp-pthread.a: $(OBJECTS)
+libcpp-logger.a: $(OBJECTS)
 	${AR} ${LIBDIR}/$@ $(OBJECTS)
 	$(RANLIB) ${LIBDIR}/$@
 
@@ -47,7 +47,7 @@ globber: clean
 
 clean:
 	${RM} *.o core *.a
-	${RM} $(LIBDIR)/libcpp-pthread.a ${TARGETS}
+	${RM} $(LIBDIR)/libcpp-logger.a ${TARGETS}
 	$(RM) *unc-backup*~ *unc-backup*~
 
 cxref:

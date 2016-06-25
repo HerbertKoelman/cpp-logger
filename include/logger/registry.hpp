@@ -8,8 +8,9 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <unordered_map>
+
 #include <pthread/pthread.hpp>
-#include <logger.hpp>
+#include <logger/logger.hpp>
 
 #ifndef PMU_LOGGER_REGISTRY_HPP
 #define PMU_LOGGER_REGISTRY_HPP

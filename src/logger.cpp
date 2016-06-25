@@ -2,12 +2,12 @@
 //  logger.cpp
 //  substation
 //
-//  Created by herbert koelman on 01/03/2016.
+//  Created by herbert koelman on 01/07/2016.
 //  Copyright © 2016 urbix-software. All rights reserved.
 //
 
-#include "logger.hpp"
 #include <pthread/pthread.hpp>
+#include "logger/logger.hpp"
 
 namespace pmu {
   namespace log {

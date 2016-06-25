@@ -28,7 +28,7 @@ core
 *.exe
 *.out
 *.app
-logger-tests
+logger-test
 
 # emacs
 *~

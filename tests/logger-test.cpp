@@ -1,11 +1,14 @@
-#include <logger.hpp>
-#include <registry.hpp>
+/** simple test program.
+ *
+ * It's used to check that the library is working as expected.
+ */
+#include <logger/cpp-logger.hpp>
 
 int main(){
 
   pmu::log::logger_ptr logger( new pmu::log::logger());
 
-  logger->info("starting test program");
+  logger->info("starting logger test program (using version: %s)", pmu::log::cpp_logger_version());
 
   logger->info("try to get regsitry singleton");
   pmu::log::registry reg = pmu::log::registry::instance();

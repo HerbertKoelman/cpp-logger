@@ -1,45 +1,20 @@
-/*
- * cpp_pthread_version config header (autoconf related)
- *
- * Copyright (C) 2006 - herbert koelman
- *
- * cpp_pthread_version is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * cpp_pthread_version is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with cpp_pthread_version; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor,
- * Boston, MA  02110-1301  USA
- */
-
-
 /* autoconf section ----------------------------------------------------------------------*/
 
-#ifndef pthread_config_h
-#define pthread_config_h
+#ifndef cpp_logger_config_h
+#define cpp_logger_config_h
 
-#undef CPP_PTHREAD_VERSION
+#undef CPP_LOGGER_VERSION
 
-/* Define DEBUG. */
-#undef _DEBUG_CPP_PTHREAD_
 
 /* Define to 1 if you have the `pthread' library (-lpthread). */
 #undef HAVE_LIBPTHREAD
+
+#undef HAVE_LIBCPP_PTHREAD
 
 /* Defined if compiler support C++11 */
 #undef HAVE_CPP11_MUTEX
 #undef HAVE_CPP11_CHRONO
 #undef HAVE_CPP11_THREAD
-
-/* Define to empty if `const' does not conform to ANSI C. */
-#undef const
 
 /*
  * Define to `__inline__' or `__inline' if that's what the C compiler
@@ -49,4 +24,4 @@
 #undef inline
 #endif
 
-#endif /* pthread_config_h */
+#endif /* cpp_logger_config_h */
