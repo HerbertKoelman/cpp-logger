@@ -1,0 +1,52 @@
+# Top makefile to build  @PACKAGE_STRING@
+#
+# @configure_input@
+#
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+INCLUDEDIR=@includedir@/pthread
+LIBDIR=@libdir@
+LOCALEDIR=@localedir@
+
+INSTALL=@INSTALL@ 
+RM=@RM@
+MKDIR=@MKDIR_P@
+PACKAGE=@PACKAGE_NAME@-@PACKAGE_VERSION@-@build_os@.tar.gz
+HEADERS=@HEADERS@
+DOXYGEN=@DOXYGEN@
+CODECHECK=@CODECHECK@
+
+PTHREADLIB=libcpp-pthread.a
+
+all: 
+	cd src && $(MAKE)
+
+pkg: 
+	$(MKDIR) distrib
+	tar cf - `git ls-files`  | gzip -c > distrib/$(PACKAGE)
+
+globber:clean
+	-$(RM) -R Makefile autom4te.cache config.log config.status 
+
+clean:
+	-(cd src && $(MAKE) clean)
+
+codecheck: clean all
+		$(CODECHECK)
+
+version:
+	autoconf && ( cd src && autoconf )
+	-echo "don't forget to run configure."
+
+doxygen:
+	${DOXYGEN} doxyfile
+
+install:
+	$(MKDIR) $(INCLUDEDIR)
+	cd include/pthread && $(INSTALL) *.hpp *.h $(INCLUDEDIR)
+	$(INSTALL) lib/$(PTHREADLIB) @libdir@
+
+uninstall:
+	$(RM) -R  $(INCLUDEDIR)
+	$(RM) @libdir@/$(PTHREADLIB)
