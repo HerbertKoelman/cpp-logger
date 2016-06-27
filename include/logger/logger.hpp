@@ -207,7 +207,7 @@ namespace pmu {
         return _name;
       };
 
-      /** @return logger's facility (see pmu::log::log_facility) 
+      /** @return logger's facility (see pmu::log::log_facility) */
       const std::string facility() const {
         return _facility;
       };
