@@ -15,18 +15,14 @@ namespace pmu {
     /** initailize static data
      */
     registry       registry::_registry = registry() ;
-    log_level      registry::_level    = log_levels::info;
-    pthread::mutex registry::_mutex;
-    
-#if __IBMCPP_TR1__
-    std::tr1::unordered_map <std::string, logger_ptr> registry::_loggers;
-#else
-    std::unordered_map <std::string, logger_ptr>      registry::_loggers;
-#endif
     
     logger_ptr get (const std::string &name ){
 
       return registry::instance().get(name);
+    }
+
+    void set_level(const log_level level){
+      registry::instance().set_log_level(level);
     }
 
     // Registry implementation ------------------------------------------------------
@@ -38,13 +34,13 @@ namespace pmu {
     logger_ptr registry::get(const std::string &name){
       pthread::lock_guard<pthread::mutex> lck(_mutex);
 
-      // TODO remove this  printf("pmu::log::registry.get(%s);\n", name.c_str());
+      // printf("DEBUG pmu::log::registry.get(%s, %d);\n", name.c_str(), _level);
 
       logger_ptr logger;
       auto search = _loggers.find(name);
 
       if ( search == _loggers.end() ){
-        logger = logger_ptr(new pmu::log::logger(name));
+        logger = logger_ptr(new pmu::log::logger(name, _level));
         add(logger);
       } else {
         logger = search->second;
@@ -61,6 +57,7 @@ namespace pmu {
       }
 
       _level = level;
+      // printf("DEBUG registry log level is now %d\n", _level);
     }
 
     void registry::add(logger_ptr logger){
@@ -82,7 +79,7 @@ namespace pmu {
       _loggers.erase(name);
     }
 
-    registry::registry(){
+    registry::registry(): _level(log_levels::info) {
     }
 
     registry::~registry(){

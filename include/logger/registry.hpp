@@ -31,6 +31,14 @@ namespace pmu {
      */
     logger_ptr get (const std::string &name );
 
+    /** Set the current log level of all registered loggers.
+     *
+     * Default level becomes this level.
+     *
+     * @param level wanted log level.
+     */
+    void set_level(const log_level level);
+
     /** wraps a map of logger map
      */
     class registry {
@@ -83,13 +91,13 @@ namespace pmu {
         registry();
 
 #if __IBMCPP_TR1__
-        static std::tr1::unordered_map <std::string, logger_ptr> _loggers; //!< known loggers
+        std::tr1::unordered_map <std::string, logger_ptr> _loggers; //!< known loggers
 #else
-        static std::unordered_map <std::string, logger_ptr>      _loggers; //!< known loggers
+        std::unordered_map <std::string, logger_ptr>      _loggers; //!< known loggers
 #endif
 
-        static pthread::mutex _mutex; //!< used to protect access to static class data
-        static log_level      _level; //!< used when new logger instances are created by the regsitry
+        pthread::mutex _mutex; //!< used to protect access to static class data
+         log_level      _level; //!< used when new logger instances are created by the regsitry
 
         static registry       _registry; //!< singleton
     };

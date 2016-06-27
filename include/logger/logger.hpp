@@ -188,6 +188,7 @@ namespace pmu {
        * @param level new logging level
        */
       void set_log_level( log_levels level ){
+        pthread::lock_guard<pthread::mutex> lock(_mutex);
         _level = level;
       };
 
@@ -234,13 +235,16 @@ namespace pmu {
        *
        * @param name logger name (i.e. some/thing)
        */
-       void set_name(const std::string &name);
+      void set_name(const std::string &name);
 
       std::string  _name ;
       std::string  _pattern;
       std::string  _facility;
       log_level    _level;
       pid_t        _pid;
+
+      pthread::mutex _mutex; //!< used to protect access to static class data
+
     }; // logger
     
     /** @} */

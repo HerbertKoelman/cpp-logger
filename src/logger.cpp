@@ -22,6 +22,7 @@ namespace pmu {
     }
     
     void logger::set_facility(log_facility facility){
+      pthread::lock_guard<pthread::mutex> lock(_mutex);
 
       switch(facility) {
         case sic_bat:
@@ -46,6 +47,7 @@ namespace pmu {
     }
 
     void logger::set_name(const std::string &name){
+      pthread::lock_guard<pthread::mutex> lock(_mutex);
       _name = name ;
       _pattern = std::string(PMU_LOG_PATTERN) + _name + ": " ;
     };
