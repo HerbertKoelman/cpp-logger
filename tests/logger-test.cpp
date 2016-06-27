@@ -26,7 +26,7 @@ int main(){
   flogger1->set_log_level(pmu::log::log_levels::warning);
   flogger2->info("factory created logger one name: %s, level: %d", flogger2->name().c_str(), flogger2->level());
 
-  pmu::log::set_level(pmu::log::log_level::err);
+  pmu::log::set_level(pmu::log::log_level::warning);
   pmu::log::logger_ptr main_logger = pmu::log::get("main");
 
   // for ( auto x = 1000000; x > 0 ; x--) {
