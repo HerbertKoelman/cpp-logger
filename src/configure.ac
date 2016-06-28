@@ -81,12 +81,8 @@ AC_CHECK_HEADER([chrono], [AC_DEFINE([HAVE_CPP11_CHRONO])])
 AC_CHECK_HEADER([thread], [AC_DEFINE([HAVE_CPP11_THREAD])])
 
 # Checks for typedefs, structures, and compiler characteristics.
-#AC_C_CONST
-#AC_C_INLINE
-#AC_HEADER_TIME
 
 # Checks for library functions.
-#AC_TYPE_SIGNAL
 
 AC_CHECK_FUNCS([gettimeofday])
 

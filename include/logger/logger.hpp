@@ -21,6 +21,7 @@
 #define LOG_NOTICE  5
 #define LOG_INFO    6
 #define LOG_DEBUG   7
+#define LOG_TRACE   8
 
 #define PMU_LOG_PATTERN "<%d> %s [%s] (pid: %d, thrdid: %d) - "
 
@@ -32,6 +33,7 @@ namespace pmu {
 
     class logger;
 
+    /** known logging levels */
     enum log_levels {
       emerg   = LOG_EMERG, //!< system is unusable
       alert   = LOG_ALERT, //!< action must be taken immediately
@@ -40,12 +42,14 @@ namespace pmu {
       warning = LOG_WARNING, //!< warning condition
       notice  = LOG_NOTICE,  //!< normal but signification condition
       info    = LOG_INFO,  //!< informational (default)
-      debug   = LOG_DEBUG  //!< debug information
+      debug   = LOG_DEBUG, //!< debug information
+      trace   = LOG_TRACE  //!< trace information
     };
 
     /** used when defined as a parameter */
     typedef log_levels log_level;
 
+    /** known facilities */
     enum log_facilities {
       sic_bat, //!< pour les batchs
       sic_ine, //!< pour les interfaces externes
@@ -71,6 +75,15 @@ namespace pmu {
     class logger {
     public:
       
+      /** affiche un message debug si le niveau de journalisation  >= log_levels::trace.
+       *
+       * @param fmt chaine de formattage (see printf for more informations)
+       * @param args arguments sp.cifique . imprimer
+       */
+      template<typename... Args> void trace( const std::string &fmt, const Args&... args){
+          log(log_levels::trace, fmt, args...);
+      };
+
       /** affiche un message debug si le niveau de journalisation  >= log_levels::debug.
        *
        * @param fmt chaine de formattage (see printf for more informations)
