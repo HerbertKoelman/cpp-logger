@@ -33,6 +33,7 @@ namespace pmu {
 
     class logger;
 
+    /** known logging levels */
     enum log_levels {
       emerg   = LOG_EMERG, //!< system is unusable
       alert   = LOG_ALERT, //!< action must be taken immediately
@@ -48,6 +49,7 @@ namespace pmu {
     /** used when defined as a parameter */
     typedef log_levels log_level;
 
+    /** known facilities */
     enum log_facilities {
       sic_bat, //!< pour les batchs
       sic_ine, //!< pour les interfaces externes
