@@ -23,12 +23,6 @@ fi
 # Okay, no cppcheck found, maybe we have sonar
 if test -z "$CODECHECK" 
 then
-  AC_CHECK_PROG([CODECHECK],[sonar-runner],[sonar-runner -Dsonar.cfamily.library.directories=../include,/usr/include],[])
-fi
-
-# Okay, no cppcheck found, maybe we have sonar
-if test -z "$CODECHECK" 
-then
   AC_CHECK_PROG([CODECHECK],[cppcheck],[cppcheck --template='{file}:{line},{severity},{id}:\n    {message}\n' --enable=all -I include ./],[])
 fi
 
