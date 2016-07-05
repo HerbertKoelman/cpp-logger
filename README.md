@@ -22,6 +22,8 @@ The `make` target `pkg` will produce au tar.gz that can be distributed.
 
 > INFO On an Intel NUC, this library logs 200,000 messages/s
 
+> ATTENTION If you are using AIX's XL C/C++ 13.1.2 you'll have to add the macro __IBMCPP_TR1__. This is because we are using the template shared_ptr which is defined only if the macro is set (compile option -D).
+
 ### How to use it
 
 Sample code can be found in the `tests` directory. To use it, run the following commands:
