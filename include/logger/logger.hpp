@@ -62,7 +62,7 @@ namespace pmu {
     /** used to define method paramters */
     typedef log_facilities log_facility;
 
-#if __IBMCPP_TR1__
+#if __IBMCPP_TR1__ //NOSONAR this macro is set with the compiler command line argument
     typedef std::tr1::shared_ptr<pmu::log::logger> logger_ptr; //!< shared pointer to a logger instance
 #else
     typedef std::shared_ptr<pmu::log::logger>      logger_ptr; //!< shared pointer to a logger instance
