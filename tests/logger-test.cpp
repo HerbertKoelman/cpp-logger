@@ -4,7 +4,33 @@
  */
 #include <logger/cpp-logger.hpp>
 
+class C {
+
+  public:
+
+    C(): _log(pmu::log::get("test-class-c")){
+      _log->info("new class instance");
+    };
+
+  private:
+    pmu::log::logger_ptr _log;
+};
+
+class D : public C{
+  public:
+
+    D(): _log(pmu::log::get("test-class-d")){
+      _log->info("new class instance");
+    };
+
+  private:
+    pmu::log::logger_ptr _log;
+};
+
 int main(){
+
+  C cclass;
+  D dclass;
 
   pmu::log::set_level(pmu::log::log_level::warning);
   pmu::log::logger_ptr logger( new pmu::log::logger());
