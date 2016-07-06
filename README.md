@@ -36,6 +36,14 @@ Sample code can be found in the `tests` directory. To use it, run the following 
 
 * [cpp-pthread](https://github.com/HerbertKoelman/cpp-pthread): used to protected shared data access (static registry instance)
 
+### Autoconf
+
+Add these entries in your `configure.ac` file to use the logger library:
+# Checks for libraries.
+AC_CHECK_LIB([pthread], [pthread_create],[],[AC_ERROR([missing pthread library.])])
+AC_CHECK_LIB([cpp-pthread], [cpp_pthread_version],[],[AC_ERROR([missing cpp-pthread library.])])
+AC_CHECK_LIB([cpp-logger], [cpp_logger_version],[],[AC_ERROR([missing cpp-logger library.])])
+
 ### Usefull links
 
 #### Memory management on AIX
