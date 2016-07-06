@@ -53,6 +53,7 @@ config.log
 Makefile
 
 # layout
+sonar-project.properties
 doxyfile
 distrib/
 lib/
