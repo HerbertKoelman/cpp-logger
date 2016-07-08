@@ -5,8 +5,6 @@
 //  Copyright © 2016 urbix-software. All rights reserved.
 //
 
-
-#include <pthread/pthread.hpp>
 #include "logger/registry.hpp"
 
 namespace pmu {
