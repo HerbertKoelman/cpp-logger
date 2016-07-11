@@ -24,7 +24,7 @@
 #define LOG_TRACE   8
 #define MAXECIDLEN  64
 
-#define PMU_LOG_PATTERN "<%d> %s [%s] (pid: %d, thrdid: %d) - "
+#define PMU_LOG_PATTERN "<%d> %s [%s] (pid: %d, thrdid: %d, %s) - "
 
 namespace pmu {
   namespace log {
@@ -181,6 +181,7 @@ namespace pmu {
               _facility.c_str(),
               _pid,
               pthread::this_thread::get_id(),
+              _ecid.empty()? "- " : _ecid.c_str(),
               args...
           ); 
         }
@@ -221,23 +222,10 @@ namespace pmu {
         pthread::lock_guard<pthread::mutex> lock(_mutex);
 
         if ( !ecid.empty() ) {
-          _ecid.assign("[M ECID=\"");
-          _ecid.insert(9, ecid.data(), MAXECIDLEN);
-          _ecid.resize (ecid.size());
-          if (_ecid.size() > MAXECIDLEN + 9) {
-            _ecid.resize (MAXECIDLEN + 9);
-          }
-          _ecid.resize(_ecid.size() + 1);
-          _ecid[_ecid.size()] = '"';
-          _ecid.resize(_ecid.size() + 1);
-          _ecid[_ecid.size()] = ']';
-          _ecid.resize(_ecid.size() + 1);
-          _ecid[_ecid.size()] = ' ';
+          _ecid = "[M ECID=\"" + ecid.substr(0, MAXECIDLEN) + "\"] ";
         }
         else {
-          _ecid[0] = '-';
-          _ecid[1] = ' ';
-          _ecid.resize(2);
+          _ecid = "- ";
         }
       };
 
