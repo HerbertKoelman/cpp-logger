@@ -72,6 +72,13 @@ namespace pmu {
           return _level;
         }
 
+        /** set the ecid of all registered loggers
+         *
+         * @param ecid
+         */
+        void set_ecid ( const std::string ecid );
+
+
         /** @return a logger instance (if not found a new one is created)
          */
         logger_ptr get(const std::string &name);
