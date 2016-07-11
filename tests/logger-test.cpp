@@ -39,6 +39,7 @@ int main(){
 
   logger->info("try to get regsitry singleton");
   pmu::log::registry reg = pmu::log::registry::instance();
+  logger->set_ecid("Test ecid !!!");
   logger->set_log_level(pmu::log::log_levels::debug);
   logger->debug("got one");
 
