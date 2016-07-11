@@ -60,6 +60,16 @@ namespace pmu {
       // printf("DEBUG registry log level is now %d\n", _level);
     }
 
+    void registry::set_ecid( const std::string ecid){
+      pthread::lock_guard<pthread::mutex> lck(_mutex);
+
+      for (auto logger = _loggers.begin(); logger != _loggers.end(); ++logger) {
+        logger->second->set_ecid(ecid);
+      }
+
+      // printf("DEBUG registry ecid is now %s\n", _ecid);
+    }
+
     void registry::add(logger_ptr logger){
       // TODO remove this lock.
       // internal utility method doesn't have to be protected by a mutex
