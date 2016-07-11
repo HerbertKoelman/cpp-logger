@@ -22,6 +22,7 @@
 #define LOG_INFO    6
 #define LOG_DEBUG   7
 #define LOG_TRACE   8
+#define MAXECIDLEN  64
 
 #define PMU_LOG_PATTERN "<%d> %s [%s] (pid: %d, thrdid: %d) - "
 
@@ -211,6 +212,41 @@ namespace pmu {
          return _level;
       };
       
+      /** change the current ecid.
+       *
+       * @param level new ecid
+       */
+      void set_ecid( std::string ecid ){
+
+        pthread::lock_guard<pthread::mutex> lock(_mutex);
+
+        if ( !ecid.empty() ) {
+          _ecid.assign("[M ECID=\"");
+          _ecid.insert(9, ecid.data(), MAXECIDLEN);
+          _ecid.resize (ecid.size());
+          if (_ecid.size() > MAXECIDLEN + 9) {
+            _ecid.resize (MAXECIDLEN + 9);
+          }
+          _ecid.resize(_ecid.size() + 1);
+          _ecid[_ecid.size()] = '"';
+          _ecid.resize(_ecid.size() + 1);
+          _ecid[_ecid.size()] = ']';
+          _ecid.resize(_ecid.size() + 1);
+          _ecid[_ecid.size()] = ' ';
+        }
+        else {
+          _ecid[0] = '-';
+          _ecid[1] = ' ';
+          _ecid.resize(2);
+        }
+      };
+
+      /** @return ecid courrant
+       */
+      std::string ecid() const {
+         return _ecid;
+      };
+      
       /** @return loggers prefix pattern */
       const std::string pattern() const{
         return _pattern;
@@ -255,6 +291,7 @@ namespace pmu {
       std::string  _facility;
       log_level    _level;
       pid_t        _pid;
+      std::string  _ecid;
 
       pthread::mutex _mutex; //!< used to protect access to static class data
 
