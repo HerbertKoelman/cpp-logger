@@ -9,11 +9,10 @@ namespace pmu {
   //! \namespace log 
   namespace log {
 
-  
    /** \addtogroup pmu_log pmu logging facility for C++.
     * @{
     */
-
+  
    /** @return the library's current version
     */
     extern "C" const char *cpp_logger_version();

@@ -5,8 +5,6 @@
 //  Copyright © 2016 urbix-software. All rights reserved.
 //
 
-
-#include <pthread/pthread.hpp>
 #include "logger/registry.hpp"
 
 namespace pmu {
@@ -90,9 +88,11 @@ namespace pmu {
     }
 
     registry::registry(): _level(log_levels::info) {
+      // intientional...
     }
 
     registry::~registry(){
+      // intientional...
     }
 
   } // namespace log
