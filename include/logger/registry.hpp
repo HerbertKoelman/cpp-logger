@@ -10,6 +10,7 @@
 #include <unordered_map>
 
 #include <pthread/pthread.hpp>
+#include "logger/definitions.hpp"
 #include <logger/logger.hpp>
 
 #ifndef PMU_LOGGER_REGISTRY_HPP
@@ -83,6 +84,30 @@ namespace pmu {
          */
         logger_ptr get(const std::string &name);
 
+        /** 
+         * @param name logger instance name
+         * @param T a logger type
+         * @param args logger type special arguments
+         * @return a logger instance (if not found a new one is created)
+         */
+        template<class T, typename... Args> logger_ptr get( const std::string &name, const Args&... args){
+          pthread::lock_guard<pthread::mutex> lck(_mutex);
+
+          // printf("DEBUG pmu::log::registry.get(%s, %d);\n", name.c_str(), _level);
+
+          logger_ptr logger;
+          auto search = _loggers.find(name);
+
+          if ( search == _loggers.end() ){
+            logger = logger_ptr(new T(name, _level, args...));
+            add(logger);
+          } else {
+            logger = search->second;
+          }
+
+          return logger;
+        };
+
         ~registry();
 
       private:
@@ -107,6 +132,25 @@ namespace pmu {
          log_level      _level; //!< used when new logger instances are created by the regsitry
 
         static registry       _registry; //!< singleton
+    };
+
+    /* IT IS not possible to forward declare method of a class. Therefore this function MUST implemented after the
+     * registry's class definition.
+     * This can be done either by having the code at the end of this file or to move the template into
+     * another header file that starts with including the registry class definition.
+     */
+
+    /** Searches the registry for the wanted logger instance.
+     *
+     * If the logger doesn't exist, then a new one is created and registered.
+     *
+     * @param name logger instance name
+     * @param T a logger type
+     * @param args logger type special arguments
+     * @return a logger instance
+     */
+    template<class T, typename... Args> logger_ptr get( const std::string &name, const Args&... args){
+      return registry::instance().get<T>(name, args...);
     };
     
     /** @} */
