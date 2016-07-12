@@ -4,7 +4,19 @@
  */
 #include <logger/cpp-logger.hpp>
 
+void get_test( const std::string &name, pmu::log::log_level level){
+
+  std::cout << "created function not a template. " << name << std::endl ;
+}
+
+template<class T, typename... Args> void get_test( const std::string &name, pmu::log::log_level level, const Args&... args){
+
+  T instance(name);
+  std::cout << "created string: " << instance << std::endl ;
+}
+
 class C {
+
 
   public:
 
@@ -29,6 +41,10 @@ class D : public C{
 
 int main(){
 
+  get_test("hello les amis du C++", pmu::log::log_level::info);
+
+  get_test<std::string>("hello", pmu::log::log_level::info,  "one", 2);
+
   C cclass;
   D dclass;
 
@@ -39,6 +55,15 @@ int main(){
 
   logger->info("try to get regsitry singleton");
   pmu::log::registry reg = pmu::log::registry::instance();
+
+  logger->info("About to set ECID to %s", "Test ecid !!!");
+  logger->set_ecid("Test ecid !!!");
+
+  logger->info("try to get a new logger instance through the template get method");
+
+  pmu::log::logger_ptr template_logger = pmu::log::get<pmu::log::logger>("template-logger");
+  template_logger->crit("HOURRAAAA ca marche >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
   logger->set_log_level(pmu::log::log_levels::debug);
   logger->debug("got one");
 
@@ -59,6 +84,13 @@ int main(){
   for ( auto x = 10; x > 0 ; x--) {
     main_logger->info("Messages #%d.", x);
   }
+
+  logger->set_ecid("01234567801234567801234567801234567801234567801234567801234567899999990123456789");
+  logger->info("very long ECID was set");
+
+  logger->info("resetting ECID to empty");
+  logger->set_ecid("");
+  logger->info("done %s (%d)", __FILE__, __LINE__);
 
   main_logger->warning("End of test program. Have a nice day.");
 }
