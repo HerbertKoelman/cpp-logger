@@ -128,7 +128,7 @@ namespace pmu {
                   _pattern +
                   (format.at(format.size()-1) == '\n' ? format : format += '\n') // handle string termination
                 ).c_str(),
-              _level,
+              level,
               date_time().c_str(),
               _facility.c_str(),
               _pid,
