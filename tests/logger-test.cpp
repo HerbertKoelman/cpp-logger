@@ -48,10 +48,15 @@ int main(){
   C cclass;
   D dclass;
 
+  char hostname[100];
+  gethostname(hostname, 100);
+
+  pmu::log::set_program_name("logger-test");
+
   pmu::log::set_level(pmu::log::log_level::warning);
   pmu::log::logger_ptr logger( new pmu::log::logger());
 
-  logger->info("starting logger test program (using version: %s)", pmu::log::cpp_logger_version());
+  logger->info("starting logger test program on %s (using version: %s)", hostname, pmu::log::cpp_logger_version());
 
   logger->info("try to get regsitry singleton");
   pmu::log::registry reg = pmu::log::registry::instance();

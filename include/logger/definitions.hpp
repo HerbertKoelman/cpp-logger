@@ -26,7 +26,8 @@
 #define LOG_TRACE   8
 
 #define MAXECIDLEN  64
-#define PMU_LOG_PATTERN "<%d> %s [%s] (pid: %d, thrdid: %d, %s) - "
+// original #define PMU_LOG_PATTERN "<%d> %s %s [%s] (pid: %d, thrdid: %d, ecid: %s) - "
+#define PMU_LOG_PATTERN "<%d> %s %s %s %s.%.6d.%.6d - %-16s "
 
 namespace pmu {
   namespace log {
@@ -72,7 +73,7 @@ namespace pmu {
 #else
     typedef std::shared_ptr<pmu::log::logger>      logger_ptr; //!< shared pointer to a logger instance
 #endif
-    
+
     /** @} */
 
   } // namespace log
