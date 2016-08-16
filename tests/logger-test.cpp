@@ -51,6 +51,8 @@ int main(){
   char hostname[100];
   gethostname(hostname, 100);
 
+  pmu::log::set_program_name("logger-test");
+
   pmu::log::set_level(pmu::log::log_level::warning);
   pmu::log::logger_ptr logger( new pmu::log::logger());
 

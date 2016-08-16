@@ -12,7 +12,7 @@
 namespace pmu {
   namespace log {
     
-    logger::logger( const std::string &name, log_level level ): _pid(getpid()), _name(name), _pattern(PMU_LOG_PATTERN), _level(level){
+    logger::logger( const std::string &name, const std::string &pname, log_level level ): _pid(getpid()), _name(name), _pname(pname), _pattern(PMU_LOG_PATTERN), _level(level){
       set_facility(log_facility::sic_tux);
       _pattern = std::string(PMU_LOG_PATTERN) + "[" +_name + "] " ;
       _hostname[0] = 0;

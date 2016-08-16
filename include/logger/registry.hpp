@@ -40,6 +40,14 @@ namespace pmu {
      */
     void set_level(const log_level level);
 
+    /** set program name.
+     *
+     * this name will be used for any logger created after this call.
+     *
+     * @param pname program name
+     */
+    void set_program_name(const std::string &pname);
+
     /** wraps a map of logger map
      */
     class registry {
@@ -60,6 +68,10 @@ namespace pmu {
          * @param level log level
          */
         void set_log_level ( log_level level );
+
+        void set_program_name(const std::string &pname);
+
+        std::string program_name();
 
         /** unregister all loggers
          */
@@ -99,7 +111,7 @@ namespace pmu {
           auto search = _loggers.find(name);
 
           if ( search == _loggers.end() ){
-            logger = logger_ptr(new T(name, _level, args...));
+            logger = logger_ptr(new T(name, _pname, _level, args...));
             add(logger);
           } else {
             logger = search->second;
@@ -129,7 +141,8 @@ namespace pmu {
 #endif
 
         pthread::mutex _mutex; //!< used to protect access to static class data
-         log_level      _level; //!< used when new logger instances are created by the regsitry
+        log_level      _level; //!< used when new logger instances are created by the regsitry
+        std::string    _pname;
 
         static registry       _registry; //!< singleton
     };
