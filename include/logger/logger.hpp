@@ -132,6 +132,7 @@ namespace pmu {
               date_time().c_str(),
               _hostname,
               _facility.c_str(),
+              _pname.c_str(),
               _pid,
               pthread::this_thread::get_id(),
               _ecid.empty()? "- " : _ecid.c_str(),
@@ -145,7 +146,7 @@ namespace pmu {
        * @param name nom du journal
        * @param level initial log level (defaults to pmu::log::info)
        */
-      logger( const std::string &name = "default", log_level level = log_levels::info );
+      logger( const std::string &name = "default",  const std::string &pname = "program", log_level level = log_levels::info );
 
       /** dispose of logger instance ressources
        */
@@ -235,6 +236,7 @@ namespace pmu {
       log_level    _level;
       pid_t        _pid;
       std::string  _ecid;
+      std::string  _pname ; // program name
 
       char         _hostname[HOST_NAME_MAX];
 
