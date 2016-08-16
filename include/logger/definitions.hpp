@@ -73,7 +73,7 @@ namespace pmu {
 #else
     typedef std::shared_ptr<pmu::log::logger>      logger_ptr; //!< shared pointer to a logger instance
 #endif
-    
+
     /** @} */
 
   } // namespace log
