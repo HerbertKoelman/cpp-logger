@@ -27,7 +27,7 @@
 
 #define MAXECIDLEN  64
 // original #define PMU_LOG_PATTERN "<%d> %s %s [%s] (pid: %d, thrdid: %d, ecid: %s) - "
-#define PMU_LOG_PATTERN "<%d> %s %s %s %.6d.%d - %-34s "
+#define PMU_LOG_PATTERN "<%d> %s %s %s %s.%.6d.%.6d - %-16s "
 
 namespace pmu {
   namespace log {

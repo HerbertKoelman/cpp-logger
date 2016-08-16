@@ -23,6 +23,10 @@ namespace pmu {
       registry::instance().set_log_level(level);
     }
 
+    void set_program_name(const std::string &pname){
+      registry::instance().set_program_name(pname);
+    }
+
     // Registry implementation ------------------------------------------------------
     //
     registry &registry::instance(){
@@ -38,13 +42,21 @@ namespace pmu {
       auto search = _loggers.find(name);
 
       if ( search == _loggers.end() ){
-        logger = logger_ptr(new pmu::log::logger(name, _level));
+        logger = logger_ptr(new pmu::log::logger(name, _pname, _level));
         add(logger);
       } else {
         logger = search->second;
       }
 
       return logger;
+    }
+
+    void registry::set_program_name(const std::string &pname){
+      _pname = pname ;
+    }
+
+    std::string registry::program_name(){
+      return _pname;
     }
 
     void registry::set_log_level( const log_level level ){
@@ -87,7 +99,7 @@ namespace pmu {
       _loggers.erase(name);
     }
 
-    registry::registry(): _level(log_levels::info) {
+    registry::registry(): _level(log_levels::info), _pname("program") {
       // intientional...
     }
 
