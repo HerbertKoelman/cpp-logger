@@ -130,6 +130,7 @@ namespace pmu {
                 ).c_str(),
               level,
               date_time().c_str(),
+              _hostname,
               _facility.c_str(),
               _pid,
               pthread::this_thread::get_id(),
@@ -234,6 +235,8 @@ namespace pmu {
       log_level    _level;
       pid_t        _pid;
       std::string  _ecid;
+
+      char         _hostname[HOST_NAME_MAX];
 
       pthread::mutex _mutex; //!< used to protect access to static class data
 

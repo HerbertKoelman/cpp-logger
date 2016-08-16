@@ -14,7 +14,9 @@ namespace pmu {
     
     logger::logger( const std::string &name, log_level level ): _pid(getpid()), _name(name), _pattern(PMU_LOG_PATTERN), _level(level){
       set_facility(log_facility::sic_tux);
-      _pattern = std::string(PMU_LOG_PATTERN) + _name + ": " ;
+      _pattern = std::string(PMU_LOG_PATTERN) + "[" +_name + "] " ;
+      _hostname[0] = 0;
+      gethostname(_hostname, HOST_NAME_MAX);
     }
     
     logger::~logger(){
@@ -66,11 +68,12 @@ namespace pmu {
 
       timeval current_time;
       gettimeofday(&current_time, NULL);
-      int millis = current_time.tv_usec / 1000;
+      //int millis = current_time.tv_usec / 1000;
+      int micros = current_time.tv_usec ;
 
-      strftime(buffer, size-1, "%d/%m/%Y %Z %T", localtime(&current_time.tv_sec));
+      strftime(buffer, size-1, "%FT%T%z", localtime(&current_time.tv_sec));
 
-      snprintf(target, size-1, "%s.%d", buffer, millis);
+      snprintf(target, size-1, "%s.%06d", buffer, micros);
 
       return std::string(target);
     }
