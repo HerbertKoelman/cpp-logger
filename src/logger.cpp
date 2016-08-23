@@ -71,9 +71,9 @@ namespace pmu {
       //int millis = current_time.tv_usec / 1000;
       int micros = current_time.tv_usec ;
 
-      strftime(buffer, size-1, "%FT%T%z", localtime(&current_time.tv_sec));
+      strftime(buffer, size-1, "%FT%T", localtime(&current_time.tv_sec));
 
-      snprintf(target, size-1, "%s.%06d", buffer, micros);
+      snprintf(target, size-1, "%s.%06d%+05d", buffer, micros,(timezone/3600) * -100);
 
       return std::string(target);
     }
