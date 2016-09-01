@@ -173,23 +173,11 @@ namespace pmu {
        *
        * @param ecid new ecid
        */
-      void set_ecid( std::string ecid ){
-
-        pthread::lock_guard<pthread::mutex> lock(_mutex);
-
-        if ( !ecid.empty() ) {
-          _ecid = "[M ECID=\"" + ecid.substr(0, MAXECIDLEN) + "\"] ";
-        }
-        else {
-          _ecid = "- ";
-        }
-      };
+      void set_ecid( const std::string &ecid );
 
       /** @return ecid courrant
        */
-      std::string ecid() const {
-         return _ecid;
-      };
+      std::string ecid() ;
 
       /** @return loggers prefix pattern */
       const std::string pattern() const{
@@ -237,9 +225,11 @@ namespace pmu {
       pid_t        _pid;
       std::string  _ecid;
       std::string  _pname ; // program name
+      int          _lag;
 
       char         _hostname[HOST_NAME_MAX];
 
+      pthread::read_write_lock _ecid_rwlock; //!< ecid access protection
       pthread::mutex _mutex; //!< used to protect access to static class data
 
     }; // logger
