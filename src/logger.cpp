@@ -12,11 +12,21 @@
 namespace pmu {
   namespace log {
     
-    logger::logger( const std::string &name, const std::string &pname, log_level level ): _pid(getpid()), _name(name), _pname(pname), _pattern(PMU_LOG_PATTERN), _level(level){
+    logger::logger( const std::string &name, const std::string &pname, log_level level ): 
+      _pid(getpid()), _name(name), _pname(pname), _pattern(PMU_LOG_PATTERN), _level(level)
+    {
       set_facility(log_facility::sic_tux);
-      _pattern = std::string(PMU_LOG_PATTERN) + "[" +_name + "] " ;
+      _pattern = std::string(PMU_LOG_PATTERN) + "[logger=" +_name + "] " ;
       _hostname[0] = 0;
       gethostname(_hostname, HOST_NAME_MAX);
+
+      timeval current_time;
+      gettimeofday(&current_time, NULL);
+
+      struct std::tm local_time ;
+      localtime_r(&current_time.tv_sec, &local_time);
+
+      _lag = (timezone/3600) * -1 * (local_time.tm_isdst == 1 ? 200:100);
     }
     
     logger::~logger(){
@@ -48,10 +58,28 @@ namespace pmu {
       }
     }
 
+    std::string logger::ecid() {
+      pthread::lock_guard<pthread::read_lock> lock(_ecid_rwlock);
+
+      return _ecid;
+    }
+
+    void logger::set_ecid( const std::string &ecid ){
+
+      pthread::lock_guard<pthread::write_lock> lock(_ecid_rwlock);
+
+      if ( !ecid.empty() ) {
+        _ecid = "[M ECID=\"" + ecid.substr(0, MAXECIDLEN) + "\"] ";
+      }
+      else {
+        _ecid = "- ";
+      }
+    }
+
     void logger::set_name(const std::string &name){
       pthread::lock_guard<pthread::mutex> lock(_mutex);
       _name = name ;
-      _pattern = std::string(PMU_LOG_PATTERN) + _name + ": " ;
+      _pattern = std::string(PMU_LOG_PATTERN) + "[logger=" +_name + "] " ;
     };
 
     void logger::set_pattern(const std::string pattern){
@@ -59,7 +87,7 @@ namespace pmu {
     };
 
     const std::string logger::date_time(){
-      int  size = 100;
+      int  size = 50;
       char buffer[size];
       char target[size];
 
@@ -68,13 +96,19 @@ namespace pmu {
 
       timeval current_time;
       gettimeofday(&current_time, NULL);
-      //int millis = current_time.tv_usec / 1000;
       int micros = current_time.tv_usec ;
 
-      std::tm *local_time = localtime(&current_time.tv_sec);
-      strftime(buffer, size-1, "%FT%T", local_time);
-
-      snprintf(target, size-1, "%s.%06d%+05d", buffer, micros,(timezone/3600) * -1 * (local_time->tm_isdst == 1 ? 200:100));
+      struct std::tm local_time ;
+      localtime_r(&current_time.tv_sec, &local_time);
+      snprintf(target, size-1, "%d-%02d-%02dT%02d:%02d:%02d.%06d%+05d", 
+          local_time.tm_year+1900, // tm_year is the number of years from 1900
+          local_time.tm_mon + 1,   // tm_mon is the month number starting from 0
+          local_time.tm_mday,
+          local_time.tm_hour,
+          local_time.tm_min,
+          local_time.tm_sec,
+          micros,
+          _lag);
 
       return std::string(target);
     }
