@@ -134,7 +134,7 @@ namespace pmu {
          */
         registry();
 
-#if __IBMCPP_TR1__ // NOSONAR this macro is set with the compiler command line argument
+#if __IBMCPP_TR1__ //NOSONAR this macro is set with the compiler command line argumen
         std::tr1::unordered_map <std::string, logger_ptr> _loggers; //!< known loggers
 #else
         std::unordered_map <std::string, logger_ptr>      _loggers; //!< known loggers

@@ -11,8 +11,8 @@
 
 namespace pmu {
   namespace log {
-    
-    logger::logger( const std::string &name, const std::string &pname, log_level level ): 
+
+    logger::logger( const std::string &name, const std::string &pname, log_level level ):
       _pid(getpid()), _name(name), _pname(pname), _pattern(PMU_LOG_PATTERN), _level(level)
     {
       set_facility(log_facility::sic_tux);
@@ -26,13 +26,13 @@ namespace pmu {
       struct std::tm local_time ;
       localtime_r(&current_time.tv_sec, &local_time);
 
-      _lag = (timezone/3600) * -1 * (local_time.tm_isdst == 1 ? 200:100);
+      _lag = (timezone/3600) * (-1 * ((local_time.tm_isdst == 1) ? 200:100));
     }
-    
+
     logger::~logger(){
       // TODO remove this printf("logger::~logger() destructor.\n");
     }
-    
+
     void logger::set_facility(log_facility facility){
       pthread::lock_guard<pthread::mutex> lock(_mutex);
 
@@ -100,7 +100,7 @@ namespace pmu {
 
       struct std::tm local_time ;
       localtime_r(&current_time.tv_sec, &local_time);
-      snprintf(target, size-1, "%d-%02d-%02dT%02d:%02d:%02d.%06d%+05d", 
+      snprintf(target, size-1, "%d-%02d-%02dT%02d:%02d:%02d.%06d%+05d",
           local_time.tm_year+1900, // tm_year is the number of years from 1900
           local_time.tm_mon + 1,   // tm_mon is the month number starting from 0
           local_time.tm_mday,

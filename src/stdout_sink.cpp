@@ -36,7 +36,7 @@ namespace pmu {
     void default_sink::set_pattern(const std::string pattern){
       _pattern = pattern ;
     };
-    
+
     void default_sink::set_facility(log_facility facility){
       pthread::lock_guard<pthread::mutex> lock(_mutex);
 
