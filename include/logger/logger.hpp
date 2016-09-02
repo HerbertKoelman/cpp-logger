@@ -119,7 +119,7 @@ namespace pmu {
         if ( _level >= level) {
 
           // we make a copy of the formatting string (fmt) because we receive a const string
-          // and want to change things in it
+          // and want to change things in i
           std::string format = fmt;
 
           printf(
@@ -169,27 +169,15 @@ namespace pmu {
 
       /** change the current ecid.
        *
-       * Setting this to an empty string will stop logger to print
+       * Setting this to an empty string will stop logger to prin
        *
        * @param ecid new ecid
        */
-      void set_ecid( std::string ecid ){
+      void set_ecid( const std::string &ecid );
 
-        pthread::lock_guard<pthread::mutex> lock(_mutex);
-
-        if ( !ecid.empty() ) {
-          _ecid = "[M ECID=\"" + ecid.substr(0, MAXECIDLEN) + "\"] ";
-        }
-        else {
-          _ecid = "- ";
-        }
-      };
-
-      /** @return ecid courrant
+      /** @return ecid courran
        */
-      std::string ecid() const {
-         return _ecid;
-      };
+      std::string ecid() ;
 
       /** @return loggers prefix pattern */
       const std::string pattern() const{
@@ -237,9 +225,11 @@ namespace pmu {
       pid_t        _pid;
       std::string  _ecid;
       std::string  _pname ; // program name
+      int          _lag;
 
       char         _hostname[HOST_NAME_MAX];
 
+      pthread::read_write_lock _ecid_rwlock; //!< ecid access protection
       pthread::mutex _mutex; //!< used to protect access to static class data
 
     }; // logger

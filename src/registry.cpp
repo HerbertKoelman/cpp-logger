@@ -9,11 +9,11 @@
 
 namespace pmu {
   namespace log {
-    
+
     /** initailize static data
      */
     registry       registry::_registry = registry() ;
-    
+
     logger_ptr get (const std::string &name ){
 
       return registry::instance().get(name);
@@ -86,7 +86,7 @@ namespace pmu {
       // pthread::lock_guard<pthread::mutex> lck(_mutex);
 
       // check if the logger was already registered
-      auto search = _loggers.find(logger->name()); 
+      auto search = _loggers.find(logger->name());
       if ( search == _loggers.end() ){
         // add the logger in the map
         _loggers[logger->name()] = logger;

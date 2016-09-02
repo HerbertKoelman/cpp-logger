@@ -18,7 +18,7 @@ namespace pmu {
     /** \addtogroup pmu_log_sinks Sinks
      * @{
      */
-    
+
     /** default sink writes your stuff on stdout.
      *
      * @author herbert koelman(herbert.koelman@pmu.fr)
@@ -32,16 +32,16 @@ namespace pmu {
         default_sink();
 
         /** log a message if current log level is >= level
-         * 
+         *
          * @param fmt formatting string (see printf for more informations)
          * @param args message arguments
          */
         template<typename... Args> void write( const log_level level, const std::string &fmt, const Args&... args){
           if ( _level >= level) {
 
-            // we make a copy of the formatting string (fmt) because we receive a const string 
-            // and want to change things in it
-            std::string format = fmt; 
+            // we make a copy of the formatting string (fmt) because we receive a const string
+            // and want to change things in i
+            std::string format = fmt;
 
             printf(
                   // first, we build a format pattern made of the current pattern (which will hold the prefix and the fmt received
@@ -55,11 +55,11 @@ namespace pmu {
                 _pid,
                 pthread::this_thread::get_id(),
                 args...
-            ); 
+            );
           }
         };
 
-        /** 
+        /**
          * @param facility facility to use
          */
         void set_facility(log_facility facility);

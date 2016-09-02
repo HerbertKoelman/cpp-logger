@@ -29,6 +29,7 @@ core
 *.out
 *.app
 logger-test
+logger-prof
 cpp-logger-test
 
 # emacs
