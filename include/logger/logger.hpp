@@ -119,7 +119,7 @@ namespace pmu {
         if ( _level >= level) {
 
           // we make a copy of the formatting string (fmt) because we receive a const string
-          // and want to change things in it
+          // and want to change things in i
           std::string format = fmt;
 
           printf(
@@ -169,13 +169,13 @@ namespace pmu {
 
       /** change the current ecid.
        *
-       * Setting this to an empty string will stop logger to print
+       * Setting this to an empty string will stop logger to prin
        *
        * @param ecid new ecid
        */
       void set_ecid( const std::string &ecid );
 
-      /** @return ecid courrant
+      /** @return ecid courran
        */
       std::string ecid() ;
 
