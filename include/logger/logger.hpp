@@ -225,7 +225,7 @@ namespace pmu {
       pid_t        _pid;
       std::string  _ecid;
       std::string  _pname ; // program name
-      int          _lag;
+      std::string  _lag;
 
       char         _hostname[HOST_NAME_MAX];
 
