@@ -26,7 +26,18 @@ namespace pmu {
       struct std::tm local_time ;
       localtime_r(&current_time.tv_sec, &local_time);
 
-      _lag = (timezone/3600) * (-1 * ((local_time.tm_isdst == 1) ? 200:100));
+      char buffer[10] ;// lag is in the form of "-02:00"
+      memset (buffer, 0, 10 );
+
+      int lag = (timezone/3600) * (-1 * ((local_time.tm_isdst == 1) ? 200:100));
+      int hours = lag / 100 ;
+      int minutes = lag - (hours * 100 );
+      snprintf(buffer, 7, "%s%0.2d:%0.2d", 
+          ((lag < 0) ? "-" : "+" ),
+          hours,
+          minutes
+          );
+      _lag = buffer ;
     }
 
     logger::~logger(){
@@ -100,7 +111,7 @@ namespace pmu {
 
       struct std::tm local_time ;
       localtime_r(&current_time.tv_sec, &local_time);
-      snprintf(target, size-1, "%d-%02d-%02dT%02d:%02d:%02d.%06d%+05d",
+      snprintf(target, size-1, "%d-%02d-%02dT%02d:%02d:%02d.%06d%s",
           local_time.tm_year+1900, // tm_year is the number of years from 1900
           local_time.tm_mon + 1,   // tm_mon is the month number starting from 0
           local_time.tm_mday,
@@ -108,7 +119,7 @@ namespace pmu {
           local_time.tm_min,
           local_time.tm_sec,
           micros,
-          _lag);
+          _lag.c_str());
 
       return std::string(target);
     }
