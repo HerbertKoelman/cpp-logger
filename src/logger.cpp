@@ -16,7 +16,7 @@ namespace pmu {
       _pid(getpid()), _name(name), _pname(pname), _pattern(PMU_LOG_PATTERN), _level(level)
     {
       set_facility(log_facility::sic_tux);
-      _pattern = std::string(PMU_LOG_PATTERN) + "[logger=" +_name + "] " ;
+      _pattern = std::string(PMU_LOG_PATTERN) + "[L SUBSYS=" +_name + "] " ;
       _hostname[0] = 0;
       gethostname(_hostname, HOST_NAME_MAX);
 
@@ -80,7 +80,7 @@ namespace pmu {
       pthread::lock_guard<pthread::write_lock> lock(_ecid_rwlock);
 
       if ( !ecid.empty() ) {
-        _ecid = "[M ECID=\"" + ecid.substr(0, MAXECIDLEN) + "\"] ";
+        _ecid = "[M ECID=\"" + ecid.substr(0, MAXECIDLEN) + "\"]";
       }
       else {
         _ecid = "- ";
