@@ -33,24 +33,6 @@ namespace pmu {
       return _registry;
     }
 
-    logger_ptr registry::get(const std::string &name){
-      pthread::lock_guard<pthread::mutex> lck(_mutex);
-
-      // printf("DEBUG pmu::log::registry.get(%s, %d);\n", name.c_str(), _level);
-
-      logger_ptr logger;
-      auto search = _loggers.find(name);
-
-      if ( search == _loggers.end() ){
-        logger = logger_ptr(new pmu::log::logger(name, _pname, _level));
-        add(logger);
-      } else {
-        logger = search->second;
-      }
-
-      return logger;
-    }
-
     void registry::set_program_name(const std::string &pname){
       _pname = pname ;
     }
@@ -70,7 +52,7 @@ namespace pmu {
       // printf("DEBUG registry log level is now %d\n", _level);
     }
 
-    void registry::set_ecid( const std::string ecid){
+    void registry::set_ecid( const std::string &ecid){
       pthread::lock_guard<pthread::mutex> lck(_mutex);
 
       for (auto logger = _loggers.begin(); logger != _loggers.end(); ++logger) {
@@ -100,11 +82,11 @@ namespace pmu {
     }
 
     registry::registry(): _level(log_levels::info), _pname("program") {
-      // intientional...
+      // intentional...
     }
 
     registry::~registry(){
-      // intientional...
+      // intentional...
     }
 
   } // namespace log

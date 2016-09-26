@@ -20,6 +20,8 @@ namespace pmu {
     * @{
     */
 
+    class sink ;
+
     /** handles log messages.
      *
      * @author herbert koelman (herbert.koelman@pmu.fr)
@@ -116,56 +118,45 @@ namespace pmu {
        * @param args message arguments
        */
       template<typename... Args> void log( log_level level, const std::string &fmt, const Args&... args){
-        if ( _level >= level) {
+        _sink->write(level, fmt.c_str(), args... );
 
-          // we make a copy of the formatting string (fmt) because we receive a const string
-          // and want to change things in i
-          std::string format = fmt;
-
-          printf(
-                // first, we build a format pattern made of the current pattern (which will hold the prefix and the fmt received
-                (
-                  _pattern +
-                  (format.at(format.size()-1) == '\n' ? format : format += '\n') // handle string termination
-                ).c_str(),
-              level,
-              date_time().c_str(),
-              _hostname,
-              _facility.c_str(),
-              _pname.c_str(),
-              _pid,
-              pthread::this_thread::get_id(),
-              _ecid.empty()? "- " : _ecid.c_str(),
-              args...
-          );
-        }
+//        if ( _level >= level) {
+//
+//          // we make a copy of the formatting string (fmt) because we receive a const string
+//          // and want to change things in i
+//          std::string format = fmt;
+//
+//          printf(
+//                // first, we build a format pattern made of the current pattern (which will hold the prefix and the fmt received
+//                (
+//                  _pattern +
+//                  (format.at(format.size()-1) == '\n' ? format : format += '\n') // handle string termination
+//                ).c_str(),
+//              level,
+//              date_time().c_str(),
+//              _hostname,
+//              _facility.c_str(),
+//              _pname.c_str(),
+//              _pid,
+//              pthread::this_thread::get_id(),
+//              _ecid.empty()? "- " : _ecid.c_str(),
+//              args...
+//          );
+//        }
       };
 
-      /** instancie un objet pour journaliser
-       *
-       * @param name nom du journal
-       * @param level initial log level (defaults to pmu::log::info)
-       */
-      logger( const std::string &name = "default",  const std::string &pname = "program", log_level level = log_levels::info );
-
-      /** dispose of logger instance ressources
-       */
-      virtual ~logger();
+      // -------------------------------------------------------------
+      //
 
       /** change the current log level.
        *
        * @param level new logging level
        */
-      void set_log_level( log_levels level ){
-        pthread::lock_guard<pthread::mutex> lock(_mutex);
-        _level = level;
-      };
+      void set_log_level( log_levels level );
 
       /** @return niveau courrant de journalisation
        */
-      log_levels level() const {
-         return _level;
-      };
+      log_levels level() const ;
 
       /** change the current ecid.
        *
@@ -179,20 +170,11 @@ namespace pmu {
        */
       std::string ecid() ;
 
-      /** @return loggers prefix pattern */
-      const std::string pattern() const{
-        return _pattern;
-      };
-
       /** @return logger name */
-      std::string name() const{
-        return _name;
-      };
+      std::string name() const;
 
       /** @return logger's facility (see pmu::log::log_facility) */
-      const std::string facility() const {
-        return _facility;
-      };
+      const std::string facility() const;
 
       /** modifie la facilit. . utiliser.
        *
@@ -200,37 +182,20 @@ namespace pmu {
        */
       void set_facility(log_facility facility);
 
+      /** instancie un objet pour journaliser
+       *
+       * @param name nom du journal
+       * @param level initial log level (defaults to pmu::log::info)
+       */
+      logger( const std::string &name, sink *sink);
+
+      /** dispose of logger instance ressources
+       */
+      virtual ~logger();
+
     private:
 
-      /** fill the buffer with the current date and time information
-       */
-      const std::string date_time();
-
-      /** définit le préfix à utiliser
-       *
-       * @param pattern d.sir. (default "%s")
-       */
-      void set_pattern(std::string pattern);
-
-      /** set the logger name.
-       *
-       * @param name logger name (i.e. some/thing)
-       */
-      void set_name(const std::string &name);
-
-      std::string  _name ;
-      std::string  _pattern;
-      std::string  _facility;
-      log_level    _level;
-      pid_t        _pid;
-      std::string  _ecid;
-      std::string  _pname ; // program name
-      std::string  _lag;
-
-      char         _hostname[HOST_NAME_MAX];
-
-      pthread::read_write_lock _ecid_rwlock; //!< ecid access protection
-      pthread::mutex _mutex; //!< used to protect access to static class data
+      sink        *_sink; //!< logger delegate to a sink the actual magic to write log messages
 
     }; // logger
 

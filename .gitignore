@@ -28,9 +28,8 @@ core
 *.exe
 *.out
 *.app
-logger-test
-logger-prof
-cpp-logger-test
+tests/*test
+tests/*prof
 
 # emacs
 *~
