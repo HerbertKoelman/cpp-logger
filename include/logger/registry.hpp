@@ -12,6 +12,8 @@
 #include <pthread/pthread.hpp>
 #include "logger/definitions.hpp"
 #include <logger/logger.hpp>
+#include <logger/sinks.hpp>
+#include <logger/definitions.hpp>
 
 #ifndef PMU_LOGGER_REGISTRY_HPP
 #define PMU_LOGGER_REGISTRY_HPP
@@ -19,7 +21,7 @@
 namespace pmu {
   namespace log {
 
-   /** \addtogroup pmu_log
+   /** \addtogroup pmu_log 
     * @{
     */
 
@@ -29,6 +31,7 @@ namespace pmu {
      *
      * @param name logger name
      * @return a logger instance
+     * @example cpp-logger-test.cpp
      */
     logger_ptr get (const std::string &name );
 
@@ -39,6 +42,12 @@ namespace pmu {
      * @param level wanted log level.
      */
     void set_level(const log_level level);
+
+    /** set ECID for all registered loggers.
+     *
+     * @param ecid ECID
+     */
+    void set_ecid(const std::string &ecid );
 
     /** set program name.
      *
@@ -63,19 +72,20 @@ namespace pmu {
          */
         void remove(const std::string &name);
 
+        /** unregister all loggers
+         */
+        void reset();
+
+        /** return number of registered loggers */
+        size_t size() const {
+          return _loggers.size();
+        };
+
         /** set the log level of all registered loggers
          *
          * @param level log level
          */
         void set_log_level ( log_level level );
-
-        void set_program_name(const std::string &pname);
-
-        std::string program_name();
-
-        /** unregister all loggers
-         */
-        void reset();
 
         /**  this is the log level that will be set when a new logger is instanciated.
          *
@@ -85,18 +95,29 @@ namespace pmu {
           return _level;
         }
 
+        /** set program name
+         *
+         * @param pname program name
+         */
+        void set_program_name(const std::string &pname);
+
+        /** @return current program name
+         */
+        std::string program_name();
+
         /** set the ecid of all registered loggers
          *
          * @param ecid
          */
-        void set_ecid ( const std::string ecid );
-
+        void set_ecid ( const std::string &ecid );
 
         /** @return a logger instance (if not found a new one is created)
          */
-        logger_ptr get(const std::string &name);
+        logger_ptr get(const std::string &name){
+          return get<stdout_sink>(name);
+        }
 
-        /**
+        /** 
          * @param name logger instance name
          * @param T a logger type
          * @param args logger type special arguments
@@ -111,7 +132,15 @@ namespace pmu {
           auto search = _loggers.find(name);
 
           if ( search == _loggers.end() ){
-            logger = logger_ptr(new T(name, _pname, _level, args...));
+            // no logger was registered yet, instantiate a new one.
+            logger = logger_ptr(
+              new pmu::log::logger(
+                name, 
+                new T(name, _pname, _level, args...)
+              )
+            );
+
+            // register the newly created logger instance
             add(logger);
           } else {
             logger = search->second;
@@ -134,7 +163,7 @@ namespace pmu {
          */
         registry();
 
-#if __IBMCPP_TR1__ //NOSONAR this macro is set with the compiler command line argumen
+#if __IBMCPP_TR1__ // NOSONAR this macro is set with the compiler command line argument
         std::tr1::unordered_map <std::string, logger_ptr> _loggers; //!< known loggers
 #else
         std::unordered_map <std::string, logger_ptr>      _loggers; //!< known loggers
@@ -165,7 +194,7 @@ namespace pmu {
     template<class T, typename... Args> logger_ptr get( const std::string &name, const Args&... args){
       return registry::instance().get<T>(name, args...);
     };
-
+    
     /** @} */
   } // namespace log
 } // namespace pmu
