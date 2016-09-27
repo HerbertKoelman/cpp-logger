@@ -24,6 +24,8 @@ namespace pmu {
 
     /** abstract sink base class.
      *
+     * derive specific implmenetation from this abstraction.
+     *
      * @author herbert koelman
      * @since v1.4.0
      */
@@ -40,13 +42,6 @@ namespace pmu {
          * @param ... format parameters
          */
         virtual void write( log_level level, const char *fmt, ... ) = 0;
-
-        /** instancie un objet pour journaliser
-         *
-         * @param name nom du journal
-         * @param level initial log level (defaults to pmu::log::info)
-         */
-        sink( const std::string &name = "default", const std::string &pname = "prog", log_level level = log_levels::info );
 
         /** dispose of logger instance ressources
          */
@@ -96,6 +91,14 @@ namespace pmu {
 
       protected:
 
+        /** instancie un objet pour journaliser
+         *
+         * @param name nom du journal
+         * @param pname program name
+         * @param level initial log level (defaults to pmu::log::info)
+         */
+        sink( const std::string &name = "default", const std::string &pname = "prog", log_level level = log_levels::info );
+
         /** fill the buffer with the current date and time information
          */
         const std::string date_time();
@@ -107,8 +110,8 @@ namespace pmu {
         std::string     _ecid;     //!< current ECID (a Tuxedo notion)
         log_level       _level;    //!< current logging level
         pid_t           _pid;      //!< process ID
-        std::string     _lag;
-        char            _hostname[HOST_NAME_MAX];
+        std::string     _lag;      //!< date time lag (i.e. +02:00)
+        char            _hostname[HOST_NAME_MAX]; //!< hostname (this will be displayed by log messages)
 
       private:
         pthread::read_write_lock _ecid_rwlock; //!< ecid access protection
@@ -118,7 +121,9 @@ namespace pmu {
 
     /** file sink.
      *
-     * send log messages to stdou
+     * send log messages to FILE.
+     *
+     * > it is up to you to handle the file opening/closing.
      *
      * @author herbert koelman (herbert.koelman@pmu.fr)
      * @since v1.4.0
@@ -129,6 +134,7 @@ namespace pmu {
         /** instancie un objet pour journaliser
          *
          * @param name nom du journal
+         * @param pname program name
          * @param level initial log level (defaults to pmu::log::info)
          */
         file_sink( const std::string &name, const std::string &pname, log_level level, FILE *file);
@@ -143,12 +149,12 @@ namespace pmu {
         virtual void write( log_level level, const char *fmt, ... );
 
       protected:
-        FILE   *_file_descriptor ;
+        FILE   *_file_descriptor ; //!< file descriptor of a log file
     };
 
     /** stdout sink.
      *
-     * send log messages to stdou
+     * send log messages to stdout
      *
      * @author herbert koelman (herbert.koelman@pmu.fr)
      * @since v1.4.0
@@ -159,6 +165,7 @@ namespace pmu {
         /** instancie un objet pour journaliser
          *
          * @param name nom du journal
+         * @param pname program name
          * @param level initial log level (defaults to pmu::log::info)
          */
         stdout_sink( const std::string &name = "stdout", const std::string &pname = "prog", log_level level = log_level::info);
@@ -178,6 +185,7 @@ namespace pmu {
         /** instancie un objet pour journaliser
          *
          * @param name nom du journal
+         * @param pname program name
          * @param level initial log level (defaults to pmu::log::info)
          */
         stderr_sink( const std::string &name = "stderr", const std::string &pname = "prog", log_level level = log_level::info);
