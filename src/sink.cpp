@@ -11,10 +11,10 @@
 
 namespace pmu {
   namespace log {
-    
+
     // abstract sink class -------------------
     //
-    sink::sink( const std::string &name, const std::string &pname, log_level level ): 
+    sink::sink( const std::string &name, const std::string &pname, log_level level ):
       // init class data
       _pid(getpid()), _name(name), _level(level), _pname(pname), _pattern(PMU_LOG_PATTERN)
     {
@@ -40,18 +40,22 @@ namespace pmu {
       int lag = (timezone/3600) * (-1 * ((local_time.tm_isdst == 1) ? 200:100));
       int hours = lag / 100 ;
       int minutes = lag - (hours * 100 );
-      snprintf(buffer, 7, "%s%0.2d:%0.2d", 
+      snprintf(buffer, 7, "%s%0.2d:%0.2d",
           ((lag < 0) ? "-" : "+" ),
           hours,
           minutes
           );
       _lag = buffer ;
     }
-    
+
     sink::~sink(){
-      // TODO remove this printf("sink::~sink() destructor.\n");
+#ifdef DEBUG
+      printf("DEBUG %s (%s,%d).\n", __FUNCTION__, __FILE__, __LINE__);
+#endif
+
+      // intentional
     }
-    
+
     std::string sink::ecid() {
       pthread::lock_guard<pthread::read_lock> lock(_ecid_rwlock);
 

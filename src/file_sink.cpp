@@ -7,7 +7,7 @@
 
 namespace pmu {
   namespace log {
-    
+
     file_sink::file_sink( const std::string &name, const std::string &pname, log_level level, FILE *file): sink(name, pname, level), _file_descriptor(file){
       // intentional...
     };
@@ -31,12 +31,12 @@ namespace pmu {
 
         // new character vector
         // vsnprintf returns the needed characters to store the outpu
-        // not possible with XXL C/C++ std::vector<char> buf(1+std::vsnprintf(NULL, 0, fmt, args1)); 
+        // not possible with XXL C/C++ std::vector<char> buf(1+std::vsnprintf(NULL, 0, fmt, args1));
 
-        size_t buffer_size = 1+vsnprintf(NULL, 0, fmt, args1); 
+        size_t buffer_size = 1+vsnprintf(NULL, 0, fmt, args1);
         va_end(args1); // don't need this one anymore
 
-        char buffer[buffer_size]; 
+        char buffer[buffer_size];
         memset(buffer,0,buffer_size);
 
         // fill buffer with message ...
@@ -69,7 +69,7 @@ namespace pmu {
             pthread::this_thread::get_id(),
             _ecid.empty()? "- " : _ecid.c_str(),
             buffer
-        ); 
+        );
       }
     }; // write
   } // namespace log

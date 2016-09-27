@@ -59,14 +59,12 @@ namespace pmu {
         logger->second->set_ecid(ecid);
       }
 
-      // printf("DEBUG registry ecid is now %s\n", _ecid);
+#ifdef DEBUG
+      printf("DEBUG %s: registry ecid is now %s (%s,%d)\n", __FUNCTION__, _ecid, __FILE__, __LINE__);
+#endif
     }
 
     void registry::add(logger_ptr logger){
-      // TODO remove this lock.
-      // internal utility method doesn't have to be protected by a mutex
-      // pthread::lock_guard<pthread::mutex> lck(_mutex);
-
       // check if the logger was already registered
       auto search = _loggers.find(logger->name());
       if ( search == _loggers.end() ){

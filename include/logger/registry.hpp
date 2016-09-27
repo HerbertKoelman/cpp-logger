@@ -21,7 +21,7 @@
 namespace pmu {
   namespace log {
 
-   /** \addtogroup pmu_log 
+   /** \addtogroup pmu_log
     * @{
     */
 
@@ -117,7 +117,7 @@ namespace pmu {
           return get<stdout_sink>(name);
         }
 
-        /** 
+        /**
          * @param name logger instance name
          * @param T a logger type
          * @param args logger type special arguments
@@ -135,7 +135,7 @@ namespace pmu {
             // no logger was registered yet, instantiate a new one.
             logger = logger_ptr(
               new pmu::log::logger(
-                name, 
+                name,
                 new T(name, _pname, _level, args...)
               )
             );
@@ -163,7 +163,7 @@ namespace pmu {
          */
         registry();
 
-#if __IBMCPP_TR1__ // NOSONAR this macro is set with the compiler command line argument
+#if __IBMCPP_TR1__ // NOSONAR this macro is set with the compiler command line argumen
         std::tr1::unordered_map <std::string, logger_ptr> _loggers; //!< known loggers
 #else
         std::unordered_map <std::string, logger_ptr>      _loggers; //!< known loggers
@@ -194,7 +194,7 @@ namespace pmu {
     template<class T, typename... Args> logger_ptr get( const std::string &name, const Args&... args){
       return registry::instance().get<T>(name, args...);
     };
-    
+
     /** @} */
   } // namespace log
 } // namespace pmu
