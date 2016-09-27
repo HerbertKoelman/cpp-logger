@@ -31,7 +31,7 @@ namespace pmu {
      *
      * @param name logger name
      * @return a logger instance
-     * @example cpp-logger-test.cpp
+     * @example logger-test.cpp
      */
     logger_ptr get (const std::string &name );
 

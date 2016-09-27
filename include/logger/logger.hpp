@@ -161,7 +161,7 @@ namespace pmu {
       /** instancie un objet pour journaliser
        *
        * @param name nom du journal
-       * @param level initial log level (defaults to pmu::log::info)
+       * @param sink sink that this instance will delegate log writing
        */
       logger( const std::string &name, sink *sink);
 
