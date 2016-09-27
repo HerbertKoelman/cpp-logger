@@ -18,7 +18,7 @@
 
 namespace pmu {
   namespace log {
-   /** \addtogroup pmu_log 
+   /** \addtogroup pmu_log
     * @{
     */
 
@@ -43,7 +43,7 @@ namespace pmu {
 
         /** instancie un objet pour journaliser
          *
-         * @param name nom du journal 
+         * @param name nom du journal
          * @param level initial log level (defaults to pmu::log::info)
          */
         sink( const std::string &name = "default", const std::string &pname = "prog", log_level level = log_levels::info );
@@ -51,7 +51,7 @@ namespace pmu {
         /** dispose of logger instance ressources
          */
         virtual ~sink();
-        
+
         /** change the current log level.
          *
          * @param level new logging level
@@ -65,7 +65,7 @@ namespace pmu {
         log_levels level() const {
            return _level;
         };
-        
+
         /** @return logger name */
         std::string name() const{
           return _name;
@@ -84,13 +84,13 @@ namespace pmu {
 
 				/** change the current ecid.
 				 *
-				 * Setting this to an empty string will stop logger to print
+				 * Setting this to an empty string will stop logger to prin
 				 *
 				 * @param ecid new ecid
 				 */
 				void set_ecid( const std::string &ecid );
 
-				/** @return ecid courrant
+				/** @return ecid courran
 				 */
 				std::string ecid() ;
 
@@ -118,7 +118,7 @@ namespace pmu {
 
     /** file sink.
      *
-     * send log messages to stdout
+     * send log messages to stdou
      *
      * @author herbert koelman (herbert.koelman@pmu.fr)
      * @since v1.4.0
@@ -128,7 +128,7 @@ namespace pmu {
 
         /** instancie un objet pour journaliser
          *
-         * @param name nom du journal 
+         * @param name nom du journal
          * @param level initial log level (defaults to pmu::log::info)
          */
         file_sink( const std::string &name, const std::string &pname, log_level level, FILE *file);
@@ -136,7 +136,7 @@ namespace pmu {
         virtual ~file_sink();
 
         /** \copydoc sink::write()
-         * 
+         *
          * This sink writes messages in FILE.
          *
          */
@@ -148,7 +148,7 @@ namespace pmu {
 
     /** stdout sink.
      *
-     * send log messages to stdout
+     * send log messages to stdou
      *
      * @author herbert koelman (herbert.koelman@pmu.fr)
      * @since v1.4.0
@@ -158,7 +158,7 @@ namespace pmu {
 
         /** instancie un objet pour journaliser
          *
-         * @param name nom du journal 
+         * @param name nom du journal
          * @param level initial log level (defaults to pmu::log::info)
          */
         stdout_sink( const std::string &name = "stdout", const std::string &pname = "prog", log_level level = log_level::info);
@@ -177,7 +177,7 @@ namespace pmu {
 
         /** instancie un objet pour journaliser
          *
-         * @param name nom du journal 
+         * @param name nom du journal
          * @param level initial log level (defaults to pmu::log::info)
          */
         stderr_sink( const std::string &name = "stderr", const std::string &pname = "prog", log_level level = log_level::info);
