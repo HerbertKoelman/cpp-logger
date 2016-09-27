@@ -35,7 +35,6 @@ int main( int argc, char *argv[]){
     int x =100;
 
     for ( auto x = loop; x > 0 ; x--) {
-    //while (true) {
       main_logger->info("Messages #%d. program: %s, some text %s, %s", x, pname, "01234567890123456789012345678901234567801234567801234567801234567801234567899999", s.c_str());
       //printf("Messages #%d. program: %s, some text %s, %s", x, pname, "01234567890123456789012345678901234567801234567801234567801234567801234567899999", s.c_str());
     }

@@ -119,30 +119,6 @@ namespace pmu {
        */
       template<typename... Args> void log( log_level level, const std::string &fmt, const Args&... args){
         _sink->write(level, fmt.c_str(), args... );
-
-//        if ( _level >= level) {
-//
-//          // we make a copy of the formatting string (fmt) because we receive a const string
-//          // and want to change things in i
-//          std::string format = fmt;
-//
-//          printf(
-//                // first, we build a format pattern made of the current pattern (which will hold the prefix and the fmt received
-//                (
-//                  _pattern +
-//                  (format.at(format.size()-1) == '\n' ? format : format += '\n') // handle string termination
-//                ).c_str(),
-//              level,
-//              date_time().c_str(),
-//              _hostname,
-//              _facility.c_str(),
-//              _pname.c_str(),
-//              _pid,
-//              pthread::this_thread::get_id(),
-//              _ecid.empty()? "- " : _ecid.c_str(),
-//              args...
-//          );
-//        }
       };
 
       // -------------------------------------------------------------
