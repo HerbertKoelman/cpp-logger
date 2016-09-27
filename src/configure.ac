@@ -2,21 +2,22 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.69)
-AC_INIT([cpp-logger],[m4_esyscmd_s(echo $(git describe --always --abbrev=0))],[herbert.koelman@me.com],[],[http://herbertkoelman.github.io/cpp-logger/])
+AC_INIT([cpp-logger],[m4_esyscmd_s(echo $(git describe --always --abbrev=0))],[herbert.koelman@me.com],[],[http://mut-mut-scmv1.dev.parimutuel.local/applications/cpp-logger])
 AC_LANG(C++)
 AC_CONFIG_SRCDIR([logger.cpp])
 AC_CONFIG_AUX_DIR([/usr/bin ../ ../bin])
 AC_CONFIG_HEADERS([../include/logger/config.h])
 
-AC_DEFINE_UNQUOTED(CPP_LOGGER_VERSION, ["$PACKAGE_NAME $PACKAGE_VERSION - $(git log --pretty='%H' | head -1) - compiled on `uname -sv`."], [logging facility.])
+AC_DEFINE_UNQUOTED(CPP_LOGGER_VERSION, ["$PACKAGE_NAME $PACKAGE_VERSION - $(git log --pretty='commit: %h, %cn (%cI)' | head -1) - compiled on `uname -sv`."], [logging facility.])
 
 CXXFLAGS=""
-CFLAGS="-I../include"
+CPPFLAGS="-I../include"
+CFLAGS=""
 
 AC_ARG_VAR([AUXDIR], [auxiliary include and lib directories])
 AC_ARG_ENABLE([auxdir], AS_HELP_STRING([--enable-auxdir=PATH],[set AUXDIR to point to this path]), AUXDIR=$enable_auxdir)
 
-AC_ARG_ENABLE([localdir], AS_HELP_STRING([--enable-localdir],[adds -I and -L to /usr/local include and lib respectively.]), CFLAGS="-I /usr/local/include" LDFLAGS=" -L /usr/local/lib" )
+AC_ARG_ENABLE([localdir], AS_HELP_STRING([--enable-localdir],[adds -I and -L to /usr/local include and lib respectively.]), CPPFLAGS="-I /usr/local/include" LDFLAGS=" -L /usr/local/lib" )
 
 # Checks for programs.
 AC_PROG_CXX([xlC_r xlC g++ c++ gcc cl KCC CC cxx cc++ aCC ])
@@ -27,7 +28,7 @@ AC_PROG_RANLIB
 
 if test -n "$AUXDIR"
 then
-  CFLAGS="$CFLAGS -I$AUXDIR/include"
+  CPPFLAGS="$CPPFLAGS -I$AUXDIR/include"
   LDFLAGS="$LDFLAGS -L$AUXDIR/lib"
   AC_MSG_NOTICE([WARNING using auxiliary directory $AUXDIR (CFLAGS=$CFLAGS, LDFLAGS=$LDFLAGS)])
 fi
@@ -54,14 +55,13 @@ AC_SUBST(OBJECTS,$OBJECTS)
 AC_MSG_CHECKING([for specific $CXX compiler options])
 case "$CXX" in
   xlC_r | xlC)
-    CPPFLAGS="-D__IBMCPP_TR1__ -qlanglvl=extended0x:decltype:static_assert:rvaluereferences -qsourcetype=c++ $CPPFLAGS"
-    CFLAGS="-qmaxmem=-1 -q$BITS $CFLAGS"
+    CFLAGS="-D__IBMCPP_TR1__ -qmaxmem=-1 -q$BITS -qlanglvl=extended0x:decltype:static_assert:rvaluereferences $CFLAGS"
     CXXFLAGS="-O"
     LDFLAGS="$LDFLAGS -brtl -bmaxdata:0x80000000"
-    AC_MSG_RESULT([using large memory model (maxdata:0x80000000), optimising level 2 (-O),using run-time link method (-brtl)])
+    AC_MSG_RESULT([yes])
     ;;
   g++ | gcc)
-    CPPFLAGS="-x c++ -std=c++11 -frtti $CPPFLAGS"
+    CFLAGS="-x c++ -std=c++11 -frtti $CFLAGS"
     CXXFLAGS="-O2"
     AC_MSG_RESULT([yes])
   ;;
@@ -70,20 +70,13 @@ case "$CXX" in
 esac
 
 # Checks for libraries.
-AC_CHECK_LIB([pthread], [pthread_create],[],[AC_ERROR([missing pthread library.])])
+AC_CHECK_LIB([pthread],     [pthread_create],[],[AC_ERROR([missing pthread library.])])
 AC_CHECK_LIB([cpp-pthread], [cpp_pthread_version],[],[AC_ERROR([missing cpp-pthread library.])])
 
 # Checks for header files.
 #AC_HEADER_STDC
 
-AC_CHECK_HEADER([mutex],  [AC_DEFINE([HAVE_CPP11_MUTEX])])
-AC_CHECK_HEADER([chrono], [AC_DEFINE([HAVE_CPP11_CHRONO])])
-AC_CHECK_HEADER([thread], [AC_DEFINE([HAVE_CPP11_THREAD])])
-
-# Checks for typedefs, structures, and compiler characteristics.
-
-# Checks for library functions.
-
+# check function
 AC_CHECK_FUNCS([gettimeofday])
 
 AC_CONFIG_FILES([Makefile cpp-logger.cpp])
