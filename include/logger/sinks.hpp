@@ -2,87 +2,187 @@
  * author: herbert koelman (herbert.koelman@pmu.fr)
  */
 
+#include <pthread/pthread.hpp> // pthread::this_thread::get_id
 #include <string>
-#include <cstdio>
-#include <pthread/pthread.hpp>
-#include "logger/definitions.hpp"
+#include <cstdio>   // std::vsnprintf(...)
+#include <cstdarg>  // std::va_list, ...
+#include <vector>
+#include <unistd.h> // std::getpid
 
 #ifndef PMU_LOGGER_SINKS_HPP
 #define PMU_LOGGER_SINKS_HPP
 
-#include "logger/logger.hpp"
+#include "logger/definitions.hpp"
+
+#define MAXECIDLEN 64
 
 namespace pmu {
   namespace log {
+   /** \addtogroup pmu_log 
+    * @{
+    */
 
-    /** \addtogroup pmu_log_sinks Sinks
-     * @{
-     */
-
-    /** default sink writes your stuff on stdout.
+    /** abstract sink base class.
      *
-     * @author herbert koelman(herbert.koelman@pmu.fr)
-     * @since v1.3.0
+     * @author herbert koelman
+     * @since v1.4.0
      */
-    class default_sink {
+    class sink {
       public:
 
-        /** default constructor
-         */
-        default_sink();
-
-        /** log a message if current log level is >= level
+        /** actual write operation.
          *
-         * @param fmt formatting string (see printf for more informations)
-         * @param args message arguments
+         * sinks should override this method. Implmenetationas are in charge of prefixing the message
+         * with date time and other infos.
+         *
+         * @param level corresponding messages's log level.
+         * @param fmt formatting string
+         * @param ... format parameters
          */
-        template<typename... Args> void write( const log_level level, const std::string &fmt, const Args&... args){
-          if ( _level >= level) {
+        virtual void write( log_level level, const char *fmt, ... ) = 0;
 
-            // we make a copy of the formatting string (fmt) because we receive a const string
-            // and want to change things in i
-            std::string format = fmt;
+        /** instancie un objet pour journaliser
+         *
+         * @param name nom du journal 
+         * @param level initial log level (defaults to pmu::log::info)
+         */
+        sink( const std::string &name = "default", const std::string &pname = "prog", log_level level = log_levels::info );
 
-            printf(
-                  // first, we build a format pattern made of the current pattern (which will hold the prefix and the fmt received
-                  (
-                    _pattern +
-                    (format.at(format.size()-1) == '\n' ? format : format += '\n') // handle string termination
-                  ).c_str(),
-                _level,
-                date_time().c_str(),
-                _facility.c_str(),
-                _pid,
-                pthread::this_thread::get_id(),
-                args...
-            );
-          }
+        /** dispose of logger instance ressources
+         */
+        virtual ~sink();
+        
+        /** change the current log level.
+         *
+         * @param level new logging level
+         */
+        void set_log_level( log_levels level ){
+          _level = level;
         };
 
-        /**
+        /** @return niveau courrant de journalisation
+         */
+        log_levels level() const {
+           return _level;
+        };
+        
+        /** @return logger name */
+        std::string name() const{
+          return _name;
+        };
+
+        /** @return logger's facility (see pmu::log::log_facility) */
+        const std::string facility() const {
+          return _facility;
+        };
+
+        /** modifie la facilit. . utiliser.
+         *
          * @param facility facility to use
          */
         void set_facility(log_facility facility);
 
-      private:
+				/** change the current ecid.
+				 *
+				 * Setting this to an empty string will stop logger to print
+				 *
+				 * @param ecid new ecid
+				 */
+				void set_ecid( const std::string &ecid );
+
+				/** @return ecid courrant
+				 */
+				std::string ecid() ;
+
+      protected:
 
         /** fill the buffer with the current date and time information
          */
         const std::string date_time();
 
-        /** définit le préfix à utiliser
+        std::string     _name ; //!< logging domain name (as for now, this is equal to the logger name)
+        std::string     _pattern;//!< message pattern (layout)
+        std::string     _pname ; //!< program name
+        std::string     _facility; //!< current faility string
+        std::string     _ecid;     //!< current ECID (a Tuxedo notion)
+        log_level       _level;    //!< current logging level
+        pid_t           _pid;      //!< process ID
+        std::string     _lag;
+        char            _hostname[HOST_NAME_MAX];
+
+      private:
+        pthread::read_write_lock _ecid_rwlock; //!< ecid access protection
+        pthread::mutex           _mutex;       //!< used to protect access to static class data
+
+    }; // sink
+
+    /** file sink.
+     *
+     * send log messages to stdout
+     *
+     * @author herbert koelman (herbert.koelman@pmu.fr)
+     * @since v1.4.0
+     */
+    class file_sink: public sink {
+      public:
+
+        /** instancie un objet pour journaliser
          *
-         * @param pattern d.sir. (default "%s")
+         * @param name nom du journal 
+         * @param level initial log level (defaults to pmu::log::info)
          */
-        void set_pattern(std::string pattern);
+        file_sink( const std::string &name, const std::string &pname, log_level level, FILE *file);
 
-        std::string  _pattern;
-        std::string  _facility;
-        pid_t        _pid;
-        log_level    _level;
-        pthread::mutex _mutex; //!< used to protect access to static class data
-      };
+        virtual ~file_sink();
 
+        /** \copydoc sink::write()
+         * 
+         * This sink writes messages in FILE.
+         *
+         */
+        virtual void write( log_level level, const char *fmt, ... );
+
+      protected:
+        FILE   *_file_descriptor ;
+    };
+
+    /** stdout sink.
+     *
+     * send log messages to stdout
+     *
+     * @author herbert koelman (herbert.koelman@pmu.fr)
+     * @since v1.4.0
+     */
+    class stdout_sink: public file_sink {
+      public:
+
+        /** instancie un objet pour journaliser
+         *
+         * @param name nom du journal 
+         * @param level initial log level (defaults to pmu::log::info)
+         */
+        stdout_sink( const std::string &name = "stdout", const std::string &pname = "prog", log_level level = log_level::info);
+
+    };
+
+    /** stderr sink.
+     *
+     * send log messages to stderr
+     *
+     * @author herbert koelman (herbert.koelman@pmu.fr)
+     * @since v1.4.0
+     */
+    class stderr_sink: public file_sink {
+      public:
+
+        /** instancie un objet pour journaliser
+         *
+         * @param name nom du journal 
+         * @param level initial log level (defaults to pmu::log::info)
+         */
+        stderr_sink( const std::string &name = "stderr", const std::string &pname = "prog", log_level level = log_level::info);
+
+    };
     /** @} */
 
   } // namespace log

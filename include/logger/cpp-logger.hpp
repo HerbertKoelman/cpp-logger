@@ -1,5 +1,6 @@
 #include <logger/logger.hpp>
 #include <logger/registry.hpp>
+#include <logger/sinks.hpp>
 
 #ifndef PMU_CPP_LOGGER_HPP
 #define PMU_CPP_LOGGER_HPP
