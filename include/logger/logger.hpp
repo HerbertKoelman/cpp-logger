@@ -25,7 +25,7 @@ namespace pmu {
     /** handles log messages.
      *
      * @author herbert koelman (herbert.koelman@pmu.fr)
-     * @example logger-tests.cpp
+     * @example logger-test.cpp
      */
     class logger {
     public:
