@@ -16,6 +16,7 @@ int main(){
   pmu::log::logger_ptr err    = pmu::log::get<pmu::log::stderr_sink>("stderr-test-logger");
   pmu::log::logger_ptr out    = pmu::log::get<pmu::log::stdout_sink>("stdout-test-logger");
   pmu::log::logger_ptr logger = pmu::log::get<pmu::log::stdout_sink>("stdout-test-logger");
+  pmu::log::logger_ptr test_logger = pmu::log::get("test-logger");
 
   out->warning("registered %d loggers so far.\n", pmu::log::registry::instance().size());
   err->warning("writing into stderr sink");
@@ -26,6 +27,13 @@ int main(){
   logger->set_ecid("Test ecid !!!");
 
   logger->notice("setting log level to debug");
+  std::string str("hello, world...");
+  logger->notice("string [%s], decimal: %d, long decimal: %ld.\n\n", str.c_str(), 10, 100000);
+  logger->notice("End of line handling, string [%s], decimal: %d, long decimal: %ld.", str.c_str(), 10, 100000);
+
+  logger->set_ecid("");
+  logger->notice("string [%s], decimal: %d, long decimal: %ld.\n\n", str.c_str(), 10, 100000);
+  logger->notice("End of line handling, string [%s], decimal: %d, long decimal: %ld.", str.c_str(), 10, 100000);
 
   logger->set_log_level(pmu::log::log_levels::debug);
   logger->debug("debug message");
@@ -42,9 +50,8 @@ int main(){
   logger->notice("setting log level to info");
   pmu::log::set_level(pmu::log::log_level::info);
 
-  // for ( auto x = 1000000; x > 0 ; x--) {
   for ( auto x = 10; x > 0 ; x--) {
-    logger->info("Messages #%d.", x);
+    test_logger->info("Messages #%d.\n", x);
   }
 
   logger->set_ecid("01234567801234567801234567801234567801234567801234567801234567899999990123456789");
@@ -53,5 +60,5 @@ int main(){
   logger->info("resetting ECID to empty");
   logger->set_ecid("");
   logger->info("done %s (%d)", __FILE__, __LINE__);
-  logger->warning("End of test program. Have a nice day.");
+  logger->warning("End of test program Have a nice day.");
 }
