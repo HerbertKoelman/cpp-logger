@@ -60,7 +60,7 @@ namespace pmu {
       }
 
 #ifdef DEBUG
-      printf("DEBUG %s: registry ecid is now %s (%s,%d)\n", __FUNCTION__, _ecid, __FILE__, __LINE__);
+      printf("DEBUG %s: registry ecid is now %s (%s,%d)\n", __FUNCTION__, ecid.c_str(), __FILE__, __LINE__);
 #endif
     }
 
