@@ -25,22 +25,27 @@ namespace pmu {
 
         // fill a buffer with the user message
         va_list args1;
-        va_start(args1, fmt );
         va_list args2;
-        va_copy(args2, args1); // save a copy
+
+        va_start(args1, fmt ); // initialize va_list
+        va_copy(args2, args1); // save a copy args1 -> args2
 
         // new character vector
-        // vsnprintf returns the needed characters to store the outpu
-        // not possible with XXL C/C++ std::vector<char> buf(1+std::vsnprintf(NULL, 0, fmt, args1));
+        // vsnprintf returns the needed characters to store the output
+        // not possible with XL C/C++ std::vector<char> buf(1+std::vsnprintf(NULL, 0, fmt, args1));
 
-        size_t buffer_size = 1+vsnprintf(NULL, 0, fmt, args1);
+        // this call only returns the actual number of bytes needed to store the message.
+        // It doesn't count the needed end-of-string
+        size_t buffer_size = vsnprintf(NULL, 0, fmt, args1) + 1; // plus 1 character to store \0
         va_end(args1); // don't need this one anymore
 
-        char buffer[buffer_size];
-        memset(buffer,0,buffer_size);
+        // add one more character to handle \n (see code below)
+        char buffer[buffer_size + 1];
+        memset(buffer,0,buffer_size + 1); 
 
         // fill buffer with message ...
         vsnprintf(buffer, buffer_size, fmt, args2);
+        size_t len = strlen(buffer);
         va_end(args2);
 
 #ifdef DEBUG
@@ -48,13 +53,13 @@ namespace pmu {
             _pattern.c_str(),
             _file_descriptor,
             buffer,
-            buffer[buffer_size-2] == '\n' ? "yes" : "no",
+            buffer[len-1] == '\n' ? "yes" : "no",
             __FILE__,
             __LINE__);
 #endif
         // add a new line if not already there
-        if ( buffer[buffer_size-2] != '\n' ){
-          buffer[buffer_size-1] = '\n';
+        if ( buffer[len-1] != '\n' ){
+          buffer[len] = '\n'; // override ending \0 (that's why we provisioned for one more character above)
         }
 
         fprintf(
