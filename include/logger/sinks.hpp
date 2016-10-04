@@ -34,9 +34,6 @@ namespace pmu {
 
         /** actual write operation.
          *
-         * sinks should override this method. Implmenetationas are in charge of prefixing the message
-         * with date time and other infos.
-         *
          * @param level corresponding messages's log level.
          * @param fmt formatting string
          * @param ... format parameters
@@ -71,9 +68,9 @@ namespace pmu {
           return _facility;
         };
 
-        /** modifie la facilit. . utiliser.
+        /** set faclity name
          *
-         * @param facility facility to use
+         * @param facility facility name
          */
         void set_facility(log_facility facility);
 
@@ -191,6 +188,36 @@ namespace pmu {
         stderr_sink( const std::string &name = "stderr", const std::string &pname = "prog", log_level level = log_level::info);
 
     };
+
+    /** syslog sink.
+     *
+     * send log messages to syslogd
+     *
+     * @author herbert koelman (herbert.koelman@pmu.fr)
+     * @since v1.4.0
+     */
+    class syslog_sink: public sink {
+      public:
+
+        /** instancie un objet pour journaliser
+         *
+         * @param name nom du journal
+         * @param pname program name
+         * @param level initial log level (defaults to pmu::log::info)
+         * @param facility syslog facilty to use (default is LOG_USER)
+         * @param options syslog options
+         */
+        syslog_sink( const std::string &name = "syslog", const std::string &pname = "prog", log_level level = log_level::info, int facility = NULL, int options = NULL);
+
+        virtual ~syslog_sink();
+
+        /** \copydoc  sink::write
+         *
+         * send messages to syslogd
+         */
+        virtual void write( log_level level, const char *fmt, ... );
+    };
+
     /** @} */
 
   } // namespace log
