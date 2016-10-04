@@ -34,9 +34,6 @@ namespace pmu {
 
         /** actual write operation.
          *
-         * sinks should override this method. Implmenetationas are in charge of prefixing the message
-         * with date time and other infos.
-         *
          * @param level corresponding messages's log level.
          * @param fmt formatting string
          * @param ... format parameters
@@ -71,9 +68,9 @@ namespace pmu {
           return _facility;
         };
 
-        /** modifie la facilit. . utiliser.
+        /** set faclity name
          *
-         * @param facility facility to use
+         * @param facility facility name
          */
         void set_facility(log_facility facility);
 
@@ -99,9 +96,9 @@ namespace pmu {
          */
         sink( const std::string &name = "default", const std::string &pname = "prog", log_level level = log_levels::info );
 
-        /** fill the buffer with the current date and time information
+        /** @return display name for a given log level
          */
-        const std::string date_time();
+        std::string log_level_name ( log_level level );
 
         std::string     _name ; //!< logging domain name (as for now, this is equal to the logger name)
         std::string     _pattern;//!< message pattern (layout)
@@ -109,9 +106,6 @@ namespace pmu {
         std::string     _facility; //!< current faility string
         std::string     _ecid;     //!< current ECID (a Tuxedo notion)
         log_level       _level;    //!< current logging level
-        pid_t           _pid;      //!< process ID
-        std::string     _lag;      //!< date time lag (i.e. +02:00)
-        char            _hostname[HOST_NAME_MAX]; //!< hostname (this will be displayed by log messages)
 
       private:
         pthread::read_write_lock _ecid_rwlock; //!< ecid access protection
@@ -125,7 +119,7 @@ namespace pmu {
      *
      * > it is up to you to handle the file opening/closing.
      *
-     * @author herbert koelman (herbert.koelman@pmu.fr)
+     * @author herbert koelman
      * @since v1.4.0
      */
     class file_sink: public sink {
@@ -149,14 +143,22 @@ namespace pmu {
         virtual void write( log_level level, const char *fmt, ... );
 
       protected:
+
+        /** fill the buffer with the current date and time information
+         */
+        const std::string date_time();
+
         FILE   *_file_descriptor ; //!< file descriptor of a log file
+        pid_t           _pid;      //!< process ID
+        std::string     _lag;      //!< date time lag (i.e. +02:00)
+        char            _hostname[HOST_NAME_MAX]; //!< hostname (this will be displayed by log messages)
     };
 
     /** stdout sink.
      *
      * send log messages to stdout
      *
-     * @author herbert koelman (herbert.koelman@pmu.fr)
+     * @author herbert koelman
      * @since v1.4.0
      */
     class stdout_sink: public file_sink {
@@ -176,7 +178,7 @@ namespace pmu {
      *
      * send log messages to stderr
      *
-     * @author herbert koelman (herbert.koelman@pmu.fr)
+     * @author herbert koelman
      * @since v1.4.0
      */
     class stderr_sink: public file_sink {
@@ -191,6 +193,36 @@ namespace pmu {
         stderr_sink( const std::string &name = "stderr", const std::string &pname = "prog", log_level level = log_level::info);
 
     };
+
+    /** syslog sink.
+     *
+     * send log messages to syslogd
+     *
+     * @author herbert koelman
+     * @since v1.4.0
+     */
+    class syslog_sink: public sink {
+      public:
+
+        /** instancie un objet pour journaliser
+         *
+         * @param name nom du journal
+         * @param pname program name
+         * @param level initial log level (defaults to pmu::log::info)
+         * @param facility syslog facilty to use (default is LOG_USER)
+         * @param options syslog options
+         */
+        syslog_sink( const std::string &name = "syslog", const std::string &pname = "prog", log_level level = log_level::info, int facility = NULL, int options = NULL);
+
+        virtual ~syslog_sink();
+
+        /** \copydoc  sink::write
+         *
+         * send messages to syslogd
+         */
+        virtual void write( log_level level, const char *fmt, ... );
+    };
+
     /** @} */
 
   } // namespace log

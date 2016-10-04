@@ -4,6 +4,7 @@
  */
 #include <logger/cpp-logger.hpp>
 #include <unistd.h>
+#include <syslog.h>
 
 int main(){
 
@@ -16,6 +17,15 @@ int main(){
   pmu::log::logger_ptr err    = pmu::log::get<pmu::log::stderr_sink>("stderr-test-logger");
   pmu::log::logger_ptr out    = pmu::log::get<pmu::log::stdout_sink>("stdout-test-logger");
   pmu::log::logger_ptr logger = pmu::log::get<pmu::log::stdout_sink>("stdout-test-logger");
+
+  out->info("get a syslog logger [syslog-test-logger]");
+  out->warning("check your syslogd config to locate the destination file");
+  pmu::log::logger_ptr syslog = pmu::log::get<pmu::log::syslog_sink>("syslog-test-logger");
+  out->info("sending messages to [syslog-test-logger]");
+  syslog->info("syslog logger says hello %s", "herbert");
+  syslog->crit("syslog logger says hello %s", "herbert");
+  syslog->trace("TRACE syslog logger says hello %s", "herbert");
+
   pmu::log::logger_ptr test_logger = pmu::log::get("test-logger");
 
   out->warning("registered %d loggers so far.\n", pmu::log::registry::instance().size());
