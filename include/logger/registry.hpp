@@ -27,9 +27,9 @@ namespace pmu {
 
     /** Searches the registry for the wanted logger instance.
      *
-     * If the logger doesn't exist, then a new one is created and registered.
+     * If the logger doesn't exist, then a new one is created and registered. Else the existing one is returned.:w
      *
-     * @param name logger name
+     * @param name unique logger name
      * @return a logger instance
      * @example logger-test.cpp
      */
