@@ -1,4 +1,5 @@
 2.0.0
+_ memset issue (#40)
 - use CMake build system (#37)
 - replace cpp-pthread features by standard C++17 ones (#38)
 

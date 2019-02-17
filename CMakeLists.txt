@@ -2,7 +2,7 @@
 # Creation date: lundi 24 septembre 2018, 10:39:35 (UTC+0200)
 # Description: C++ threading library that mimics the C++11 standard implementation.
 #
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.11)
 
 project(
   cpp-logger

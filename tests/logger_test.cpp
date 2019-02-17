@@ -11,27 +11,27 @@ TEST(concurrency, mutex) {
   char hostname[100];
   gethostname(hostname, 100);
 
-  pmu::log::set_program_name("logger-test");
-  pmu::log::set_level(pmu::log::log_level::info);
+  logger::set_program_name("logger-test");
+  logger::set_level(logger::log_level::info);
 
-  pmu::log::logger_ptr err    = pmu::log::get<pmu::log::stderr_sink>("stderr-test-logger");
-  pmu::log::logger_ptr out    = pmu::log::get<pmu::log::stdout_sink>("stdout-test-logger");
-  pmu::log::logger_ptr logger = pmu::log::get<pmu::log::stdout_sink>("stdout-test-logger");
+  logger::logger_ptr err    = logger::get<logger::stderr_sink>("stderr-test-logger");
+  logger::logger_ptr out    = logger::get<logger::stdout_sink>("stdout-test-logger");
+  logger::logger_ptr logger = logger::get<logger::stdout_sink>("stdout-test-logger");
 
   out->info("get a syslog logger [syslog-test-logger]");
   out->warning("check your syslogd config to locate the destination file");
-  pmu::log::logger_ptr syslog = pmu::log::get<pmu::log::syslog_sink>("syslog-test-logger");
+  logger::logger_ptr syslog = logger::get<logger::syslog_sink>("syslog-test-logger");
   out->info("sending messages to [syslog-test-logger]");
   syslog->info("syslog logger says hello %s", "herbert");
   syslog->crit("syslog logger says hello %s", "herbert");
   syslog->trace("TRACE syslog logger says hello %s", "herbert");
 
-  pmu::log::logger_ptr test_logger = pmu::log::get("test-logger");
+  logger::logger_ptr test_logger = logger::get("test-logger");
 
-  out->warning("registered %d loggers so far.\n", pmu::log::registry::instance().size());
+  out->warning("registered %d loggers so far.\n", logger::registry::instance().size());
   err->warning("writing into stderr sink");
 
-  logger->info("starting logger test program on %s (using version: %s)\n", hostname, pmu::log::cpp_logger_version());
+  logger->info("starting logger test program on %s (using version: %s)\n", hostname, logger::cpp_logger_version());
 
   logger->info("setting ECID to %s", "Test ecid !!!");
   logger->set_ecid("Test ecid !!!");
@@ -45,20 +45,20 @@ TEST(concurrency, mutex) {
   logger->notice("string [%s], decimal: %d, long decimal: %ld.\n\n", str.c_str(), 10, 100000);
   logger->notice("End of line handling, string [%s], decimal: %d, long decimal: %ld.", str.c_str(), 10, 100000);
 
-  logger->set_log_level(pmu::log::log_levels::debug);
+  logger->set_log_level(logger::log_levels::debug);
   logger->debug("debug message");
   logger->info("info message");
   logger->warning ("warn message\n");
 
   logger->notice("setting log level to notice");
 
-  logger->set_log_level(pmu::log::log_levels::notice);
+  logger->set_log_level(logger::log_levels::notice);
   logger->debug("debug message");
   logger->info("info message");
   logger->warning ("warn message\n");
 
   logger->notice("setting log level to info");
-  pmu::log::set_level(pmu::log::log_level::info);
+  logger::set_level(logger::log_level::info);
 
   for ( auto x = 10; x > 0 ; x--) {
     test_logger->info("Messages #%d.\n", x);
