@@ -5,6 +5,7 @@
 
 #include <sys/time.h>
 #include "logger/sinks.hpp"
+#include <cstring>
 
 namespace logger {
 
