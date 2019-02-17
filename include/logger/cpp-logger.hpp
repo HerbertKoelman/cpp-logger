@@ -2,14 +2,14 @@
 #include <logger/registry.hpp>
 #include <logger/sinks.hpp>
 
-#ifndef PMU_CPP_LOGGER_HPP
-#define PMU_CPP_LOGGER_HPP
+#ifndef CPP_CPP_LOGGER_HPP
+#define CPP_CPP_LOGGER_HPP
 
 
 //! \namespace log
-namespace log {
+namespace logger {
 
- /** \addtogroup pmu_log pmu logging facility for C++.
+ /** \addtogroup logger_log pmu logging facility for C++.
   * @{
   */
 

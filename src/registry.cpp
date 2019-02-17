@@ -7,7 +7,7 @@
 
 #include "logger/registry.hpp"
 
-namespace log {
+namespace logger {
 
     /** initailize static data
      */
@@ -48,7 +48,7 @@ namespace log {
         }
 
         _level = level;
-        // printf("DEBUG registry log level is now %d\n", _level);
+        // printf("DEBUG registry logger level is now %d\n", _level);
     }
 
     void registry::set_ecid(const std::string &ecid) {
@@ -86,4 +86,4 @@ namespace log {
         // intentional...
     }
 
-} // namespace log
+} // namespace logger

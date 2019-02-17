@@ -7,7 +7,7 @@
 
 #include "logger/sinks.hpp"
 
-namespace log {
+namespace logger {
 
     stderr_sink::stderr_sink(const std::string &name, const std::string &pname, log_level level) :
             file_sink(name,
@@ -17,4 +17,4 @@ namespace log {
         // intentional...
     };
 
-} // namespace log
+} // namespace logger

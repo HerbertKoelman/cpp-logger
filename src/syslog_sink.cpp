@@ -7,7 +7,7 @@
 #include <syslog.h>
 
 
-namespace log {
+namespace logger {
 
     syslog_sink::syslog_sink(const std::string &name, const std::string &pname, log_level level, int facility, int options) :
             sink(name, pname, level) {
@@ -118,4 +118,4 @@ namespace log {
                     buffer);
         }
     }; // write
-} // namespace log
+} // namespace logger

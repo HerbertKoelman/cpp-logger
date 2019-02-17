@@ -15,15 +15,15 @@
 #include <unistd.h> // std::getpid
 #include <limits>
 
-#ifndef PMU_LOGGER_SINKS_HPP
-#define PMU_LOGGER_SINKS_HPP
+#ifndef CPP_LOGGER_SINKS_HPP
+#define CPP_LOGGER_SINKS_HPP
 
 #include "logger/definitions.hpp"
 
 #define MAXECIDLEN 64
 
-namespace log {
-   /** \addtogroup pmu_log
+namespace logger {
+   /** \addtogroup logger_log
     * @{
     */
 
@@ -230,5 +230,5 @@ namespace log {
 
     /** @} */
 
-} // namespace log
+} // namespace logger
 #endif

@@ -9,12 +9,12 @@
 #include "logger/logger.hpp"
 #include "logger/sinks.hpp"
 
-namespace log {
+namespace logger {
 
     // constructors & destructors -------------------------------------
     //
 
-    logger::logger(const std::string &name, pmu::log::sink *sink) : _sink(NULL) {
+    logger::logger(const std::string &name, sink *sink) : _sink(NULL) {
         _sink = sink;
     }
 
@@ -61,4 +61,4 @@ namespace log {
         return _sink->name();
     };
 
-} // namespace log
+} // namespace logger
