@@ -42,7 +42,7 @@ namespace pmu {
     }
 
     void registry::set_log_level( const log_level level ){
-      pthread::lock_guard<pthread::mutex> lck(_mutex);
+      std::lock_guard<std::mutex> lck(_mutex);
 
       for (auto logger = _loggers.begin(); logger != _loggers.end(); ++logger) {
         logger->second->set_log_level(level);
@@ -53,7 +53,7 @@ namespace pmu {
     }
 
     void registry::set_ecid( const std::string &ecid){
-      pthread::lock_guard<pthread::mutex> lck(_mutex);
+      std::lock_guard<std::mutex> lck(_mutex);
 
       for (auto logger = _loggers.begin(); logger != _loggers.end(); ++logger) {
         logger->second->set_ecid(ecid);
@@ -74,7 +74,7 @@ namespace pmu {
     }
 
     void registry::remove(const std::string &name){
-      pthread::lock_guard<pthread::mutex> lck(_mutex);
+      std::lock_guard<std::mutex> lck(_mutex);
 
       _loggers.erase(name);
     }

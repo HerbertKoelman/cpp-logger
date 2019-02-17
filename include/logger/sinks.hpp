@@ -2,12 +2,18 @@
  * author: herbert koelman (herbert.koelman@pmu.fr)
  */
 
-#include <pthread/pthread.hpp> // pthread::this_thread::get_id
+#include "logger/config.h"
+
+#include <mutex>
+#include <shared_mutex>
+#include <thread>
+
 #include <string>
 #include <cstdio>   // std::vsnprintf(...)
 #include <cstdarg>  // std::va_list, ...
 #include <vector>
 #include <unistd.h> // std::getpid
+#include <limits>
 
 #ifndef PMU_LOGGER_SINKS_HPP
 #define PMU_LOGGER_SINKS_HPP
@@ -104,12 +110,12 @@ namespace pmu {
         std::string     _pattern;//!< message pattern (layout)
         std::string     _pname ; //!< program name
         std::string     _facility; //!< current faility string
-        std::string     _ecid;     //!< current ECID (a Tuxedo notion)
+        std::string     _ecid;
         log_level       _level;    //!< current logging level
 
       private:
-        pthread::read_write_lock _ecid_rwlock; //!< ecid access protection
-        pthread::mutex           _mutex;       //!< used to protect access to static class data
+        std::mutex           _mutex;       //!< used to protect access to static class data
+        std::shared_mutex    _shared_mutex;
 
     }; // sink
 
@@ -151,7 +157,7 @@ namespace pmu {
         FILE   *_file_descriptor ; //!< file descriptor of a log file
         pid_t           _pid;      //!< process ID
         std::string     _lag;      //!< date time lag (i.e. +02:00)
-        char            _hostname[HOST_NAME_MAX]; //!< hostname (this will be displayed by log messages)
+        std::string     _hostname; //!< hostname (this will be displayed by log messages)
     };
 
     /** stdout sink.
@@ -212,7 +218,7 @@ namespace pmu {
          * @param facility syslog facilty to use (default is LOG_USER)
          * @param options syslog options
          */
-        syslog_sink( const std::string &name = "syslog", const std::string &pname = "prog", log_level level = log_level::info, int facility = NULL, int options = NULL);
+        syslog_sink( const std::string &name = "syslog", const std::string &pname = "prog", log_level level = log_level::info, int facility = 0, int options = 0);
 
         virtual ~syslog_sink();
 
