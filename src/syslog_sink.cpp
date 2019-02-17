@@ -5,7 +5,7 @@
 
 #include "logger/sinks.hpp"
 #include <syslog.h>
-
+#include <cstring> // std::memset
 
 namespace logger {
 
