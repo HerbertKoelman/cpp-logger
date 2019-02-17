@@ -2,7 +2,7 @@
 # Creation date: lundi 24 septembre 2018, 10:39:35 (UTC+0200)
 # Description: C++ threading library that mimics the C++11 standard implementation.
 #
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.12)
 
 project(
   cpp-logger
@@ -22,15 +22,15 @@ find_package(Conan)
 #
 if( CMAKE_BUILD_TYPE MATCHES Release )
   if( GIT_LOG )
-    add_definitions( -DCPP_PTHREAD_VERSION="${PROJECT_VERSION} - ${GIT_LOG}")
+    add_definitions( -DCPP_LOGGER_VERSION="${PROJECT_VERSION} - ${GIT_LOG}")
   else()
-    add_definitions( -DCPP_PTHREAD_VERSION="${PROJECT_VERSION}")
+    add_definitions( -DCPP_LOGGER_VERSION="${PROJECT_VERSION}")
   endif()
 else()
   if( GIT_LOG )
-    add_definitions( -DCPP_PTHREAD_VERSION="${PROJECT_VERSION}-${GIT_LOG}-SNAPSHOT")
+    add_definitions( -DCPP_LOGGER_VERSION="${PROJECT_VERSION}-${GIT_LOG}-SNAPSHOT")
   else()
-    add_definitions( -DCPP_PTHREAD_VERSION="${PROJECT_VERSION}-SNAPSHOT")
+    add_definitions( -DCPP_LOGGER_VERSION="${PROJECT_VERSION}-SNAPSHOT")
   endif()
 endif()
 
@@ -42,19 +42,14 @@ set(LOGGER_SOURCE
         src/cpp-logger.cpp
         src/cpp-logger.cpp.in
         src/logger.cpp
-        src/Makefile.in
         src/registry.cpp
         src/stdout_sink.cpp)
 
-add_library(cpp-logger-static STATIC
-        ${LOGGER_SOURCE}
-        )
+add_library(cpp-logger-static STATIC ${LOGGER_SOURCE})
 target_link_libraries(cpp-logger-static pthread)
 set_target_properties(cpp-logger-static PROPERTIES OUTPUT_NAME logger)
 
-add_library(cpp-logger-shared SHARED
-        ${LOGGER_SOURCE}
-        )
+add_library(cpp-logger-shared SHARED  ${LOGGER_SOURCE} )
 target_link_libraries(cpp-logger-shared pthread)
 set_target_properties(cpp-logger-shared PROPERTIES OUTPUT_NAME logger)
 

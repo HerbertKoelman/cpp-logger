@@ -5,9 +5,9 @@
 #include <logger/cpp-logger.hpp>
 #include <unistd.h>
 #include <syslog.h>
+#include "gtest/gtest.h"
 
-int main(){
-
+TEST(concurrency, mutex) {
   char hostname[100];
   gethostname(hostname, 100);
 
