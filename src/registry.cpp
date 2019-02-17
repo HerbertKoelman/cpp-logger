@@ -7,85 +7,83 @@
 
 #include "logger/registry.hpp"
 
-namespace pmu {
-  namespace log {
+namespace logger {
 
     /** initailize static data
      */
-    registry       registry::_registry = registry() ;
+    registry       registry::_registry = registry();
 
-    logger_ptr get (const std::string &name ){
+    logger_ptr get(const std::string &name) {
 
-      return registry::instance().get(name);
+        return registry::instance().get(name);
     }
 
-    void set_level(const log_level level){
-      registry::instance().set_log_level(level);
+    void set_level(const log_level level) {
+        registry::instance().set_log_level(level);
     }
 
-    void set_program_name(const std::string &pname){
-      registry::instance().set_program_name(pname);
+    void set_program_name(const std::string &pname) {
+        registry::instance().set_program_name(pname);
     }
 
     // Registry implementation ------------------------------------------------------
     //
-    registry &registry::instance(){
-      return _registry;
+    registry &registry::instance() {
+        return _registry;
     }
 
-    void registry::set_program_name(const std::string &pname){
-      _pname = pname ;
+    void registry::set_program_name(const std::string &pname) {
+        _pname = pname;
     }
 
-    std::string registry::program_name(){
-      return _pname;
+    std::string registry::program_name() {
+        return _pname;
     }
 
-    void registry::set_log_level( const log_level level ){
-      std::lock_guard<std::mutex> lck(_mutex);
+    void registry::set_log_level(const log_level level) {
+        std::lock_guard<std::mutex> lck(_mutex);
 
-      for (auto logger = _loggers.begin(); logger != _loggers.end(); ++logger) {
-        logger->second->set_log_level(level);
-      }
+        for (auto logger = _loggers.begin(); logger != _loggers.end(); ++logger) {
+            logger->second->set_log_level(level);
+        }
 
-      _level = level;
-      // printf("DEBUG registry log level is now %d\n", _level);
+        _level = level;
+        // printf("DEBUG registry logger level is now %d\n", _level);
     }
 
-    void registry::set_ecid( const std::string &ecid){
-      std::lock_guard<std::mutex> lck(_mutex);
+    void registry::set_ecid(const std::string &ecid) {
+        std::lock_guard<std::mutex> lck(_mutex);
 
-      for (auto logger = _loggers.begin(); logger != _loggers.end(); ++logger) {
-        logger->second->set_ecid(ecid);
-      }
+        for (auto logger = _loggers.begin(); logger != _loggers.end(); ++logger) {
+            logger->second->set_ecid(ecid);
+        }
 
 #ifdef DEBUG
-      printf("DEBUG %s: registry ecid is now %s (%s,%d)\n", __FUNCTION__, ecid.c_str(), __FILE__, __LINE__);
+        printf("DEBUG %s: registry ecid is now %s (%s,%d)\n", __FUNCTION__, ecid.c_str(), __FILE__, __LINE__);
 #endif
     }
 
-    void registry::add(logger_ptr logger){
-      // check if the logger was already registered
-      auto search = _loggers.find(logger->name());
-      if ( search == _loggers.end() ){
-        // add the logger in the map
-        _loggers[logger->name()] = logger;
-      }
+    void registry::add(logger_ptr logger) {
+        // check if the logger was already registered
+        auto search = _loggers.find(logger->name());
+        if (search == _loggers.end()) {
+            // add the logger in the map
+            _loggers[logger->name()] = logger;
+        }
     }
 
-    void registry::remove(const std::string &name){
-      std::lock_guard<std::mutex> lck(_mutex);
+    void registry::remove(const std::string &name) {
+        std::lock_guard<std::mutex> lck(_mutex);
 
-      _loggers.erase(name);
+        _loggers.erase(name);
     }
 
-    registry::registry(): _level(log_levels::info), _pname("program") {
-      // intentional...
+    registry::registry() : _level(log_levels::info), _pname("program") {
+        // intentional...
     }
 
-    registry::~registry(){
-      // intentional...
+    registry::~registry() {
+        // intentional...
     }
 
-  } // namespace log
-}   // namespace pmu
+} // namespace logger
