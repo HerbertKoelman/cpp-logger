@@ -13,11 +13,11 @@
 #include "logger/definitions.hpp"
 #include "logger/sinks.hpp"
 
-#ifndef PMU_LOGGER_HPP
-#define PMU_LOGGER_HPP
+#ifndef CPP_LOGGER_LOGGER_HPP
+#define CPP_LOGGER_LOGGER_HPP
 
-namespace log {
-   /** \addtogroup pmu_log
+namespace logger {
+   /** \addtogroup logger_log
     * @{
     */
 
@@ -178,5 +178,5 @@ namespace log {
 
     /** @} */
 
-} // namespace log
+} // namespace logger
 #endif

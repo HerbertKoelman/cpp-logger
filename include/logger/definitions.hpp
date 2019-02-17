@@ -11,8 +11,8 @@
 #include <cstdlib>
 #include <unistd.h>
 
-#ifndef PMU_LOG_DEFINITIONS_HPP
-#define PMU_LOG_DEFINITIONS_HPP
+#ifndef CPP_LOG_DEFINITIONS_HPP
+#define CPP_LOG_DEFINITIONS_HPP
 
 #define LOG_EMERG   0
 #define LOG_ALERT   1
@@ -28,12 +28,16 @@
 // original #define PMU_LOG_PATTERN "<%d> %s %s [%s] (pid: %d, thrdid: %d, ecid: %s) - "
 #define PMU_LOG_PATTERN "<%d>1 %s %s %s %s.%d.%d - %-16s"
 
-namespace log {
+namespace logger {
 
-   /** \addtogroup pmu_log_definitions Type definitions and macros
-    *  \addtogroup pmu_log
+   /** \addtogroup logger_definitions Type definitions and macros
+    *  \addtogroup logger_log
     * @{
     */
+
+
+    const static long HOST_NAME_MAX = sysconf(_SC_HOST_NAME_MAX);
+        //if (host_name_max <= 0) host_name_max = _POSIX_HOST_NAME_MAX;
 
     class logger;
 
@@ -67,12 +71,12 @@ namespace log {
     typedef log_facilities log_facility;
 
 #if __IBMCPP_TR1__ //NOSONAR this macro is set with the compiler command line argumen
-    typedef std::tr1::shared_ptr<log::logger> logger_ptr; //!< shared pointer to a logger instance
+    typedef std::tr1::shared_ptr<logger::logger> logger_ptr; //!< shared pointer to a logger instance
 #else
-    typedef std::shared_ptr<log::logger>      logger_ptr; //!< shared pointer to a logger instance
+    typedef std::shared_ptr<logger>      logger_ptr; //!< shared pointer to a logger instance
 #endif
 
     /** @} */
 
-} // namespace log
+} // namespace logger
 #endif

@@ -1,5 +1,5 @@
 /*
- * pmu::log::registry - herbert koelman
+ * pmu::logger::registry - herbert koelman
  */
 
 #include <memory>
@@ -16,12 +16,12 @@
 #include <logger/sinks.hpp>
 #include <logger/definitions.hpp>
 
-#ifndef PMU_LOGGER_REGISTRY_HPP
-#define PMU_LOGGER_REGISTRY_HPP
+#ifndef CPP_LOGGER_REGISTRY_HPP
+#define CPP_LOGGER_REGISTRY_HPP
 
-namespace log {
+namespace logger {
 
-   /** \addtogroup pmu_log
+   /** \addtogroup logger_log
     * @{
     */
 
@@ -126,7 +126,7 @@ namespace log {
         template<class T, typename... Args> logger_ptr get( const std::string &name, const Args&... args){
           std::lock_guard<std::mutex> lck(_mutex);
 
-          // printf("DEBUG pmu::log::registry.get(%s, %d);\n", name.c_str(), _level);
+          // printf("DEBUG pmu::logger::registry.get(%s, %d);\n", name.c_str(), _level);
 
           logger_ptr logger;
           auto search = _loggers.find(name);
@@ -134,7 +134,7 @@ namespace log {
           if ( search == _loggers.end() ){
             // no logger was registered yet, instantiate a new one.
             logger = logger_ptr(
-              new pmu::log::logger(
+              new class logger(
                 name,
                 new T(name, _pname, _level, args...)
               )
@@ -196,5 +196,5 @@ namespace log {
     };
 
     /** @} */
-} // namespace log
+} // namespace logger
 #endif

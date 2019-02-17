@@ -6,7 +6,7 @@
 #include <sys/time.h>
 #include "logger/sinks.hpp"
 
-namespace log {
+namespace logger {
 
     file_sink::file_sink(const std::string &name, const std::string &pname, log_level level, FILE *file) :
             sink(name, pname, level),
@@ -145,4 +145,4 @@ namespace log {
 
         return std::string(target);
     }
-} // namespace log
+} // namespace logger
