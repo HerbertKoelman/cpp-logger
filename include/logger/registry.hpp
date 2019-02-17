@@ -19,8 +19,7 @@
 #ifndef PMU_LOGGER_REGISTRY_HPP
 #define PMU_LOGGER_REGISTRY_HPP
 
-namespace pmu {
-  namespace log {
+namespace log {
 
    /** \addtogroup pmu_log
     * @{
@@ -197,6 +196,5 @@ namespace pmu {
     };
 
     /** @} */
-  } // namespace log
-} // namespace pmu
+} // namespace log
 #endif

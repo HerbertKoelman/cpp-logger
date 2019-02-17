@@ -22,8 +22,7 @@
 
 #define MAXECIDLEN 64
 
-namespace pmu {
-  namespace log {
+namespace log {
    /** \addtogroup pmu_log
     * @{
     */
@@ -231,6 +230,5 @@ namespace pmu {
 
     /** @} */
 
-  } // namespace log
-} // namespace pmu
+} // namespace log
 #endif
