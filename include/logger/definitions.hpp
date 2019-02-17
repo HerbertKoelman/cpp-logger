@@ -28,8 +28,7 @@
 // original #define PMU_LOG_PATTERN "<%d> %s %s [%s] (pid: %d, thrdid: %d, ecid: %s) - "
 #define PMU_LOG_PATTERN "<%d>1 %s %s %s %s.%d.%d - %-16s"
 
-namespace pmu {
-  namespace log {
+namespace log {
 
    /** \addtogroup pmu_log_definitions Type definitions and macros
     *  \addtogroup pmu_log
@@ -68,13 +67,12 @@ namespace pmu {
     typedef log_facilities log_facility;
 
 #if __IBMCPP_TR1__ //NOSONAR this macro is set with the compiler command line argumen
-    typedef std::tr1::shared_ptr<pmu::log::logger> logger_ptr; //!< shared pointer to a logger instance
+    typedef std::tr1::shared_ptr<log::logger> logger_ptr; //!< shared pointer to a logger instance
 #else
-    typedef std::shared_ptr<pmu::log::logger>      logger_ptr; //!< shared pointer to a logger instance
+    typedef std::shared_ptr<log::logger>      logger_ptr; //!< shared pointer to a logger instance
 #endif
 
     /** @} */
 
-  } // namespace log
-} // namespace pmu
+} // namespace log
 #endif

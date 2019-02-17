@@ -7,12 +7,14 @@
 
 #include "logger/sinks.hpp"
 
-namespace pmu {
-  namespace log {
+namespace log {
 
-    stderr_sink::stderr_sink( const std::string &name, const std::string &pname, log_level level): file_sink(name, pname, level, stderr){
-      // intentional...
+    stderr_sink::stderr_sink(const std::string &name, const std::string &pname, log_level level) :
+            file_sink(name,
+                      pname,
+                      level,
+                      stderr) {
+        // intentional...
     };
 
-  } // namespace log
-} // namespace pmu
+} // namespace log
