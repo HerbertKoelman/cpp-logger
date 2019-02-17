@@ -6,46 +6,39 @@
 //  Copyright © 2016 urbix-software. All rights reserved.
 //
 
-//#ifdef __CPP_PTHREAD__
-//#include <pthread/pthread.hpp> // pthread::this_thread::get_id
-//#else
-//#include <mutex>
-//#endif
-
 #include "logger/logger.hpp"
 #include "logger/sinks.hpp"
 
-namespace pmu {
-  namespace log {
+namespace logger {
 
     // constructors & destructors -------------------------------------
     //
 
-    logger::logger( const std::string &name, pmu::log::sink *sink ): _sink(NULL) {
-      _sink = sink;
+    logger::logger(const std::string &name, sink *sink) : _sink(NULL) {
+        _sink = sink;
     }
 
-    logger::~logger(){
-      // printf("DEBUG %s destructor (%s,%d).\n", __FUNCTION__, __FILE__, __LINE__);
-      if ( _sink != NULL ){
-        delete _sink ;
-      }
+    logger::~logger() {
+        // printf("DEBUG %s destructor (%s,%d).\n", __FUNCTION__, __FILE__, __LINE__);
+        if (_sink != NULL) {
+            delete _sink;
+        }
     }
 
     const std::string logger::facility() const {
-      return _sink->facility();
+        return _sink->facility();
     };
 
-    void logger::set_facility(log_facility facility){
-      _sink->set_facility(facility);
+    void logger::set_facility(log_facility facility) {
+        _sink->set_facility(facility);
     }
 
     std::string logger::ecid() {
-      return _sink->ecid();
+        return _sink->ecid();
     }
 
-    void logger::set_ecid( const std::string &ecid ){
-      _sink->set_ecid(ecid);
+    void logger::set_ecid(const std::string &ecid) {
+        _sink->set_ecid(ecid);
     }
 
 
@@ -53,20 +46,19 @@ namespace pmu {
      *
      * @param level new logging level
      */
-    void logger::set_log_level( log_levels level ){
-      _sink->set_log_level(level);
+    void logger::set_log_level(log_levels level) {
+        _sink->set_log_level(level);
     };
 
     /** @return niveau courrant de journalisation
      */
     log_levels logger::level() const {
-       return _sink->level();
+        return _sink->level();
     };
 
     /** @return logger name */
-    std::string logger::name() const{
-      return _sink->name();
+    std::string logger::name() const {
+        return _sink->name();
     };
 
-  } // namespace log
-} // namespace pmu
+} // namespace logger
