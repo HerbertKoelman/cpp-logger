@@ -21,11 +21,11 @@ namespace pmu {
 #endif
       _pattern = "[L SUBSYS=" +_name + "] %s %s" ;
 
-      if ( options == NULL ){
+      if ( options == 0 ){
         options = LOG_PID;
       }
 
-      if ( facility == NULL ){
+      if ( facility == 0 ){
         facility = LOG_USER;
       }
 

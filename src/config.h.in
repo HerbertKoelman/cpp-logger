@@ -1,21 +1,23 @@
 /* autoconf section ----------------------------------------------------------------------*/
 
+#include <unistd.h>
+
 #ifndef cpp_logger_config_h
 #define cpp_logger_config_h
-
-#undef CPP_LOGGER_VERSION
-
 
 /* Define to 1 if you have the `pthread' library (-lpthread). */
 #undef HAVE_LIBPTHREAD
 
 #undef HAVE_LIBCPP_PTHREAD
 
-/* Defined if compiler support C++11 */
-#undef HAVE_CPP11_MUTEX
-#undef HAVE_CPP11_CHRONO
-#undef HAVE_CPP11_THREAD
+namespace pmu {
+    namespace log {
 
+        const static long HOST_NAME_MAX = sysconf(_SC_HOST_NAME_MAX);
+
+        //if (host_name_max <= 0) host_name_max = _POSIX_HOST_NAME_MAX;
+    }
+}
 /*
  * Define to `__inline__' or `__inline' if that's what the C compiler
  * calls it, or to nothing if 'inline' is not supported under any name.
@@ -23,5 +25,6 @@
 #ifndef __cplusplus
 #undef inline
 #endif
+
 
 #endif /* cpp_logger_config_h */

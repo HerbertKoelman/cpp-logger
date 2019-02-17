@@ -6,10 +6,10 @@ cmake_minimum_required(VERSION 3.12)
 
 project(
   cpp-logger
-  VERSION 1.3.3
+  VERSION 2.0.0
   DESCRIPTION "Simple C++ logger that works on AIX (${GIT_LOG})")
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 configure_file(src/config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/config.h)
 
@@ -34,16 +34,21 @@ else()
   endif()
 endif()
 
+configure_file(src/config.h.in ../include/logger/config.h)
+
 # project's public headers
 include_directories(include src)
 
 set(LOGGER_SOURCE
-        src/config.h
         src/cpp-logger.cpp
-        src/cpp-logger.cpp.in
+        src/file_sink.cpp
         src/logger.cpp
         src/registry.cpp
-        src/stdout_sink.cpp)
+        src/sink.cpp
+        src/stderr_sink.cpp
+        src/stdout_sink.cpp
+        src/syslog_sink.cpp
+      )
 
 add_library(cpp-logger-static STATIC ${LOGGER_SOURCE})
 target_link_libraries(cpp-logger-static pthread)

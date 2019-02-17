@@ -6,7 +6,12 @@
 //  Copyright © 2016 urbix-software. All rights reserved.
 //
 
-#include <pthread/pthread.hpp>
+//#ifdef __CPP_PTHREAD__
+//#include <pthread/pthread.hpp> // pthread::this_thread::get_id
+//#else
+//#include <mutex>
+//#endif
+
 #include "logger/logger.hpp"
 #include "logger/sinks.hpp"
 

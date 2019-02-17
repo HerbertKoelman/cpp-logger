@@ -2,14 +2,16 @@
  * pmu::logger - herbert koelman
  */
 
+#include "logger/config.h"
+
 #include <memory>
 #include <string>
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
 #include <unordered_map> // supposed to be faster
-#include <pthread/pthread.hpp>
 #include "logger/definitions.hpp"
+#include "logger/sinks.hpp"
 
 #ifndef PMU_LOGGER_HPP
 #define PMU_LOGGER_HPP
