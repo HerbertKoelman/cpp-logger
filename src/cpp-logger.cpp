@@ -9,7 +9,7 @@
 #ifndef cpp_logger_hpp
 #define cpp_logger_hpp
 
-#include "logger/config.h"
+#include "config.h"
 #include "logger/cpp-logger.hpp"
 
 namespace pmu {

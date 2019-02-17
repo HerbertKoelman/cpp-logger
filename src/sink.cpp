@@ -6,7 +6,6 @@
 //  Copyright © 2016 urbix-software. All rights reserved.
 //
 
-#include <pthread/pthread.hpp>
 #include "logger/sinks.hpp"
 
 namespace pmu {
@@ -35,16 +34,16 @@ namespace pmu {
     }
 
     std::string sink::ecid() {
-      pthread::lock_guard<pthread::read_lock> lock(_ecid_rwlock);
+        std::shared_lock lock(_shared_mutex);
 
-      return _ecid;
+        return _ecid;
     }
 
     void sink::set_ecid( const std::string &ecid ){
 
-      pthread::lock_guard<pthread::write_lock> lock(_ecid_rwlock);
+        std::unique_lock lock(_shared_mutex);
 
-      if ( !ecid.empty() ) {
+        if ( !ecid.empty() ) {
         _ecid = "[M ECID=\"" + ecid.substr(0, MAXECIDLEN) + "\"]";
       }
       else {

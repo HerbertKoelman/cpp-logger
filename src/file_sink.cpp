@@ -3,6 +3,7 @@
 //  Copyright © 2016 urbix-software. All rights reserved.
 //
 
+#include <sys/time.h>
 #include "logger/sinks.hpp"
 
 namespace pmu {
@@ -18,10 +19,15 @@ namespace pmu {
 #endif
 
       _pattern = PMU_LOG_PATTERN;
+
       set_facility(log_facility::sic_tux);
+
       _pattern = std::string(PMU_LOG_PATTERN) + "[L SUBSYS=" +_name + "] %s" ;
-      _hostname[0] = 0;
-      gethostname(_hostname, HOST_NAME_MAX);
+
+      char hostname[HOST_NAME_MAX];
+      hostname[0] = 0;
+      gethostname(hostname, HOST_NAME_MAX);
+      _hostname = hostname;
 
       timeval current_time;
       gettimeofday(&current_time, NULL);
@@ -105,10 +111,10 @@ namespace pmu {
             level,
             date_time().c_str(),
             _facility.c_str(),
-            _hostname,
+            _hostname.c_str(),
             _pname.c_str(),
             _pid,
-            pthread::this_thread::get_id(),
+            std::this_thread::get_id(),
             _ecid.empty()? "- " : _ecid.c_str(),
             buffer
         );

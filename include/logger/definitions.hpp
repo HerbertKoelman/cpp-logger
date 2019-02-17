@@ -10,7 +10,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
-#include <pthread/pthread.hpp>
 
 #ifndef PMU_LOG_DEFINITIONS_HPP
 #define PMU_LOG_DEFINITIONS_HPP

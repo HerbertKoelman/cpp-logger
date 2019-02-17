@@ -9,7 +9,8 @@
 #include <unistd.h>
 #include <unordered_map>
 
-#include <pthread/pthread.hpp>
+#include <mutex>
+
 #include "logger/definitions.hpp"
 #include <logger/logger.hpp>
 #include <logger/sinks.hpp>
@@ -124,7 +125,7 @@ namespace pmu {
          * @return a logger instance (if not found a new one is created)
          */
         template<class T, typename... Args> logger_ptr get( const std::string &name, const Args&... args){
-          pthread::lock_guard<pthread::mutex> lck(_mutex);
+          std::lock_guard<std::mutex> lck(_mutex);
 
           // printf("DEBUG pmu::log::registry.get(%s, %d);\n", name.c_str(), _level);
 
@@ -169,7 +170,7 @@ namespace pmu {
         std::unordered_map <std::string, logger_ptr>      _loggers; //!< known loggers
 #endif
 
-        pthread::mutex _mutex; //!< used to protect access to static class data
+        std::mutex     _mutex; //!< used to protect access to static class data
         log_level      _level; //!< used when new logger instances are created by the regsitry
         std::string    _pname;
 
