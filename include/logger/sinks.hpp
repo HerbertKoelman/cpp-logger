@@ -2,7 +2,7 @@
  * author: herbert koelman (herbert.koelman@pmu.fr)
  */
 
-#include "logger/config.h"
+//#include "logger/config.h"
 
 #include <mutex>
 #include <shared_mutex>

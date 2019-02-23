@@ -13,10 +13,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 configure_file(src/config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/config.h)
 
-# this works because we've extended CMAKE_MODULE_PATH
-# uncomment if you have a conanfile.txt and run 'conan install ...' include(conan_paths)
-find_package(Git CONFIG)
-find_package(Conan)
+#find_package(Git CONFIG)
+#find_package(Conan)
 
 # main targets --------------------------------------------------
 #
@@ -62,7 +60,9 @@ set_target_properties(cpp-logger-shared PROPERTIES OUTPUT_NAME logger)
 #
 
 # Locate GTest
-find_package(GTest)
+#find_package(GTest)
+
+find_package(GTest PATHS cmake)
 if (GTest_FOUND)
   message(STATUS "Found Google Test (GTest)...")
   enable_testing()
