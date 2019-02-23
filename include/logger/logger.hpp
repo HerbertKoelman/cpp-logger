@@ -2,7 +2,7 @@
  * pmu::logger - herbert koelman
  */
 
-#include "logger/config.h"
+//#include "logger/config.h"
 
 #include <memory>
 #include <string>
