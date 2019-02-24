@@ -27,11 +27,7 @@ The `make` target `pkg` will produce au tar.gz that can be distributed.
 
 ### How to use it
 
-Sample code can be found in the `tests` directory. To use it, run the following commands:
-
-    cd tests
-    ./configure
-    ./make
+Sample code can be found in the `tests` directory.
 
 ### Autoconf
 
