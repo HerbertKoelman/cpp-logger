@@ -38,6 +38,9 @@ if (EXISTS ${__GTEST_DOWNLOAD})
     add_library(GTest::GTest ALIAS gtest)
     add_library(GTest::gtest_main ALIAS gtest_main)
 
+    add_library(GMock::GMock ALIAS gmock)
+    add_library(GMock::gmock_main ALIAS gmock_main)
+
 else()
     message(STATUS "Failed to create GoogleTest download directory")
 endif()
