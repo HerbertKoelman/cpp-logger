@@ -58,17 +58,14 @@ set_target_properties(cpp-logger-shared PROPERTIES OUTPUT_NAME logger)
 
 # Testing -------------------------------------------------------
 #
-
-# Locate GTest
-#find_package(GTest)
-
+# Load and compile GTest
+# Aliases: GTest::GTest, GTest::gtest_main, GMock::GMock
 find_package(GTest PATHS cmake)
 if (GTest_FOUND)
   message(STATUS "Found Google Test (GTest)...")
   enable_testing()
   add_subdirectory(tests)
 endif()
-
 # doxygen -------------------------------------------------------
 #
 find_package(Doxygen REQUIRED dot OPTIONAL_COMPONENTS mscgen dia)
@@ -80,14 +77,12 @@ if (Doxygen_FOUND)
   set(DOXYGEN_PROJECT_BRIEF "Simple C++ wrapper to pthread functions.")
   set(DOXYGEN_USE_MDFILE_AS_MAINPAGE "${CMAKE_SOURCE_DIR}/README.md")
   doxygen_add_docs(doxygen README.md src include COMMENT "generate on-line documentation")
-
 endif()
 
 # install -------------------------------------------------------
 #
 install( TARGETS cpp-logger-static cpp-logger-shared DESTINATION lib )
 install( DIRECTORY include DESTINATION include COMPONENT Devel)
-# install( DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc)
 
 # CPACK ---------------------------------------------------------
 #
