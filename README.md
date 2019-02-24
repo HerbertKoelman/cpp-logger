@@ -4,8 +4,9 @@ A set of very simple classes that handles message logging.
 
 To use this library:
 
-    configure
-    make
+    mkdir build
+    cd build
+    cmake .. && make all
     make install
 
 Install moves files into your system's default localtion for headers and libraries (often /usr/local/include and /usr/local/lib). Use this command to change install target directory:
@@ -26,23 +27,18 @@ The `make` target `pkg` will produce au tar.gz that can be distributed.
 
 ### How to use it
 
-Sample code can be found in the `tests` directory. To use it, run the following commands:
-
-    cd tests
-    ./configure
-    ./make
-
-### Dependencies
-
-* [cpp-pthread](https://github.com/HerbertKoelman/cpp-pthread): used to protected shared data access (static registry instance)
+Sample code can be found in the `tests` directory.
 
 ### Autoconf
 
 Add these entries in your `configure.ac` file to use the logger library:
+
+```
 # Checks for libraries.
 AC_CHECK_LIB([pthread], [pthread_create],[],[AC_ERROR([missing pthread library.])])
 AC_CHECK_LIB([cpp-pthread], [cpp_pthread_version],[],[AC_ERROR([missing cpp-pthread library.])])
 AC_CHECK_LIB([cpp-logger], [cpp_logger_version],[],[AC_ERROR([missing cpp-logger library.])])
+```
 
 ### Usefull links
 
@@ -62,9 +58,9 @@ More detailed information can be found in this [RedBook](http://www.redbooks.ibm
 
 #### project links
 
-* [project's home]()
+* [project's home](https://redmine.urbix-software.fr/projects/urbix-cpp-logger)
 * [project's doxygen]()
 
 ### misc
 
-* author herbert koelman(herbert.koelman@pmu.fr)
+* author herbert koelman(herbert.koelman@me.com)

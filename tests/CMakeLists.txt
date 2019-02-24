@@ -1,19 +1,9 @@
-# Testing -------------------------------------------------------
-#
+# Load and compile GTest
+# Aliases: GTest::GTest, GTest::gtest_main, GMock::GMock
+enable_testing()
 
-# Name: Test-Herbert
-# Creation date: mercredi 7 novembre 2018, 10:13:42 (UTC+0100)
-# Description: C++ logger library test
-#
+add_executable(logger_tests logger_test.cpp)
+target_link_libraries(logger_tests GTest::GTest cpp-logger-static GTest::gtest_main)
 
-# Locate GTest
-find_package(GTest)
-if (GTest_FOUND)
+add_test(NAME logger_tests COMMAND logger_tests)
 
-  enable_testing()
-
-  add_executable(logger_tests logger_test.cpp)
-  target_link_libraries(logger_tests GTest::GTest cpp-logger-static gtest_main)
-  add_test(NAME logger_tests COMMAND logger_tests)
-
-endif()
