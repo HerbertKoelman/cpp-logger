@@ -1,4 +1,5 @@
 2.0.0
+- rename GTestConfig.cmake into GTestExt.cmake (#46)
 - now ggogle test comes as an external CMake project (#43)
 - memset issue (#40)
 - use CMake build system (#37)
