@@ -60,8 +60,8 @@ set_target_properties(cpp-logger-shared PROPERTIES OUTPUT_NAME logger)
 #
 # Load and compile GTest
 # Aliases: GTest::GTest, GTest::gtest_main, GMock::GMock
-find_package(GTest PATHS cmake)
-if (GTest_FOUND)
+find_package(GTestExt PATHS cmake)
+if (GTestExt_FOUND)
   message(STATUS "Found Google Test (GTest)...")
   enable_testing()
   add_subdirectory(tests)
