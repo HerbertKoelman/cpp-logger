@@ -1,6 +1,6 @@
 //
 //  Created by herbert koelman on Mon Oct  3 17:52:41 CEST 2016
-//  Copyright © 2016 PMU. All rights reserved.
+//  Copyright © 2016 Urbix. All rights reserved.
 //
 
 #include "logger/sinks.hpp"

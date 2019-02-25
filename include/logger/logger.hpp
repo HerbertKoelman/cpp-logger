@@ -1,5 +1,5 @@
 /*
- * pmu::logger - herbert koelman
+ * logger - herbert koelman
  */
 
 //#include "logger/config.h"
@@ -150,7 +150,7 @@ namespace logger {
       /** @return logger name */
       std::string name() const;
 
-      /** @return logger's facility (see pmu::log::log_facility) */
+      /** @return logger's facility (see logger::log_facility) */
       const std::string facility() const;
 
       /** modifie la facilit. . utiliser.

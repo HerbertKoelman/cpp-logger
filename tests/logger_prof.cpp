@@ -12,10 +12,10 @@ int main( int argc, char *argv[]){
   gethostname(hostname, 100);
   char *pname = basename(argv[0]);
 
-  pmu::log::set_program_name(pname);
-  pmu::log::logger_ptr main_logger = pmu::log::get("main");
+  logger::set_program_name(pname);
+  logger::logger_ptr main_logger = logger::get("main");
 
-  main_logger->info("starting logger test program on %s (using version: %s)", hostname, pmu::log::cpp_logger_version());
+  main_logger->info("starting logger test program on %s (using version: %s)", hostname, logger::cpp_logger_version());
 
   if ( argc == 1 ){
     main_logger->set_ecid("01234567801234567801234567801234567801234567801234567801234567899999990123456789");

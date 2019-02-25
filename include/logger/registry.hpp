@@ -1,5 +1,5 @@
 /*
- * pmu::logger::registry - herbert koelman
+ * logger::registry - herbert koelman
  */
 
 #include <memory>
@@ -126,7 +126,7 @@ namespace logger {
         template<class T, typename... Args> logger_ptr get( const std::string &name, const Args&... args){
           std::lock_guard<std::mutex> lck(_mutex);
 
-          // printf("DEBUG pmu::logger::registry.get(%s, %d);\n", name.c_str(), _level);
+          // printf("DEBUG logger::registry.get(%s, %d);\n", name.c_str(), _level);
 
           logger_ptr logger;
           auto search = _loggers.find(name);

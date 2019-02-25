@@ -17,11 +17,11 @@ namespace logger {
         printf ("DEBUG %s pattern: [%s](%s,%d)\n", __FUNCTION__, _pattern.c_str(), __FILE__, __LINE__);
 #endif
 
-        _pattern = PMU_LOG_PATTERN;
+        _pattern = LOGGER_LOG_PATTERN;
 
         set_facility(log_facility::sic_tux);
 
-        _pattern = std::string(PMU_LOG_PATTERN) + "[L SUBSYS=" + _name + "] %s";
+        _pattern = std::string(LOGGER_LOG_PATTERN) + "[L SUBSYS=" + _name + "] %s";
 
         char hostname[HOST_NAME_MAX];
         hostname[0] = 0;

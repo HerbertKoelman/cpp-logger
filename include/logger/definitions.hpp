@@ -1,5 +1,5 @@
 /*
- * pmu::logger - herbert koelman
+ * logger - herbert koelman
  *
  * this files gathers all definition and defines. it helps to avoid include recursion issues.
  *
@@ -25,8 +25,7 @@
 #define LOG_TRACE   8
 
 #define MAXECIDLEN  64
-// original #define PMU_LOG_PATTERN "<%d> %s %s [%s] (pid: %d, thrdid: %d, ecid: %s) - "
-#define PMU_LOG_PATTERN "<%d>1 %s %s %s %s.%d.%d - %-16s"
+#define LOGGER_LOG_PATTERN "<%d>1 %s %s %s %s.%d.%d - %-16s"
 
 namespace logger {
 
