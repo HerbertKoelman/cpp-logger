@@ -9,7 +9,7 @@
 //! \namespace log
 namespace logger {
 
- /** \addtogroup logger_log pmu logging facility for C++.
+ /** \addtogroup logger_log Simple logging facility for C++.
   * @{
   */
 

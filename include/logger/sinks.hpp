@@ -1,5 +1,5 @@
 /* created : Thu Jul  7 18:38:27 CEST 2016
- * author: herbert koelman (herbert.koelman@pmu.fr)
+ * author: herbert koelman (herbert.koelman@me.com)
  */
 
 //#include "logger/config.h"
@@ -68,7 +68,7 @@ namespace logger {
           return _name;
         };
 
-        /** @return logger's facility (see pmu::log::log_facility) */
+        /** @return logger's facility (see logger::log_facility) */
         const std::string facility() const {
           return _facility;
         };
@@ -97,7 +97,7 @@ namespace logger {
          *
          * @param name nom du journal
          * @param pname program name
-         * @param level initial log level (defaults to pmu::log::info)
+         * @param level initial log level (defaults to logger::log_level::info)
          */
         sink( const std::string &name = "default", const std::string &pname = "prog", log_level level = log_levels::info );
 
@@ -134,7 +134,7 @@ namespace logger {
          *
          * @param name nom du journal
          * @param pname program name
-         * @param level initial log level (defaults to pmu::log::info)
+         * @param level initial log level (defaults to logger::log_levels::info)
          */
         file_sink( const std::string &name, const std::string &pname, log_level level, FILE *file);
 
@@ -173,7 +173,7 @@ namespace logger {
          *
          * @param name nom du journal
          * @param pname program name
-         * @param level initial log level (defaults to pmu::log::info)
+         * @param level initial log level (defaults to logger::log_levels::info)
          */
         stdout_sink( const std::string &name = "stdout", const std::string &pname = "prog", log_level level = log_level::info);
 
@@ -193,7 +193,7 @@ namespace logger {
          *
          * @param name nom du journal
          * @param pname program name
-         * @param level initial log level (defaults to pmu::log::info)
+         * @param level initial log level (defaults to logger::log_levels::info)
          */
         stderr_sink( const std::string &name = "stderr", const std::string &pname = "prog", log_level level = log_level::info);
 
@@ -213,7 +213,7 @@ namespace logger {
          *
          * @param name nom du journal
          * @param pname program name
-         * @param level initial log level (defaults to pmu::log::info)
+         * @param level initial log level (defaults to logger::log_levels::info)
          * @param facility syslog facilty to use (default is LOG_USER)
          * @param options syslog options
          */
