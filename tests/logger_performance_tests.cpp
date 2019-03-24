@@ -7,6 +7,8 @@
 #include <libgen.h>
 #include <gtest/gtest.h>
 
+const std::string PNAME{"performance"};
+
 long long int run(const logger::logger_ptr logger, int loop){
     logger->set_ecid("01234567801234567801234567801234567801234567801234567801234567899999990123456789");
     std::string s("hello world...");
@@ -29,8 +31,8 @@ TEST(logger_performance, default) {
     char hostname[100];
     gethostname(hostname, 100);
 
-    logger::set_program_name("perfomance");
-    logger::logger_ptr main_logger = logger::get("main");
+    logger::set_program_name(PNAME);
+    logger::logger_ptr main_logger = logger::get("default");
 
 
     main_logger->info("starting logger test program on %s (using version: %s)", hostname, logger::cpp_logger_version());
@@ -44,7 +46,73 @@ TEST(logger_performance, default) {
 
     std::cout << "called " << loop << " time logger->info(...) in " << duration << " milliseconds." << std::endl;
 
-    EXPECT_LT(duration, 4000);
+    EXPECT_LT(duration, 2600);
+}
+
+TEST(logger_performance, stdout_sink) {
+    char hostname[100];
+    gethostname(hostname, 100);
+
+    logger::set_program_name(PNAME);
+    logger::logger_ptr stdout_logger = logger::get<logger::stdout_sink>("stdout");
+
+
+    stdout_logger->info("starting logger test program on %s (using version: %s)", hostname, logger::cpp_logger_version());
+
+    int loop = 10000;
+
+    auto duration = run(stdout_logger, loop);
+
+    stdout_logger->set_ecid("01234567801234567801234567801234567801234567801234567801234567899999990123456789");
+    std::string s("hello world...");
+
+    std::cout << "called " << loop << " time logger->info(...) in " << duration << " milliseconds." << std::endl;
+
+    EXPECT_LT(duration, 2600);
+}
+
+TEST(logger_performance, stderr_sink) {
+    char hostname[100];
+    gethostname(hostname, 100);
+
+    logger::set_program_name(PNAME);
+    logger::logger_ptr stdout_logger = logger::get<logger::stderr_sink>("stderr");
+
+
+    stdout_logger->info("starting logger test program on %s (using version: %s)", hostname, logger::cpp_logger_version());
+
+    int loop = 10000;
+
+    auto duration = run(stdout_logger, loop);
+
+    stdout_logger->set_ecid("01234567801234567801234567801234567801234567801234567801234567899999990123456789");
+    std::string s("hello world...");
+
+    std::cout << "called " << loop << " time logger->info(...) in " << duration << " milliseconds." << std::endl;
+
+    EXPECT_LT(duration, 2600);
+}
+
+TEST(logger_performance, syslog_sink) {
+    char hostname[100];
+    gethostname(hostname, 100);
+
+    logger::set_program_name(PNAME);
+    logger::logger_ptr stdout_logger = logger::get<logger::syslog_sink>("syslog");
+
+
+    stdout_logger->info("starting logger test program on %s (using version: %s)", hostname, logger::cpp_logger_version());
+
+    int loop = 10;
+
+    auto duration = run(stdout_logger, loop);
+
+    stdout_logger->set_ecid("01234567801234567801234567801234567801234567801234567801234567899999990123456789");
+    std::string s("hello world...");
+
+    std::cout << "called " << loop << " time logger->info(...) in " << duration << " milliseconds." << std::endl;
+
+    EXPECT_LT(duration, 5);
 }
 
 /*
