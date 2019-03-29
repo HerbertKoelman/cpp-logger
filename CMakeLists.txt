@@ -9,6 +9,7 @@ project(
   VERSION 2.0.0
   DESCRIPTION "Simple C++ logger that works on AIX (${GIT_LOG})")
 
+option(BUILD_TESTS "if set, then Unit tests are build" True)
 set(CMAKE_CXX_STANDARD 17)
 
 configure_file(src/config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/config.h)
@@ -56,16 +57,19 @@ add_library(cpp-logger-shared SHARED  ${LOGGER_SOURCE} )
 target_link_libraries(cpp-logger-shared pthread)
 set_target_properties(cpp-logger-shared PROPERTIES OUTPUT_NAME logger)
 
-# Testing -------------------------------------------------------
-#
-# Load and compile GTest
-# Aliases: GTest::GTest, GTest::gtest_main, GMock::GMock
-find_package(GTestExt PATHS cmake)
-if (GTestExt_FOUND)
-  message(STATUS "Found Google Test (GTest)...")
-  enable_testing()
-  add_subdirectory(tests)
-endif()
+if ( BUILD_TESTS )
+  # Testing -------------------------------------------------------
+  #
+  # Load and compile GTest
+  # Aliases: GTest::GTest, GTest::gtest_main, GMock::GMock
+  find_package(GTestExt PATHS cmake)
+  if (GTestExt_FOUND)
+    message(STATUS "Found Google Test (GTest)...")
+    enable_testing()
+    add_subdirectory(tests)
+  endif()
+endif(BUILD_TESTS)
+
 # doxygen -------------------------------------------------------
 #
 find_package(Doxygen REQUIRED dot OPTIONAL_COMPONENTS mscgen dia)
