@@ -1,5 +1,6 @@
 2.0.0
-- now ggogle test comes as an external CMake project (#43)
+- performance test are trough GoogleTests(#51)
+- now gogle test comes as an external CMake project (#43)
 - memset issue (#40)
 - use CMake build system (#37)
 - replace cpp-pthread features by standard C++17 ones (#38)
