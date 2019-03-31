@@ -73,6 +73,7 @@ TEST(logger, legacy) {
     logger::logger_ptr out = logger::get<logger::stdout_sink>("stdout-test-logger");
     logger::logger_ptr logger = logger::get<logger::stdout_sink>("stdout-test-logger");
 
+    out->info("Running version: %s" , logger::cpp_logger_version());
     out->info("get a syslog logger [syslog-test-logger]");
     out->warning("check your syslogd config to locate the destination file");
     logger::logger_ptr syslog = logger::get<logger::syslog_sink>("syslog-test-logger");
