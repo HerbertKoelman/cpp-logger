@@ -46,9 +46,22 @@ TEST(logger, change_log_level) {
     EXPECT_EQ(err->name(), "stderr-test-logger");
 
     auto level = err->level();
+    EXPECT_NE(level, logger::log_level::alert);
+
     logger::set_level(logger::log_level::alert);
 
     EXPECT_EQ(err->level(), logger::log_level::alert);
+}
+
+TEST(logger, change_ecid) {
+    logger::logger_ptr err = logger::get<logger::stdout_sink>("stderr-test-logger");
+    EXPECT_NE(err, nullptr);
+    EXPECT_EQ(err->name(), "stderr-test-logger");
+
+    logger::set_ecid("NEW ECID");
+
+    auto ecid = err->ecid();
+    EXPECT_EQ(err->ecid(), "[M ECID=\"NEW ECID\"]");
 }
 
 TEST(logger, DISABLED_change_program_name) {

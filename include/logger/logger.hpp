@@ -26,97 +26,123 @@ namespace logger {
     /** handles log messages.
      *
      * @author herbert koelman
-     * @example logger-test.cpp
      */
     class logger {
     public:
 
-      /** affiche un message debug si le niveau de journalisation  >= log_levels::trace.
+      /**
+       * print a trace message.
        *
-       * @param fmt chaine de formattage (see printf for more informations)
-       * @param args arguments sp.cifique . imprimer
+       * @tparam Args variadic of values to print.
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
+       * @param args data to print.
+       *
+       * @see log handles the actual logging at log_levels::trace.
        */
       template<typename... Args> void trace( const std::string &fmt, const Args&... args){
           log(log_levels::trace, fmt, args...);
       };
 
-      /** affiche un message debug si le niveau de journalisation  >= log_levels::debug.
+      /** print a debug message.
        *
-       * @param fmt chaine de formattage (see printf for more informations)
-       * @param args arguments sp.cifique . imprimer
+       * @tparam Args variadic of values to print.
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
+       * @param args data to print.
+       * @see log handles the actual logging at log_levels::debug.
        */
       template<typename... Args> void debug( const std::string &fmt, const Args&... args){
           log(log_levels::debug, fmt, args...);
       };
 
-      /** affiche un message d'info si le niveau de journalisation est >= log_levels::info.
+      /** information message.
        *
-       * @param fmt chaine de formattage (see printf for more informations)
-       * @param args arguments specifying data to print.
+       * @tparam Args variadic of values to print.
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
+       * @param args data to print.
+       * @see log handles the actual logging at log_levels::info.
        */
       template<typename... Args> void info( const std::string &fmt, const Args&... args){
           log(log_levels::info, fmt, args...);
       };
 
-      /** affiche un message notice si le niveau de journalisation est >= log_levels::notice.
+      /** notice message
        *
-       * @param fmt chaine de formattage (see printf for more informations)
-       * @param args arguments specifying data to print.
+       * @tparam Args variadic of values to print.
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
+       * @param args data to print.
+       * @see log handles the actual logging at log_levels::notice.
        */
       template<typename... Args> void notice( const std::string &fmt, const Args&... args){
           log(log_levels::notice, fmt, args...);
       };
 
-      /** affiche un message warning si le niveau de journalisation est >= log_levels::warning
+      /** warning message.
        *
-       * @param fmt chaine de formattage (see printf for more informations.
-       * @param args arguments specifying data to print.
+       * The system should continue to work.
+       *
+       * @tparam Args variadic of values to print.
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations.
+       * @param args data to print.
+       * @see log handles the actual logging at log_levels::warning.
        */
       template<typename... Args> void warning( const std::string &fmt, const Args&... args){
           log(log_levels::warning, fmt, args...);
       };
 
-      /** affiche un message err si le niveau de journalisation est >= log_levels::err.
+      /** Error message.
        *
-       * @param fmt chaine de formattage (see printf for more informations)
-       * @param args arguments specifying data to print.
+       * The system should try to recover. Maybe some fall back should be started.
+       *
+       * @tparam Args variadic of values to print.
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
+       * @param args data to print.
+       * @see log handles the actual logging at log_levels::err.
        */
       template<typename... Args> void err( const std::string &fmt, const Args&... args){
           log(log_levels::err, fmt, args...);
       };
 
-      /** affiche un message crit si le niveau de journalisation est >= log_levels::crit.
+      /** Critical message.
        *
-       * @param fmt chaine de formattage (see printf for more informations)
-       * @param args arguments specifying data to print.
+       * The system experiences critical conditions.
+       *
+       * @tparam Args variadic of values to print.
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
+       * @param args data to print.
+       * @see log handles the actual logging at log_levels::crit.
        */
       template<typename... Args> void crit( const std::string &fmt, const Args&... args){
           log(log_levels::crit, fmt, args...);
       };
 
-      /** affiche un message alert si le niveau de journalisation est  >= log_levels::alert.
+      /** Alert message.
        *
-       * @param fmt chaine de formattage (see printf for more informations)
-       * @param args arguments specifying data to print.
+       * @tparam Args variadic of values to print.
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
+       * @param args data to print.
+       * @see log handles the actual logging at log_levels::alert.
        */
       template<typename... Args> void alert( const std::string &fmt, const Args&... args){
           log(log_levels::alert, fmt, args...);
       };
 
-      /** affiche un message emerg si le niveau de journalisation est >= log_levels::emerg.
+      /** Emergency message.
        *
-       * @param fmt chaine de formattage (see printf for more informations)
-       * @param args arguments specifying data to print.
+       * @tparam Args variadic of values to print.
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
+       * @param args data to print.
+       * @see log handles the actual logging at log_levels::emerg.
        */
       template<typename... Args> void emerg( const std::string &fmt, const Args&... args){
           log(log_levels::emerg, fmt, args...);
       };
 
-      /** log a message if current log level is >= level
+      /** log a message if current log level is >= level.
        *
+       * @tparam Args variadic of values to print.
        * @param level message logging level
-       * @param fmt formatting string (see printf for more informations)
-       * @param args message arguments
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
+       * @param args data to print.
        */
       template<typename... Args> void log( log_level level, const std::string &fmt, const Args&... args){
         _sink->write(level, fmt.c_str(), args... );
