@@ -27,9 +27,12 @@ namespace logger {
      * @{
      */
 
-    /** abstract sink base class.
+    /** Logging message sink (destination).
      *
-     * derive specific implmenetation from this abstraction.
+     * A sink is in charge of sending messages to a specific destination in a proper way. Loggers delegate to instances of this
+     * class the actual writing, sending or whatever it takes to handle a log entry.
+     *
+     * Specialize this class to create your own logger sinks.
      *
      * @author herbert koelman
      * @since v1.4.0
@@ -37,7 +40,9 @@ namespace logger {
     class sink {
     public:
 
-        /** actual write operation.
+        /** write operation.
+         *
+         * A sink should override this virtual pure method in order to provide the write method to logger instances.
          *
          * @param level corresponding messages's log level.
          * @param fmt formatting string
@@ -109,7 +114,7 @@ namespace logger {
         std::string _pattern;//!< message pattern (layout)
         std::string _pname; //!< program name
         std::string _facility; //!< current faility string
-        std::string _ecid;
+        std::string _ecid; //!< execution control ID. Helps to track everything that was logged by one business operation
         log_level _level;    //!< current logging level
 
     private:
@@ -134,6 +139,7 @@ namespace logger {
          *
          * @param name nom du journal
          * @param pname program name
+         * @param file output file.
          * @param level initial log level (defaults to logger::log_levels::info)
          */
         file_sink(const std::string &name, const std::string &pname, log_level level, FILE *file);
