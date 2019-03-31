@@ -23,8 +23,11 @@ long long int run(const logger::logger_ptr logger, int loop){
     }
 
     auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() ;
 
-    return std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() ;
+    logger->info("\n    Ran performance tests on version: %s. Wrote %d log entries in %d ms\n--------", logger::cpp_logger_version(), loop, duration);
+
+    return duration;
 }
 
 TEST(logger_performance, default) {
@@ -46,7 +49,7 @@ TEST(logger_performance, default) {
 
     std::cout << "called " << loop << " time logger->info(...) in " << duration << " milliseconds." << std::endl;
 
-    EXPECT_LT(duration, 2600);
+    EXPECT_LT(duration, 6000);
 }
 
 TEST(logger_performance, stdout_sink) {
@@ -68,7 +71,7 @@ TEST(logger_performance, stdout_sink) {
 
     std::cout << "called " << loop << " time logger->info(...) in " << duration << " milliseconds." << std::endl;
 
-    EXPECT_LT(duration, 2600);
+    EXPECT_LT(duration, 6000);
 }
 
 TEST(logger_performance, stderr_sink) {
@@ -90,7 +93,7 @@ TEST(logger_performance, stderr_sink) {
 
     std::cout << "called " << loop << " time logger->info(...) in " << duration << " milliseconds." << std::endl;
 
-    EXPECT_LT(duration, 2600);
+    EXPECT_LT(duration, 6000);
 }
 
 TEST(logger_performance, syslog_sink) {
