@@ -31,7 +31,9 @@ namespace logger {
     public:
 
       /**
-       * print a trace message.
+       * Print a trace message.
+       *
+       * Messages that contain information normally of use only when debugging a program.
        *
        * @tparam Args variadic of values to print.
        * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
@@ -43,7 +45,9 @@ namespace logger {
           log(log_levels::trace, fmt, args...);
       };
 
-      /** print a debug message.
+      /** Print a debug message.
+       *
+       * Messages that contain information normally of use only when debugging a program.
        *
        * @tparam Args variadic of values to print.
        * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
@@ -54,7 +58,7 @@ namespace logger {
           log(log_levels::debug, fmt, args...);
       };
 
-      /** information message.
+      /** Informational messages.
        *
        * @tparam Args variadic of values to print.
        * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
@@ -65,7 +69,9 @@ namespace logger {
           log(log_levels::info, fmt, args...);
       };
 
-      /** notice message
+      /** Normal but significant conditions
+       *
+       * Conditions that are not error conditions, but that may require special handling.
        *
        * @tparam Args variadic of values to print.
        * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
@@ -76,9 +82,7 @@ namespace logger {
           log(log_levels::notice, fmt, args...);
       };
 
-      /** warning message.
-       *
-       * The system should continue to work.
+      /** Warning conditions.
        *
        * @tparam Args variadic of values to print.
        * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations.
@@ -89,9 +93,7 @@ namespace logger {
           log(log_levels::warning, fmt, args...);
       };
 
-      /** Error message.
-       *
-       * The system should try to recover. Maybe some fall back should be started.
+      /** Error conditions.
        *
        * @tparam Args variadic of values to print.
        * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
@@ -102,9 +104,9 @@ namespace logger {
           log(log_levels::err, fmt, args...);
       };
 
-      /** Critical message.
+      /** Critical conditions.
        *
-       * The system experiences critical conditions.
+       * The system experiences critical conditions like hard device errors.
        *
        * @tparam Args variadic of values to print.
        * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
@@ -115,7 +117,9 @@ namespace logger {
           log(log_levels::crit, fmt, args...);
       };
 
-      /** Alert message.
+      /** Alert conditions.
+       *
+       * Action must be taken immediately. A condition that should be corrected immediately, such as a corrupted system database.[
        *
        * @tparam Args variadic of values to print.
        * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
@@ -126,8 +130,10 @@ namespace logger {
           log(log_levels::alert, fmt, args...);
       };
 
-      /** Emergency message.
+      /** Emergency conditions.
        *
+       * System is unusable. A panic condition.
+       * 
        * @tparam Args variadic of values to print.
        * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
        * @param args data to print.
