@@ -44,9 +44,6 @@ TEST(logger_performance, default) {
 
     auto duration = run(main_logger, loop);
 
-    main_logger->set_ecid("01234567801234567801234567801234567801234567801234567801234567899999990123456789");
-    std::string s("hello world...");
-
     std::cout << "called " << loop << " time logger->info(...) in " << duration << " milliseconds." << std::endl;
 
     EXPECT_LT(duration, 6000);
@@ -65,9 +62,6 @@ TEST(logger_performance, stdout_sink) {
     int loop = 10000;
 
     auto duration = run(stdout_logger, loop);
-
-    stdout_logger->set_ecid("01234567801234567801234567801234567801234567801234567801234567899999990123456789");
-    std::string s("hello world...");
 
     std::cout << "called " << loop << " time logger->info(...) in " << duration << " milliseconds." << std::endl;
 
@@ -88,9 +82,6 @@ TEST(logger_performance, stderr_sink) {
 
     auto duration = run(stdout_logger, loop);
 
-    stdout_logger->set_ecid("01234567801234567801234567801234567801234567801234567801234567899999990123456789");
-    std::string s("hello world...");
-
     std::cout << "called " << loop << " time logger->info(...) in " << duration << " milliseconds." << std::endl;
 
     EXPECT_LT(duration, 6000);
@@ -109,9 +100,6 @@ TEST(logger_performance, syslog_sink) {
     int loop = 10;
 
     auto duration = run(stdout_logger, loop);
-
-    stdout_logger->set_ecid("01234567801234567801234567801234567801234567801234567801234567899999990123456789");
-    std::string s("hello world...");
 
     std::cout << "called " << loop << " time logger->info(...) in " << duration << " milliseconds." << std::endl;
 
