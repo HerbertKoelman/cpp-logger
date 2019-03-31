@@ -9,7 +9,7 @@
 
 namespace logger {
 
-    /** initailize static data
+    /** singleton
      */
     registry       registry::_registry = registry();
 
@@ -20,6 +20,10 @@ namespace logger {
 
     void set_level(const log_level level) {
         registry::instance().set_log_level(level);
+    }
+
+    void set_ecid(const std::string &ecid) {
+        registry::instance().set_ecid(ecid);
     }
 
     void set_program_name(const std::string &pname) {
@@ -43,8 +47,8 @@ namespace logger {
     void registry::set_log_level(const log_level level) {
         std::lock_guard<std::mutex> lck(_mutex);
 
-        for (auto logger = _loggers.begin(); logger != _loggers.end(); ++logger) {
-            logger->second->set_log_level(level);
+        for (auto & _logger : _loggers) {
+            _logger.second->set_log_level(level);
         }
 
         _level = level;
@@ -54,8 +58,8 @@ namespace logger {
     void registry::set_ecid(const std::string &ecid) {
         std::lock_guard<std::mutex> lck(_mutex);
 
-        for (auto logger = _loggers.begin(); logger != _loggers.end(); ++logger) {
-            logger->second->set_ecid(ecid);
+        for (auto & _logger : _loggers) {
+            _logger.second->set_ecid(ecid);
         }
 
 #ifdef DEBUG
