@@ -133,7 +133,7 @@ namespace logger {
       /** Emergency conditions.
        *
        * System is unusable. A panic condition.
-       * 
+       *
        * @tparam Args variadic of values to print.
        * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
        * @param args data to print.
