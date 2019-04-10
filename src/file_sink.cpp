@@ -19,7 +19,7 @@ namespace logger {
 
         _pattern = LOGGER_LOG_PATTERN;
 
-        set_facility(log_facility::sic_tux);
+        //set_facility(log_facility::sic_tux);
 
         _pattern = std::string(LOGGER_LOG_PATTERN) + "[L SUBSYS=" + _name + "] %s";
 
@@ -109,7 +109,7 @@ namespace logger {
                     _pattern.c_str(),
                     level,
                     date_time().c_str(),
-                    _facility.c_str(),
+                    _facility->keyword().c_str(),
                     _hostname.c_str(),
                     _pname.c_str(),
                     _pid,
