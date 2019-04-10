@@ -24,6 +24,7 @@ TEST(registry, unicity_check) {
 
 TEST(registry, stderr_sink) {
     logger::logger_ptr err = logger::get<logger::stderr_sink>("stderr-test-logger");
+    err->info("stdout sink test (version: %s)", logger::cpp_logger_version());
     EXPECT_NE(err, nullptr);
     EXPECT_EQ(err->name(), "stderr-test-logger");
 }

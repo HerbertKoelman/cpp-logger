@@ -21,6 +21,24 @@ namespace logger {
 #ifdef DEBUG
         printf("DEBUG %s (%s,%d).\n", __FUNCTION__, __FILE__, __LINE__);
 #endif
+
+        _facility = new syslog_user_facility();
+    }
+
+sink::sink(const std::string &name, const std::string &pname, log_facility *facility, log_level level) :
+    // init class data
+            _name(name),
+            _level(level),
+            _facility(facility),
+            _pname(pname) {
+        // intentional...
+#ifdef DEBUG
+        printf("DEBUG %s (%s,%d).\n", __FUNCTION__, __FILE__, __LINE__);
+#endif
+
+        if ( facility == nullptr){
+            _facility = new syslog_user_facility();
+        }
     }
 
     sink::~sink() {
@@ -72,28 +90,30 @@ namespace logger {
 
     }
 
-    void sink::set_facility(log_facility facility) {
+    void sink::set_facility(log_facility *facility) {
 
-        switch (facility) {
-            case sic_bat:
-                _facility = "SIC/BAT";
-                break;
-            case sic_ine:
-                _facility = "SIC/INE";
-                break;
-            case sic_bmp:
-                _facility = "SIC/BMP";
-                break;
-            case sic_mpp:
-                _facility = "SIC/MPP";
-                break;
-            case sic_kix:
-                _facility = "SIC/KIX";
-                break;
-            case sic_tux:
-            default:
-                _facility = "SIC/TUX";
-        }
+        _facility = facility;
+
+//        switch (facility) {
+//            case sic_bat:
+//                _facility = "SIC/BAT";
+//                break;
+//            case sic_ine:
+//                _facility = "SIC/INE";
+//                break;
+//            case sic_bmp:
+//                _facility = "SIC/BMP";
+//                break;
+//            case sic_mpp:
+//                _facility = "SIC/MPP";
+//                break;
+//            case sic_kix:
+//                _facility = "SIC/KIX";
+//                break;
+//            case sic_tux:
+//            default:
+//                _facility = "SIC/TUX";
+//        }
     }
 
 } // namespace logger

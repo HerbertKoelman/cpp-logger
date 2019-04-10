@@ -181,13 +181,13 @@ namespace logger {
       std::string name() const;
 
       /** @return logger's facility (see logger::log_facility) */
-      const std::string facility() const;
+      const log_facility *facility() const;
 
       /** modifie la facilit. . utiliser.
        *
        * @param facility facility to use
        */
-      void set_facility(log_facility facility);
+      void set_facility(log_facility *facility);
 
       /** create a logger instance.
        *
