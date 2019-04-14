@@ -22,7 +22,7 @@ namespace logger {
         printf("DEBUG %s (%s,%d).\n", __FUNCTION__, __FILE__, __LINE__);
 #endif
 
-        _facility = new syslog_user_facility();
+        _facility = syslog_facility::default_facility();
     }
 
 sink::sink(const std::string &name, const std::string &pname, log_facility *facility, log_level level) :
@@ -37,7 +37,7 @@ sink::sink(const std::string &name, const std::string &pname, log_facility *faci
 #endif
 
         if ( facility == nullptr){
-            _facility = new syslog_user_facility();
+            _facility = syslog_facility::default_facility();
         }
     }
 
@@ -90,7 +90,7 @@ sink::sink(const std::string &name, const std::string &pname, log_facility *faci
 
     }
 
-    void sink::set_facility(log_facility *facility) {
+    void sink::set_facility(log_facility_ptr facility) {
 
         _facility = facility;
 

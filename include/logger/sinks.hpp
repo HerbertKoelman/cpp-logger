@@ -2,7 +2,7 @@
  * author: herbert koelman (herbert.koelman@me.com)
  */
 
-//#include "logger/config.h"
+#include "logger/facilities.hpp"
 
 #include <mutex>
 #include <shared_mutex>
@@ -19,6 +19,7 @@
 #define CPP_LOGGER_SINKS_HPP
 
 #include "logger/definitions.hpp"
+#include <logger/facilities.hpp>
 
 #define MAXECIDLEN 64
 
@@ -74,7 +75,8 @@ namespace logger {
         };
 
         /** @return logger's facility (see logger::log_facility) */
-        const log_facility *facility() const {
+        const log_facility_ptr facility() const {
+
             return _facility;
         };
 
@@ -82,7 +84,7 @@ namespace logger {
          *
          * @param facility facility name
          */
-        void set_facility(log_facility *facility);
+        void set_facility(log_facility_ptr facility);
 
         /** change the current ecid.
          *
@@ -122,9 +124,10 @@ namespace logger {
         std::string   _name; //!< logging domain name (as for now, this is equal to the logger name)
         std::string   _pattern;//!< message pattern (layout)
         std::string   _pname; //!< program name
-        log_facility  *_facility; //!< current facility class
         std::string   _ecid; //!< execution control ID. Helps to track everything that was logged by one business operation
         log_level     _level;    //!< current logging level
+
+        log_facility_ptr _facility; //!< current facility class
 
     private:
         std::mutex _mutex;       //!< used to protect access to static class data
