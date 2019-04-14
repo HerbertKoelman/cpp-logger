@@ -47,7 +47,7 @@ set(LOGGER_SOURCE
         src/stderr_sink.cpp
         src/stdout_sink.cpp
         src/syslog_sink.cpp
-      )
+        src/facilities.cpp include/logger/facilities.hpp)
 
 add_library(cpp-logger-static STATIC ${LOGGER_SOURCE})
 target_link_libraries(cpp-logger-static pthread)
@@ -74,9 +74,6 @@ endif(BUILD_TESTS)
 #
 find_package(Doxygen REQUIRED dot OPTIONAL_COMPONENTS mscgen dia)
 if (Doxygen_FOUND)
-  # set(DOXYGEN_OUTPUT_DIRECTORY doxygen)
-  # set(DOXYGEN_GENERATE_MAN YES)
-  # set(DOXYGEN_GENERATE_HTML YES)
   set(DOXYGEN_EXAMPLE_PATH tests)
   set(DOXYGEN_PROJECT_BRIEF "Simple C++ wrapper to pthread functions.")
   set(DOXYGEN_USE_MDFILE_AS_MAINPAGE "${CMAKE_SOURCE_DIR}/README.md")
