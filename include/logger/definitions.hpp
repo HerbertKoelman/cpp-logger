@@ -55,35 +55,6 @@ namespace logger {
     /** used to define method paramters (readability) */
     typedef log_levels log_level;
 
-    // TODO remove this as soon as pmossible
-//    /** known facilities */
-//    class log_facility {
-//    public:
-//        virtual const int code() {
-//            return _code;
-//        }
-//
-//        virtual const std::string &keyword() {
-//            return _keyword;
-//        }
-//
-//        virtual const std::string &description(){
-//            return _description;
-//        }
-//
-//        log_facility( int code, std::string keyword, std::string description = ""): _code(code), _keyword(keyword), _description(description){
-//            // intentional...
-//        }
-//
-//        virtual ~log_facility(){
-//
-//        }
-//    private:
-//        int         _code;
-//        std::string _keyword;
-//        std::string _description;
-//    };
-
     enum log_facilities {
         sic_bat, //!< pour les batchs
         sic_ine, //!< pour les interfaces externes

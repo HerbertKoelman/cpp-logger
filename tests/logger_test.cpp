@@ -6,7 +6,6 @@
 #include <unistd.h>
 #include <syslog.h>
 #include "gtest/gtest.h"
-// TODO missing GMock include directory - #include "gmock/gmock.h"
 
 /**
  * This checks that a registered logger is instanciated only once.
@@ -31,23 +30,24 @@ TEST(registry, stderr_sink) {
 
     ::testing::internal::CaptureStderr();
 
-    err->info("stdout sink test (version: %s)", logger::cpp_logger_version());
+    err->info("stderr sink test (version: %s)", logger::cpp_logger_version());
 
-// TODO we fail to find GMock headers and probably libraries. CHeck cmake/GTestExtConfig.txt script to find out why
-//    std::string output = ::testing::internal::GetCapturedStderr();
-//    EXPECT_THAT(output, ::testing::HasSubstr("[L SUBSYS=stderr-test-logger] stdout sink test"));
+    std::string output = ::testing::internal::GetCapturedStderr();
 
-//    testing::internal::CaptureStdout();
-//    std::cout << "My test";
-//    printf("Says Hello, world");
-//    std::string output = testing::internal::GetCapturedStdout();
-//    std::cout << std::endl << "Intercepted: " << output << std::endl ;
+	EXPECT_TRUE( output.rfind("[L SUBSYS=stderr-test-logger] stderr sink test")!= std::string::npos);
 }
 
 TEST(registry, stdout_sink) {
-    logger::logger_ptr err = logger::get<logger::stdout_sink>("stderr-test-logger");
-    EXPECT_NE(err, nullptr);
-    EXPECT_EQ(err->name(), "stderr-test-logger");
+    logger::logger_ptr out = logger::get<logger::stdout_sink>("stdout-test-logger");
+
+	EXPECT_NE(out, nullptr);
+	EXPECT_EQ(out->name(), "stdout-test-logger");
+
+	::testing::internal::CaptureStdout();
+	out->info("stdout sink test (version: %s)", logger::cpp_logger_version());
+	std::string output = ::testing::internal::GetCapturedStdout();
+
+	EXPECT_TRUE( output.rfind("[L SUBSYS=stdout-test-logger] stdout sink test")!= std::string::npos);
 }
 
 TEST(registry, syslog_sink) {
@@ -91,7 +91,7 @@ TEST(logger, DISABLED_change_program_name) {
     EXPECT_EQ(out->name(), "google-tests");
 }
 
-TEST(logger, legacy) {
+TEST(logger, DISABLED_legacy) {
     char hostname[100];
     gethostname(hostname, 100);
 

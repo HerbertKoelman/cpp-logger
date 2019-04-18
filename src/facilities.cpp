@@ -24,7 +24,7 @@ namespace logger {
     }
 
     log_facility::~log_facility() {
-        std::cout << "destruction of facility instance: " << description() << std::endl ;
+        // intentionale - std::cout << "destruction of facility instance: " << description() << std::endl ;
     }
 
     // syslog facility -------------------------------------------------------------------------------------------------
@@ -42,6 +42,6 @@ namespace logger {
     }
 
     syslog_facility::~syslog_facility() {
-        std::cout << "destruction of a syslog_facility" << std::endl;
+        // intentional - std::cout << "destruction of a syslog_facility" << std::endl;
     }
 }
