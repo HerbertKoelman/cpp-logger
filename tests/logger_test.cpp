@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <syslog.h>
 #include "gtest/gtest.h"
+// TODO missing GMock include directory - #include "gmock/gmock.h"
 
 /**
  * This checks that a registered logger is instanciated only once.
@@ -24,8 +25,23 @@ TEST(registry, unicity_check) {
 
 TEST(registry, stderr_sink) {
     logger::logger_ptr err = logger::get<logger::stderr_sink>("stderr-test-logger");
+
     EXPECT_NE(err, nullptr);
     EXPECT_EQ(err->name(), "stderr-test-logger");
+
+    ::testing::internal::CaptureStderr();
+
+    err->info("stdout sink test (version: %s)", logger::cpp_logger_version());
+
+// TODO we fail to find GMock headers and probably libraries. CHeck cmake/GTestExtConfig.txt script to find out why
+//    std::string output = ::testing::internal::GetCapturedStderr();
+//    EXPECT_THAT(output, ::testing::HasSubstr("[L SUBSYS=stderr-test-logger] stdout sink test"));
+
+//    testing::internal::CaptureStdout();
+//    std::cout << "My test";
+//    printf("Says Hello, world");
+//    std::string output = testing::internal::GetCapturedStdout();
+//    std::cout << std::endl << "Intercepted: " << output << std::endl ;
 }
 
 TEST(registry, stdout_sink) {

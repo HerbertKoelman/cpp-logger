@@ -1,4 +1,5 @@
 #include <logger/logger.hpp>
+#include <logger/facilities.hpp>
 #include <logger/registry.hpp>
 #include <logger/sinks.hpp>
 
