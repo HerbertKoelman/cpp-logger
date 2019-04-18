@@ -25,13 +25,13 @@ namespace logger {
         }
     }
 
-    const std::string logger::facility() const {
+    const log_facility_ptr logger::facility() const {
         return _sink->facility();
     };
 
-    void logger::set_facility(log_facility facility) {
-        _sink->set_facility(facility);
-    }
+//    void logger::set_facility(log_facility *facility) {
+//        _sink->set_facility(facility);
+//    }
 
     std::string logger::ecid() {
         return _sink->ecid();

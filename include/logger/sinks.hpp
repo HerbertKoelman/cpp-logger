@@ -2,7 +2,7 @@
  * author: herbert koelman (herbert.koelman@me.com)
  */
 
-//#include "logger/config.h"
+#include "logger/facilities.hpp"
 
 #include <mutex>
 #include <shared_mutex>
@@ -19,6 +19,7 @@
 #define CPP_LOGGER_SINKS_HPP
 
 #include "logger/definitions.hpp"
+#include <logger/facilities.hpp>
 
 #define MAXECIDLEN 64
 
@@ -74,7 +75,8 @@ namespace logger {
         };
 
         /** @return logger's facility (see logger::log_facility) */
-        const std::string facility() const {
+        const log_facility_ptr facility() const {
+
             return _facility;
         };
 
@@ -82,7 +84,7 @@ namespace logger {
          *
          * @param facility facility name
          */
-        void set_facility(log_facility facility);
+        void set_facility(log_facility_ptr facility);
 
         /** change the current ecid.
          *
@@ -98,24 +100,34 @@ namespace logger {
 
     protected:
 
-        /** instancie un objet pour journaliser
+        /** new class instance.
          *
-         * @param name nom du journal
+         * @param name log name
          * @param pname program name
          * @param level initial log level (defaults to logger::log_level::info)
          */
         sink(const std::string &name = "default", const std::string &pname = "prog", log_level level = log_levels::info);
 
+        /** new class instance.
+         *
+         * @param name log name
+         * @param pname program name
+         * @param facility logging facility
+         * @param level initial log level (defaults to logger::log_level::info)
+         */
+        sink(const std::string &name = "default", const std::string &pname = "prog", log_facility *facility = nullptr, log_level level = log_levels::info);
+
         /** @return display name for a given log level
          */
         std::string log_level_name(log_level level);
 
-        std::string _name; //!< logging domain name (as for now, this is equal to the logger name)
-        std::string _pattern;//!< message pattern (layout)
-        std::string _pname; //!< program name
-        std::string _facility; //!< current faility string
-        std::string _ecid; //!< execution control ID. Helps to track everything that was logged by one business operation
-        log_level _level;    //!< current logging level
+        std::string   _name; //!< logging domain name (as for now, this is equal to the logger name)
+        std::string   _pattern;//!< message pattern (layout)
+        std::string   _pname; //!< program name
+        std::string   _ecid; //!< execution control ID. Helps to track everything that was logged by one business operation
+        log_level     _level;    //!< current logging level
+
+        log_facility_ptr _facility; //!< current facility class
 
     private:
         std::mutex _mutex;       //!< used to protect access to static class data
@@ -135,7 +147,7 @@ namespace logger {
     class file_sink : public sink {
     public:
 
-        /** instancie un objet pour journaliser
+        /** new instance.
          *
          * @param name nom du journal
          * @param pname program name
@@ -175,9 +187,9 @@ namespace logger {
     class stdout_sink : public file_sink {
     public:
 
-        /** instancie un objet pour journaliser
+        /** new instance.
          *
-         * @param name nom du journal
+         * @param name log name
          * @param pname program name
          * @param level initial log level (defaults to logger::log_levels::info)
          */
@@ -196,7 +208,7 @@ namespace logger {
     class stderr_sink : public file_sink {
     public:
 
-        /** instancie un objet pour journaliser
+        /** new instance.
          *
          * @param name nom du journal
          * @param pname program name
@@ -217,7 +229,7 @@ namespace logger {
     class syslog_sink : public sink {
     public:
 
-        /** instancie un objet pour journaliser
+        /** new instance.
          *
          * @param name nom du journal
          * @param pname program name
