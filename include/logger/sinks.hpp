@@ -115,7 +115,7 @@ namespace logger {
          * @param facility logging facility
          * @param level initial log level (defaults to logger::log_level::info)
          */
-        sink(const std::string &name = "default", const std::string &pname = "prog", log_facility *facility = nullptr, log_level level = log_levels::info);
+        sink(const std::string &name = "default", const std::string &pname = "prog", log_facility_ptr facility = nullptr, log_level level = log_levels::info);
 
         /** @return display name for a given log level
          */

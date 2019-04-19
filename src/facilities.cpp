@@ -37,6 +37,31 @@ namespace logger {
         return std::make_shared<syslog_facility>(0, "kern", "Kernel messages");
     }
 
+    syslog_facility_ptr syslog_facility::create(const std::string &key){
+
+        syslog_facility_ptr facility;
+
+        if ( key == "kern" ){
+        	facility = std::make_shared<syslog_facility>(0, "kern", "Kernel messages");
+        } else if ( key == "user" ) {
+	        facility = std::make_shared<syslog_facility>(1, "user", "User-level messages");
+        } else if ( key == "mail" ) {
+	        facility = std::make_shared<syslog_facility>(2, "mail", "Mail system");
+        } else if ( key == "daemon" ) {
+	        facility = std::make_shared<syslog_facility>(3, "daemon", "System daemons");
+        } else if ( key == "auth" ) {
+	        facility = std::make_shared<syslog_facility>(4, "auth", "Security/authorization messages");
+        } else if ( key == "local0" ) {
+	        facility = std::make_shared<syslog_facility>(16, "local0", "Local use (local0)");
+        } else if ( key == "local1" ) {
+	        facility = std::make_shared<syslog_facility>(17, "local1", "Local use (local1)");
+        } else {
+	        // throw facility_exception(...)
+        }
+
+        return facility;
+    }
+
     syslog_facility_ptr syslog_facility::default_facility(){
         return std::make_shared<syslog_facility>();
     }

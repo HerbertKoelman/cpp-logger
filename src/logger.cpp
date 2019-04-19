@@ -24,7 +24,7 @@ namespace logger {
             delete _sink;
         }
     }
-
+    
     const log_facility_ptr logger::facility() const {
         return _sink->facility();
     };

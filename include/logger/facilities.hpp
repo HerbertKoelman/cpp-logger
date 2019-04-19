@@ -10,7 +10,7 @@
 #define CPP_LOGGER_LOG_FACILITY_HPP
 
 namespace logger {
-    /** \addtogroup logger_definitions Type definitions and macros
+    /** \addtogroup logger_log
      * @{
      */
 
@@ -77,7 +77,15 @@ namespace logger {
 
         static syslog_facility_ptr kern_facility();
 
-    //protected:
+        /** Create the key related faiclity.
+         *
+         * @param key  facility's keyword
+         * @return corresponding facility instance.
+         */
+        static syslog_facility_ptr create( const std::string &key);
+
+    // TODO this should be protected or private (protected:)
+
         /** New syslog faiclity instance.
          *
          * @param code type of program that is logging the message (default is *1*)
