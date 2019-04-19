@@ -25,7 +25,7 @@ namespace logger {
         _facility = syslog_facility::default_facility();
     }
 
-sink::sink(const std::string &name, const std::string &pname, log_facility *facility, log_level level) :
+sink::sink(const std::string &name, const std::string &pname, log_facility_ptr facility, log_level level) :
     // init class data
             _name(name),
             _level(level),

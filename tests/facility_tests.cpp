@@ -17,7 +17,7 @@ TEST(syslog_facility, create_default) {
     EXPECT_EQ(facility->description(), "User-level messages");
 }
 
-TEST(syslog_facility, create_kern) {
+TEST(syslog_facility, kern_facility) {
 
     logger::syslog_facility_ptr facility = logger::syslog_facility::kern_facility();
 
@@ -25,4 +25,74 @@ TEST(syslog_facility, create_kern) {
     EXPECT_EQ(facility->code(), 0);
     EXPECT_EQ(facility->keyword(), "kern");
     EXPECT_EQ(facility->description(), "Kernel messages");
+}
+
+TEST(syslog_facility, create_kern) {
+
+	logger::syslog_facility_ptr facility = logger::syslog_facility::create("kern");
+
+	EXPECT_NE(facility, nullptr);
+	EXPECT_EQ(facility->code(), 0);
+	EXPECT_EQ(facility->keyword(), "kern");
+	EXPECT_EQ(facility->description(), "Kernel messages");
+}
+
+TEST(syslog_facility, create_user) {
+
+	logger::syslog_facility_ptr facility = logger::syslog_facility::create("user");
+
+	EXPECT_NE(facility, nullptr);
+	EXPECT_EQ(facility->code(), 1);
+	EXPECT_EQ(facility->keyword(), "user");
+	EXPECT_EQ(facility->description(), "User-level messages");
+}
+
+TEST(syslog_facility, create_mail) {
+
+	logger::syslog_facility_ptr facility = logger::syslog_facility::create("mail");
+
+	EXPECT_NE(facility, nullptr);
+	EXPECT_EQ(facility->code(), 2);
+	EXPECT_EQ(facility->keyword(), "mail");
+	EXPECT_EQ(facility->description(), "Mail system");
+}
+
+TEST(syslog_facility, create_daemon) {
+
+	logger::syslog_facility_ptr facility = logger::syslog_facility::create("daemon");
+
+	EXPECT_NE(facility, nullptr);
+	EXPECT_EQ(facility->code(), 3);
+	EXPECT_EQ(facility->keyword(), "daemon");
+	EXPECT_EQ(facility->description(), "System daemons");
+}
+
+TEST(syslog_facility, create_auth) {
+
+	logger::syslog_facility_ptr facility = logger::syslog_facility::create("auth");
+
+	EXPECT_NE(facility, nullptr);
+	EXPECT_EQ(facility->code(), 4);
+	EXPECT_EQ(facility->keyword(), "auth");
+	EXPECT_EQ(facility->description(), "Security/authorization messages");
+}
+
+TEST(syslog_facility, create_local0) {
+
+	logger::syslog_facility_ptr facility = logger::syslog_facility::create("local0");
+
+	EXPECT_NE(facility, nullptr);
+	EXPECT_EQ(facility->code(), 16);
+	EXPECT_EQ(facility->keyword(), "local0");
+	EXPECT_EQ(facility->description(), "Local use (local0)");
+}
+
+TEST(syslog_facility, create_local1) {
+
+	logger::syslog_facility_ptr facility = logger::syslog_facility::create("local1");
+
+	EXPECT_NE(facility, nullptr);
+	EXPECT_EQ(facility->code(), 17);
+	EXPECT_EQ(facility->keyword(), "local1");
+	EXPECT_EQ(facility->description(), "Local use (local1)");
 }
