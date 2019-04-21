@@ -33,11 +33,7 @@ namespace logger {
         // intentional...
     }
 
-    syslog_facility_ptr syslog_facility::kern_facility(){
-        return std::make_shared<syslog_facility>(0, "kern", "Kernel messages");
-    }
-
-    syslog_facility_ptr syslog_facility::create(const std::string &key){
+    syslog_facility_ptr syslog_facility::create_for(const std::string &key){
 
         syslog_facility_ptr facility;
 
@@ -56,7 +52,7 @@ namespace logger {
         } else if ( key == "local1" ) {
 	        facility = std::make_shared<syslog_facility>(17, "local1", "Local use (local1)");
         } else {
-	        // throw facility_exception(...)
+	        throw facility_exception("[" + key + "] is not a syslog key");
         }
 
         return facility;

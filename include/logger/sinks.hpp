@@ -20,6 +20,7 @@
 
 #include "logger/definitions.hpp"
 #include <logger/facilities.hpp>
+#include <logger/exceptions.hpp>
 
 #define MAXECIDLEN 64
 
@@ -163,7 +164,7 @@ namespace logger {
          * This sink writes messages in FILE.
          *
          */
-        virtual void write(log_level level, const char *fmt, ...);
+        virtual void write(log_level level, const char *fmt, ...) override ;
 
     protected:
 
@@ -234,11 +235,11 @@ namespace logger {
          * @param name nom du journal
          * @param pname program name
          * @param level initial log level (defaults to logger::log_levels::info)
-         * @param facility syslog facilty to use (default is LOG_USER)
+         * @param facility syslog facilty to use (default is "user")
          * @param options syslog options
+         * @throws sink_exception if init went wrong
          */
-        syslog_sink(const std::string &name = "syslog", const std::string &pname = "prog",
-                    log_level level = log_level::info, int facility = 0, int options = 0);
+        syslog_sink(const std::string &name = "syslog", const std::string &pname = "prog", log_level level = log_level::info, const std::string &facility_key = "user", int options = 0);
 
         virtual ~syslog_sink();
 
@@ -246,7 +247,7 @@ namespace logger {
          *
          * send messages to syslogd
          */
-        virtual void write(log_level level, const char *fmt, ...);
+        virtual void write(log_level level, const char *fmt, ...) override ;
     };
 
     /** @} */

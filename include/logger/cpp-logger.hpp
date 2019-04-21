@@ -2,6 +2,7 @@
 #include <logger/facilities.hpp>
 #include <logger/registry.hpp>
 #include <logger/sinks.hpp>
+#include <logger/exceptions.hpp>
 
 #ifndef CPP_CPP_LOGGER_HPP
 #define CPP_CPP_LOGGER_HPP

@@ -24,10 +24,11 @@ namespace logger {
             delete _sink;
         }
     }
-    
-    const log_facility_ptr logger::facility() const {
-        return _sink->facility();
-    };
+
+// TODOD remove this
+//    const log_facility_ptr logger::facility() const {
+//        return _sink->facility();
+//    };
 
 //    void logger::set_facility(log_facility *facility) {
 //        _sink->set_facility(facility);
