@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.11)
 project(
   cpp-logger
   VERSION 2.0.0
-  DESCRIPTION "Simple C++ logger that works on AIX (${GIT_LOG})")
+  DESCRIPTION "Simple C++ logger (${GIT_LOG})")
 
 option(BUILD_TESTS "if set, then Unit tests are build" True)
 set(CMAKE_CXX_STANDARD 17)
@@ -47,7 +47,7 @@ set(LOGGER_SOURCE
         src/stderr_sink.cpp
         src/stdout_sink.cpp
         src/syslog_sink.cpp
-        src/facilities.cpp include/logger/facilities.hpp)
+        src/facilities.cpp include/logger/facilities.hpp src/exceptions.cpp include/logger/exceptions.hpp)
 
 add_library(cpp-logger-static STATIC ${LOGGER_SOURCE})
 target_link_libraries(cpp-logger-static pthread)

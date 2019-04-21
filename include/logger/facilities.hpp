@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include <iostream>
+#include <logger/exceptions.hpp>
 
 #ifndef CPP_LOGGER_LOG_FACILITY_HPP
 #define CPP_LOGGER_LOG_FACILITY_HPP
@@ -26,7 +27,7 @@ namespace logger {
         /**
          * @return facility's code of what kind of program is logging messages.
          */
-        const int code() ;
+        const int code();
 
         /**
          * @return facility's keyword of the kind of program that is logging messages.
@@ -39,14 +40,14 @@ namespace logger {
          */
         const std::string &description();
 
-        /*
-        * @param code type of program that is logging the message
-        * @param keyword related keyword
-        * @param description falicity description.
+        /**
+         * @param code type of program that is logging the message
+         * @param keyword related keyword
+         * @param description falicity description.
          */
         log_facility(int code, std::string keyword, std::string description = "");
 
-        virtual ~log_facility() ;
+        virtual ~log_facility();
 
     private:
         int _code;
@@ -56,7 +57,8 @@ namespace logger {
 
     typedef std::shared_ptr<log_facility> log_facility_ptr; //!< a smart pointer to a log_facility
 
-    class syslog_facility ;
+    class syslog_facility;
+
     typedef std::shared_ptr<syslog_facility> syslog_facility_ptr; //!< a smart pointer to a syslog_facility
 
     /** RFC5424 log facility.
@@ -75,16 +77,14 @@ namespace logger {
          */
         static syslog_facility_ptr default_facility();
 
-        static syslog_facility_ptr kern_facility();
-
         /** Create the key related faiclity.
          *
          * @param key  facility's keyword
          * @return corresponding facility instance.
          */
-        static syslog_facility_ptr create( const std::string &key);
+        static syslog_facility_ptr create_for(const std::string &key);
 
-    // TODO this should be protected or private (protected:)
+        // TODO this should be protected or private (protected:)
 
         /** New syslog faiclity instance.
          *

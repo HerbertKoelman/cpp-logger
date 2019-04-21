@@ -167,7 +167,7 @@ namespace logger {
 
       /** change the current ecid (execution content ID).
        *
-       * Setting this to an empty string will deactivate the printing of ECIDs.
+       * setting this to an empty string will deactivate the printing of ECIDs.
        *
        * @param ecid new ecid
        */
@@ -179,16 +179,6 @@ namespace logger {
 
       /** @return logger name */
       std::string name() const;
-
-      /** @return logger's facility (see logger::log_facility) */
-      const log_facility_ptr facility() const;
-
-//      /** modifie la facilit. . utiliser.
-//       *
-//       * @param facility facility to use
-//       */
-//      TODO check if we should allow to change logger's facility or if this can only be done once when a logger instance is created
-//      void set_facility(log_facility *facility);
 
       /** create a logger instance.
        *

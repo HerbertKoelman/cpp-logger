@@ -9,38 +9,40 @@
 
 namespace logger {
 
-    syslog_sink::syslog_sink(const std::string &name, const std::string &pname, log_level level, int facility, int options) :
+    syslog_sink::syslog_sink(const std::string &name, const std::string &pname, log_level level, const std::string &facility_key, int options) :
             sink(name, pname, level) {
+        try {
 #ifdef DEBUG
-        printf("DEBUG %s name: %s, pname: %s, level: %d, facility: %d, options: %d\n", __FUNCTION__,
-            name.c_str(),
-            pname.c_str(),
-            level,
-            facility,
-            options,
-            __FILE__,__LINE__);
+            printf("DEBUG %s name: %s, pname: %s, level: %d, facility: %d, options: %d\n", __FUNCTION__,
+                name.c_str(),
+                pname.c_str(),
+                level,
+                facility,
+                options,
+                __FILE__,__LINE__);
 #endif
-        _pattern = "[L SUBSYS=" + _name + "] %s %s";
+            _pattern = "[L SUBSYS=" + _name + "] %s %s";
 
-        if (options == 0) {
-            options = LOG_PID;
-        }
+            if (options == 0) {
+                options = LOG_PID;
+            }
 
-        if (facility == 0) {
-            facility = LOG_USER;
-        }
+            syslog_facility_ptr facility = syslog_facility::create_for(facility_key);
 
 #ifdef DEBUG
-        printf("DEBUG %s calling openlog(%s, %d, %d)\n",
-            __FUNCTION__,
-            pname.c_str(),
-            options,
-            facility,
-            __FILE__,__LINE__);
+            printf("DEBUG %s calling openlog(%s, %d, %d)\n",
+                __FUNCTION__,
+                pname.c_str(),
+                options,
+                facility,
+                __FILE__,__LINE__);
 #endif
 
-        openlog(pname.c_str(), options, facility);
+            openlog(pname.c_str(), options, facility->code());
 
+        } catch ( std::exception &err ){
+            throw logger_exception(err.what());
+        }
     };
 
     syslog_sink::~syslog_sink() {
