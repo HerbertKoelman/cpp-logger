@@ -14,7 +14,7 @@ namespace logger {
     // constructors & destructors -------------------------------------
     //
 
-    logger::logger(const std::string &name, sink *sink) : _sink(NULL) {
+    logger::logger(const std::string &name, sink *sink) : _sink(NULL), _name (name) {
         _sink = sink;
     }
 
@@ -23,14 +23,6 @@ namespace logger {
         if (_sink != NULL) {
             delete _sink;
         }
-    }
-
-    const std::string logger::facility() const {
-        return _sink->facility();
-    };
-
-    void logger::set_facility(log_facility facility) {
-        _sink->set_facility(facility);
     }
 
     std::string logger::ecid() {
@@ -57,8 +49,8 @@ namespace logger {
     };
 
     /** @return logger name */
-    std::string logger::name() const {
-        return _sink->name();
+    const std::string &logger::name() const {
+        return _name;
     };
 
 } // namespace logger

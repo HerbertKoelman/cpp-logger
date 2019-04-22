@@ -7,9 +7,6 @@
 #include <syslog.h>
 #include "gtest/gtest.h"
 
-/**
- * This checks that a registered logger is instanciated only once.
- */
 TEST(registry, unicity_check) {
     logger::logger_ptr err0 = logger::get<logger::stderr_sink>("stderr-test-logger");
 
@@ -24,20 +21,46 @@ TEST(registry, unicity_check) {
 
 TEST(registry, stderr_sink) {
     logger::logger_ptr err = logger::get<logger::stderr_sink>("stderr-test-logger");
+
     EXPECT_NE(err, nullptr);
     EXPECT_EQ(err->name(), "stderr-test-logger");
+
+    ::testing::internal::CaptureStderr();
+
+    err->info("stderr sink test (version: %s)", logger::cpp_logger_version());
+
+    std::string output = ::testing::internal::GetCapturedStderr();
+
+    EXPECT_TRUE( output.rfind("[L SUBSYS=stderr-test-logger] stderr sink test")!= std::string::npos);
 }
 
 TEST(registry, stdout_sink) {
-    logger::logger_ptr err = logger::get<logger::stdout_sink>("stderr-test-logger");
-    EXPECT_NE(err, nullptr);
-    EXPECT_EQ(err->name(), "stderr-test-logger");
+    logger::logger_ptr out = logger::get<logger::stdout_sink>("stdout-test-logger");
+
+    EXPECT_NE(out, nullptr);
+    EXPECT_EQ(out->name(), "stdout-test-logger");
+
+    ::testing::internal::CaptureStdout();
+    out->info("stdout sink test (version: %s)", logger::cpp_logger_version());
+    std::string output = ::testing::internal::GetCapturedStdout();
+
+    EXPECT_TRUE( output.rfind("[L SUBSYS=stdout-test-logger] stdout sink test")!= std::string::npos);
 }
 
 TEST(registry, syslog_sink) {
-    logger::logger_ptr err = logger::get<logger::syslog_sink>("syslog-test-logger");
-    EXPECT_NE(err, nullptr);
-    EXPECT_EQ(err->name(), "syslog-test-logger");
+    logger::logger_ptr user_log = logger::get<logger::syslog_sink>("syslog-test-logger");
+    EXPECT_NE(user_log, nullptr);
+    EXPECT_EQ(user_log->name(), "syslog-test-logger");
+    user_log->info("sent by cpp-logger");
+
+    logger::logger_ptr local1_log = logger::get<logger::syslog_sink>(
+            "syslog-test-local1-logger",
+            "local1",
+            0);
+
+    EXPECT_NE(local1_log, nullptr);
+    EXPECT_EQ(local1_log->name(), "syslog-test-local1-logger");
+    local1_log->info("sent by cpp-logger");
 }
 
 TEST(logger, change_log_level) {
@@ -75,7 +98,7 @@ TEST(logger, DISABLED_change_program_name) {
     EXPECT_EQ(out->name(), "google-tests");
 }
 
-TEST(logger, legacy) {
+TEST(logger, DISABLED_legacy) {
     char hostname[100];
     gethostname(hostname, 100);
 

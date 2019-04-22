@@ -16,11 +16,12 @@ namespace logger {
     // init class data
             _name(name),
             _level(level),
-            _pname(pname) {
+            _pname(pname){
         // intentional...
 #ifdef DEBUG
         printf("DEBUG %s (%s,%d).\n", __FUNCTION__, __FILE__, __LINE__);
 #endif
+
     }
 
     sink::~sink() {
@@ -70,30 +71,6 @@ namespace logger {
                 return "UNKNOWN";
         }
 
-    }
-
-    void sink::set_facility(log_facility facility) {
-
-        switch (facility) {
-            case sic_bat:
-                _facility = "SIC/BAT";
-                break;
-            case sic_ine:
-                _facility = "SIC/INE";
-                break;
-            case sic_bmp:
-                _facility = "SIC/BMP";
-                break;
-            case sic_mpp:
-                _facility = "SIC/MPP";
-                break;
-            case sic_kix:
-                _facility = "SIC/KIX";
-                break;
-            case sic_tux:
-            default:
-                _facility = "SIC/TUX";
-        }
     }
 
 } // namespace logger
