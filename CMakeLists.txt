@@ -47,7 +47,8 @@ set(LOGGER_SOURCE
         src/stderr_sink.cpp
         src/stdout_sink.cpp
         src/syslog_sink.cpp
-        src/facilities.cpp include/logger/facilities.hpp src/exceptions.cpp include/logger/exceptions.hpp)
+        src/facilities.cpp include/logger/facilities.hpp
+        src/exceptions.cpp include/logger/exceptions.hpp)
 
 add_library(cpp-logger-static STATIC ${LOGGER_SOURCE})
 target_link_libraries(cpp-logger-static pthread)
@@ -96,7 +97,7 @@ set(CPACK_PACKAGE_RELEASE 1)
 set(CPACK_PACKAGE_CONTACT "Herbert Koelman")
 set(CPACK_PACKAGE_VENDOR "Urbix Software")
 set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
-# set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${CMAKE_SYSTEM_PROCESSOR}")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CMAKE_SYSTEM_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${CMAKE_SYSTEM_PROCESSOR}")
 
 include(CPack)
 

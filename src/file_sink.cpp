@@ -9,7 +9,7 @@
 
 namespace logger {
 
-    file_sink::file_sink(const std::string &name, const std::string &pname, log_level level, FILE *file) :
+    file_sink::file_sink(const std::string &name, const std::string &pname, log_level level, const log_facility_ptr &facility, FILE *file) :
             sink(name, pname, level),
             _pid(getpid()),
             _file_descriptor(file) {
@@ -17,6 +17,7 @@ namespace logger {
         printf ("DEBUG %s pattern: [%s](%s,%d)\n", __FUNCTION__, _pattern.c_str(), __FILE__, __LINE__);
 #endif
 
+        _facility = facility ;
         _pattern = LOGGER_LOG_PATTERN;
 
         //set_facility(log_facility::sic_tux);

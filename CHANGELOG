@@ -1,4 +1,5 @@
 2.0.0
+- revisited the facility notion which was too specific (#41)
 - use only english (#55)
 - definition and types where not displayed in doxygen (#42)
 - rename GTestConfig.cmake into GTestExt.cmake (#46)
