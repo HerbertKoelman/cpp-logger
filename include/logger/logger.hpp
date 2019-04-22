@@ -131,7 +131,7 @@ namespace logger {
       /** Emergency conditions.
        *
        * System is unusable. A panic condition.
-       *
+       * 
        * @tparam Args variadic of values to print.
        * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
        * @param args data to print.
@@ -167,7 +167,7 @@ namespace logger {
 
       /** change the current ecid (execution content ID).
        *
-       * Setting this to an empty string will deactivate the printing of ECIDs.
+       * setting this to an empty string will deactivate the printing of ECIDs.
        *
        * @param ecid new ecid
        */
@@ -177,17 +177,8 @@ namespace logger {
        */
       std::string ecid() ;
 
-      /** @return logger name */
-      std::string name() const;
-
-      /** @return logger's facility (see logger::log_facility) */
-      const std::string facility() const;
-
-      /** modifie la facilit. . utiliser.
-       *
-       * @param facility facility to use
-       */
-      void set_facility(log_facility facility);
+      /** @return logger's name */
+      const std::string &name() const;
 
       /** create a logger instance.
        *
@@ -204,6 +195,7 @@ namespace logger {
 
       sink        *_sink; //!< logger delegate to a sink the actual magic to write log messages
 
+      std::string _name; //!< logger's name
     }; // logger
 
     /** @} */

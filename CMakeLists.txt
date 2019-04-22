@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.11)
 project(
   cpp-logger
   VERSION 2.0.0
-  DESCRIPTION "Simple C++ logger that works on AIX (${GIT_LOG})")
+  DESCRIPTION "Simple C++ logger (${GIT_LOG})")
 
 option(BUILD_TESTS "if set, then Unit tests are build" True)
 set(CMAKE_CXX_STANDARD 17)
@@ -47,7 +47,8 @@ set(LOGGER_SOURCE
         src/stderr_sink.cpp
         src/stdout_sink.cpp
         src/syslog_sink.cpp
-      )
+        src/facilities.cpp include/logger/facilities.hpp
+        src/exceptions.cpp include/logger/exceptions.hpp)
 
 add_library(cpp-logger-static STATIC ${LOGGER_SOURCE})
 target_link_libraries(cpp-logger-static pthread)
@@ -74,9 +75,6 @@ endif(BUILD_TESTS)
 #
 find_package(Doxygen REQUIRED dot OPTIONAL_COMPONENTS mscgen dia)
 if (Doxygen_FOUND)
-  # set(DOXYGEN_OUTPUT_DIRECTORY doxygen)
-  # set(DOXYGEN_GENERATE_MAN YES)
-  # set(DOXYGEN_GENERATE_HTML YES)
   set(DOXYGEN_EXAMPLE_PATH tests)
   set(DOXYGEN_PROJECT_BRIEF "Simple C++ wrapper to pthread functions.")
   set(DOXYGEN_USE_MDFILE_AS_MAINPAGE "${CMAKE_SOURCE_DIR}/README.md")
@@ -99,7 +97,7 @@ set(CPACK_PACKAGE_RELEASE 1)
 set(CPACK_PACKAGE_CONTACT "Herbert Koelman")
 set(CPACK_PACKAGE_VENDOR "Urbix Software")
 set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
-# set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${CMAKE_SYSTEM_PROCESSOR}")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CMAKE_SYSTEM_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${CMAKE_SYSTEM_PROCESSOR}")
 
 include(CPack)
 

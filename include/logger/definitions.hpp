@@ -55,19 +55,6 @@ namespace logger {
     /** used to define method paramters (readability) */
     typedef log_levels log_level;
 
-    /** known facilities */
-    enum log_facilities {
-        sic_bat, //!< pour les batchs
-        sic_ine, //!< pour les interfaces externes
-        sic_bmp, //!< Pour les BMP IMS
-        sic_mpp, //!< Pour le MPP IMS
-        sic_kix, //!< Pour le CICS
-        sic_tux  //!< (non encore utilis.)
-    };
-
-    /** used to define method paramters readability) */
-    typedef log_facilities log_facility;
-
 #if __IBMCPP_TR1__ //NOSONAR this macro is set with the compiler command line argumen
     typedef std::tr1::shared_ptr<logger::logger> logger_ptr; //!< shared pointer to a logger instance
 #else
