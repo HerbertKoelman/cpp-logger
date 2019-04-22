@@ -45,6 +45,11 @@ namespace logger {
         }
     };
 
+    syslog_sink::syslog_sink(const std::string &name, const std::string &pname, log_level level) :
+            syslog_sink(name, pname, level, "user", 0) {
+        // intentional
+    }
+
     syslog_sink::~syslog_sink() {
         // intentional
     };

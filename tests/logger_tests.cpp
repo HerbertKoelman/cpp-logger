@@ -7,6 +7,18 @@
 #include <syslog.h>
 #include "gtest/gtest.h"
 
+TEST(registry, unicity_check) {
+    logger::logger_ptr err0 = logger::get<logger::stderr_sink>("stderr-test-logger");
+
+    auto logger_count = logger::registry::instance().size();
+    logger::logger_ptr err1 = logger::get<logger::stderr_sink>("stderr-test-logger");
+    logger::logger_ptr err2 = logger::get<logger::stderr_sink>("stderr-test-logger");
+    logger::logger_ptr err3 = logger::get<logger::stderr_sink>("stderr-test-logger");
+
+    EXPECT_NE(err1, nullptr);
+    EXPECT_EQ(logger_count, logger::registry::instance().size());
+}
+
 TEST(registry, stderr_sink) {
     logger::logger_ptr err = logger::get<logger::stderr_sink>("stderr-test-logger");
 
@@ -36,10 +48,19 @@ TEST(registry, stdout_sink) {
 }
 
 TEST(registry, syslog_sink) {
-    logger::logger_ptr log = logger::get<logger::syslog_sink>("syslog-test-logger");
-    EXPECT_NE(log, nullptr);
-    EXPECT_EQ(log->name(), "syslog-test-logger");
-    log->info("sent by cpp-logger");
+    logger::logger_ptr user_log = logger::get<logger::syslog_sink>("syslog-test-logger");
+    EXPECT_NE(user_log, nullptr);
+    EXPECT_EQ(user_log->name(), "syslog-test-logger");
+    user_log->info("sent by cpp-logger");
+
+    logger::logger_ptr local1_log = logger::get<logger::syslog_sink>(
+            "syslog-test-local1-logger",
+            "local1",
+            0);
+
+    EXPECT_NE(local1_log, nullptr);
+    EXPECT_EQ(local1_log->name(), "syslog-test-local1-logger");
+    local1_log->info("sent by cpp-logger");
 }
 
 TEST(logger, change_log_level) {

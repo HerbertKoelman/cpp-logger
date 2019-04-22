@@ -75,18 +75,6 @@ namespace logger {
             return _name;
         };
 
-        /** @return logger's facility (see logger::log_facility) */
-        const log_facility_ptr facility() const {
-
-            return _facility;
-        };
-
-        /** set faclity name
-         *
-         * @param facility facility name
-         */
-        void set_facility(log_facility_ptr facility);
-
         /** change the current ecid.
          *
          * Setting this to an empty string will stop logger to prin
@@ -95,7 +83,7 @@ namespace logger {
          */
         void set_ecid(const std::string &ecid);
 
-        /** @return ecid courran
+        /** @return current execution ID.
          */
         std::string ecid();
 
@@ -103,20 +91,13 @@ namespace logger {
 
         /** new class instance.
          *
-         * @param name log name
+         * > **WARN** these parameters are automatically passed when using the registry facility.
+         *
+         * @param name sink's name
          * @param pname program name
          * @param level initial log level (defaults to logger::log_level::info)
          */
         sink(const std::string &name = "default", const std::string &pname = "prog", log_level level = log_levels::info);
-
-        /** new class instance.
-         *
-         * @param name log name
-         * @param pname program name
-         * @param facility logging facility
-         * @param level initial log level (defaults to logger::log_level::info)
-         */
-        sink(const std::string &name = "default", const std::string &pname = "prog", log_facility_ptr facility = nullptr, log_level level = log_levels::info);
 
         /** @return display name for a given log level
          */
@@ -128,8 +109,6 @@ namespace logger {
         std::string   _ecid; //!< execution control ID. Helps to track everything that was logged by one business operation
         log_level     _level;    //!< current logging level
 
-        log_facility_ptr _facility; //!< current facility class
-
     private:
         std::mutex _mutex;       //!< used to protect access to static class data
         std::shared_mutex _shared_mutex;
@@ -140,7 +119,7 @@ namespace logger {
      *
      * send log messages to FILE.
      *
-     * > it is up to you to handle the file opening/closing.
+     * > **WARNING** it is up to you to handle the file opening/closing.
      *
      * @author herbert koelman
      * @since v1.4.0
@@ -152,10 +131,11 @@ namespace logger {
          *
          * @param name nom du journal
          * @param pname program name
+         * @param facility facility code used to specify the type of program that is logging messages
          * @param file output file.
          * @param level initial log level (defaults to logger::log_levels::info)
          */
-        file_sink(const std::string &name, const std::string &pname, log_level level, FILE *file);
+        file_sink(const std::string &name, const std::string &pname, log_level level, const log_facility_ptr &facility, FILE *file);
 
         virtual ~file_sink();
 
@@ -172,10 +152,11 @@ namespace logger {
          */
         const std::string date_time();
 
-        FILE *_file_descriptor; //!< file descriptor of a log file
-        pid_t _pid;      //!< process ID
-        std::string _lag;      //!< date time lag (i.e. +02:00)
-        std::string _hostname; //!< hostname (this will be displayed by log messages)
+        FILE             *_file_descriptor; //!< file descriptor of a log file
+        pid_t             _pid;      //!< process ID
+        std::string       _lag;      //!< date time lag (i.e. +02:00)
+        std::string       _hostname; //!< hostname (this will be displayed by log messages)
+        log_facility_ptr  _facility ; //!< logger's facility
     };
 
     /** stdout sink.
@@ -190,12 +171,20 @@ namespace logger {
 
         /** new instance.
          *
-         * @param name log name
+         * @param name sink name
+         * @param pname program name
+         * @param level initial log level (defaults to logger::log_levels::info)
+         * @param facility facility code used to specify the type of program that is logging messages
+         */
+        stdout_sink(const std::string &name, const std::string &pname, log_level level, const log_facility_ptr &facility);
+
+        /** new instance.
+         *
+         * @param name sink name
          * @param pname program name
          * @param level initial log level (defaults to logger::log_levels::info)
          */
-        stdout_sink(const std::string &name = "stdout", const std::string &pname = "prog",
-                    log_level level = log_level::info);
+        stdout_sink(const std::string &name, const std::string &pname, log_level level);
 
     };
 
@@ -214,9 +203,18 @@ namespace logger {
          * @param name nom du journal
          * @param pname program name
          * @param level initial log level (defaults to logger::log_levels::info)
+         * @param facility facility code used to specify the type of program that is logging messages
          */
-        stderr_sink(const std::string &name = "stderr", const std::string &pname = "prog",
-                    log_level level = log_level::info);
+        stderr_sink(const std::string &name, const std::string &pname, log_level level, const log_facility_ptr &facility);
+
+       /** new instance.
+         *
+         * @param name nom du journal
+         * @param pname program name
+         * @param level initial log level (defaults to logger::log_levels::info)
+         */
+        stderr_sink(const std::string &name, const std::string &pname, log_level level);
+
 
     };
 
@@ -235,11 +233,19 @@ namespace logger {
          * @param name nom du journal
          * @param pname program name
          * @param level initial log level (defaults to logger::log_levels::info)
-         * @param facility syslog facilty to use (default is "user")
+         * @param facility_key syslog facility to use (default is "user")
          * @param options syslog options
          * @throws sink_exception if init went wrong
          */
-        syslog_sink(const std::string &name = "syslog", const std::string &pname = "prog", log_level level = log_level::info, const std::string &facility_key = "user", int options = 0);
+        syslog_sink(const std::string &name, const std::string &pname, log_level level, const std::string &facility_key, int options);
+
+       /** new instance.
+         *
+         * @param name nom du journal
+         * @param pname program name
+         * @param level initial log level (defaults to logger::log_levels::info)
+         */
+        syslog_sink(const std::string &name, const std::string &pname, log_level level);
 
         virtual ~syslog_sink();
 

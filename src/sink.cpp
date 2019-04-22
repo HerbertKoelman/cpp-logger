@@ -16,29 +16,12 @@ namespace logger {
     // init class data
             _name(name),
             _level(level),
-            _pname(pname) {
+            _pname(pname){
         // intentional...
 #ifdef DEBUG
         printf("DEBUG %s (%s,%d).\n", __FUNCTION__, __FILE__, __LINE__);
 #endif
 
-        _facility = syslog_facility::default_facility();
-    }
-
-sink::sink(const std::string &name, const std::string &pname, log_facility_ptr facility, log_level level) :
-    // init class data
-            _name(name),
-            _level(level),
-            _facility(facility),
-            _pname(pname) {
-        // intentional...
-#ifdef DEBUG
-        printf("DEBUG %s (%s,%d).\n", __FUNCTION__, __FILE__, __LINE__);
-#endif
-
-        if ( facility == nullptr){
-            _facility = syslog_facility::default_facility();
-        }
     }
 
     sink::~sink() {
@@ -88,32 +71,6 @@ sink::sink(const std::string &name, const std::string &pname, log_facility_ptr f
                 return "UNKNOWN";
         }
 
-    }
-
-    void sink::set_facility(log_facility_ptr facility) {
-
-        _facility = facility;
-
-//        switch (facility) {
-//            case sic_bat:
-//                _facility = "SIC/BAT";
-//                break;
-//            case sic_ine:
-//                _facility = "SIC/INE";
-//                break;
-//            case sic_bmp:
-//                _facility = "SIC/BMP";
-//                break;
-//            case sic_mpp:
-//                _facility = "SIC/MPP";
-//                break;
-//            case sic_kix:
-//                _facility = "SIC/KIX";
-//                break;
-//            case sic_tux:
-//            default:
-//                _facility = "SIC/TUX";
-//        }
     }
 
 } // namespace logger

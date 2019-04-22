@@ -177,8 +177,8 @@ namespace logger {
        */
       std::string ecid() ;
 
-      /** @return logger name */
-      std::string name() const;
+      /** @return logger's name */
+      const std::string &name() const;
 
       /** create a logger instance.
        *
@@ -195,6 +195,7 @@ namespace logger {
 
       sink        *_sink; //!< logger delegate to a sink the actual magic to write log messages
 
+      std::string _name; //!< logger's name
     }; // logger
 
     /** @} */
