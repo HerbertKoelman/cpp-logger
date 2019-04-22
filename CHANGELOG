@@ -8,5 +8,5 @@
 - memset issue (#40)
 - use CMake build system (#37)
 - replace cpp-pthread features by standard C++17 ones (#38)
-- Fixed bugs #56, #57
+- Fixed bugs #56, #57, #71
 
