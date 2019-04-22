@@ -1,0 +1,12 @@
+2.0.0
+- revisited the facility notion which was too specific (#41)
+- use only english (#55)
+- definition and types where not displayed in doxygen (#42)
+- rename GTestConfig.cmake into GTestExt.cmake (#46)
+- performance test are trough GoogleTests(#51)
+- now gogle test comes as an external CMake project (#43)
+- memset issue (#40)
+- use CMake build system (#37)
+- replace cpp-pthread features by standard C++17 ones (#38)
+- Fixed bugs #56, #57, #71, #44
+

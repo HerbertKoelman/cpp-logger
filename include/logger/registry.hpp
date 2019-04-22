@@ -1,5 +1,5 @@
 /*
- * pmu::log::registry - herbert koelman
+ * logger::registry - herbert koelman
  */
 
 #include <memory>
@@ -9,26 +9,30 @@
 #include <unistd.h>
 #include <unordered_map>
 
-#include <pthread/pthread.hpp>
+#include <mutex>
+
 #include "logger/definitions.hpp"
 #include <logger/logger.hpp>
+#include <logger/sinks.hpp>
+#include <logger/definitions.hpp>
 
-#ifndef PMU_LOGGER_REGISTRY_HPP
-#define PMU_LOGGER_REGISTRY_HPP
+#ifndef CPP_LOGGER_REGISTRY_HPP
+#define CPP_LOGGER_REGISTRY_HPP
 
-namespace pmu {
-  namespace log {
+namespace logger {
 
-   /** \addtogroup pmu_log
+   /** \addtogroup logger_log
     * @{
     */
 
     /** Searches the registry for the wanted logger instance.
      *
-     * If the logger doesn't exist, then a new one is created and registered.
+     * If the logger doesn't exist, then a new one is created and registered. Else the existing one is returned. The factory
+     * create instances of stdout_sinks.
      *
-     * @param name logger name
+     * @param name unique logger name
      * @return a logger instance
+     * @see logger::stdout_sink
      */
     logger_ptr get (const std::string &name );
 
@@ -40,20 +44,33 @@ namespace pmu {
      */
     void set_level(const log_level level);
 
+    /** set ECID for all registered loggers.
+     *
+     * @param ecid ECID
+     */
+    void set_ecid(const std::string &ecid );
+
     /** set program name.
      *
-     * this name will be used for any logger created after this call.
+     * *WARN* This name will be used by loggers created after this call. Pre-existing ones are not affected.
      *
      * @param pname program name
+     * @see logger::sink#program_name
+     * @see logger::logger#program_name
      */
     void set_program_name(const std::string &pname);
 
-    /** wraps a map of logger map
+    /** The registry is a map of loggers.
+     *
+     * It makes it possible to re-use pre-existing loggers. each logger is indexed by it's name and type (sink). When a
+     * multi-threaded programmed needs to log things, sharing a logger between threads might be helpfull.
+     *
+     * @author Herbert Koelman
      */
     class registry {
       public:
 
-        /** registry factory.
+        /** @return registry singleton
          */
         static registry &instance();
 
@@ -63,19 +80,20 @@ namespace pmu {
          */
         void remove(const std::string &name);
 
+        /** unregister all loggers
+         */
+        void reset();
+
+        /** return number of registered loggers */
+        size_t size() const {
+          return _loggers.size();
+        };
+
         /** set the log level of all registered loggers
          *
          * @param level log level
          */
         void set_log_level ( log_level level );
-
-        void set_program_name(const std::string &pname);
-
-        std::string program_name();
-
-        /** unregister all loggers
-         */
-        void reset();
 
         /**  this is the log level that will be set when a new logger is instanciated.
          *
@@ -85,33 +103,56 @@ namespace pmu {
           return _level;
         }
 
+        /** set program name
+         *
+         * @param pname program name
+         */
+        void set_program_name(const std::string &pname);
+
+        /** @return current program name
+         */
+        std::string program_name();
+
         /** set the ecid of all registered loggers
          *
          * @param ecid
          */
-        void set_ecid ( const std::string ecid );
+        void set_ecid ( const std::string &ecid );
 
-
-        /** @return a logger instance (if not found a new one is created)
+        /** @return a logger instance that uses stdout (if not found a new one is created)
+         *
+         * @see stdout_sink
          */
-        logger_ptr get(const std::string &name);
+        logger_ptr get(const std::string &name){
+          return get<stdout_sink>(name);
+        }
 
         /**
+         * @tparam T logger's sink type
+         * @tparam Args logger's sink argument variadic
          * @param name logger instance name
-         * @param T a logger type
-         * @param args logger type special arguments
+         * @param args logger's sink arguments
          * @return a logger instance (if not found a new one is created)
+         * @see sink
          */
         template<class T, typename... Args> logger_ptr get( const std::string &name, const Args&... args){
-          pthread::lock_guard<pthread::mutex> lck(_mutex);
+          std::lock_guard<std::mutex> lck(_mutex);
 
-          // printf("DEBUG pmu::log::registry.get(%s, %d);\n", name.c_str(), _level);
+          // printf("DEBUG logger::registry.get(%s, %d);\n", name.c_str(), _level);
 
           logger_ptr logger;
           auto search = _loggers.find(name);
 
           if ( search == _loggers.end() ){
-            logger = logger_ptr(new T(name, _pname, _level, args...));
+            // no logger was registered yet, instantiate a new one.
+            logger = logger_ptr(
+              new class logger(
+                name,
+                new T(name, _pname, _level, args...)
+              )
+            );
+
+            // register the newly created logger instance
             add(logger);
           } else {
             logger = search->second;
@@ -134,13 +175,13 @@ namespace pmu {
          */
         registry();
 
-#if __IBMCPP_TR1__ //NOSONAR this macro is set with the compiler command line argumen
+#if __IBMCPP_TR1__ // NOSONAR this macro is set with the compiler command line argumen
         std::tr1::unordered_map <std::string, logger_ptr> _loggers; //!< known loggers
 #else
         std::unordered_map <std::string, logger_ptr>      _loggers; //!< known loggers
 #endif
 
-        pthread::mutex _mutex; //!< used to protect access to static class data
+        std::mutex     _mutex; //!< used to protect access to static class data
         log_level      _level; //!< used when new logger instances are created by the regsitry
         std::string    _pname;
 
@@ -157,16 +198,17 @@ namespace pmu {
      *
      * If the logger doesn't exist, then a new one is created and registered.
      *
+     * @tparam T logger sink type
+     * @tparam args sink's constructor argument variadic
      * @param name logger instance name
-     * @param T a logger type
-     * @param args logger type special arguments
+     * @param args sink's constructor arguments
      * @return a logger instance
+     * @see logger::sink
      */
     template<class T, typename... Args> logger_ptr get( const std::string &name, const Args&... args){
       return registry::instance().get<T>(name, args...);
     };
 
     /** @} */
-  } // namespace log
-} // namespace pmu
+} // namespace logger
 #endif

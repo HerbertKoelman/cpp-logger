@@ -1,0 +1,17 @@
+/* autoconf section ----------------------------------------------------------------------*/
+
+#include <unistd.h>
+
+#ifndef cpp_logger_config_h
+#define cpp_logger_config_h
+
+/*
+* Define to `__inline__' or `__inline' if that's what the C compiler
+* calls it, or to nothing if 'inline' is not supported under any name.
+*/
+#ifndef __cplusplus
+#undef inline
+#endif
+
+
+#endif /* cpp_logger_config_h */

@@ -10,10 +10,10 @@ sonar.verbose=false
 #sonar.working.directory=/path/to/working/folder/.sonar
 
 # The project key that is unique for each project.
-sonar.projectKey=pmu:cpp_logger
+sonar.projectKey=cpp_logger
 
 # Name of the project that will be displayed on the web interface.
-sonar.projectName=pmu:cpp-logger
+sonar.projectName=cpp-logger
 sonar.projectVersion=@PACKAGE_VERSION@
 
 # Comma-separated paths to directories containing source files

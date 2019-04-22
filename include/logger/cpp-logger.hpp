@@ -1,23 +1,25 @@
 #include <logger/logger.hpp>
+#include <logger/facilities.hpp>
 #include <logger/registry.hpp>
+#include <logger/sinks.hpp>
+#include <logger/exceptions.hpp>
 
-#ifndef PMU_CPP_LOGGER_HPP
-#define PMU_CPP_LOGGER_HPP
+#ifndef CPP_CPP_LOGGER_HPP
+#define CPP_CPP_LOGGER_HPP
 
-//! \namespace pmu
-namespace pmu {
-  //! \namespace log
-  namespace log {
 
-   /** \addtogroup pmu_log pmu logging facility for C++.
-    * @{
-    */
+//! \namespace log
+namespace logger {
 
-   /** @return the library's current version
-    */
-    extern "C" const char *cpp_logger_version();
+ /** \addtogroup logger_log Simple logging facility for C++.
+  * @{
+  */
 
-   /** @} */
+ /** @return the library's current version
+  */
+  extern "C" const char *cpp_logger_version();
+
+ /** @} */
   }
-}
+
 #endif

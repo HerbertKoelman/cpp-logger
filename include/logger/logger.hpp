@@ -1,5 +1,5 @@
 /*
- * pmu::logger - herbert koelman
+ * logger - herbert koelman
  */
 
 #include <memory>
@@ -8,234 +8,200 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <unordered_map> // supposed to be faster
-#include <pthread/pthread.hpp>
 #include "logger/definitions.hpp"
+#include "logger/sinks.hpp"
 
-#ifndef PMU_LOGGER_HPP
-#define PMU_LOGGER_HPP
+#ifndef CPP_LOGGER_LOGGER_HPP
+#define CPP_LOGGER_LOGGER_HPP
 
-namespace pmu {
-  namespace log {
-   /** \addtogroup pmu_log
+namespace logger {
+   /** \addtogroup logger_log
     * @{
     */
 
+    class sink ;
+
     /** handles log messages.
      *
-     * @author herbert koelman (herbert.koelman@pmu.fr)
-     * @example logger-tests.cpp
+     * @author herbert koelman
      */
     class logger {
     public:
 
-      /** affiche un message debug si le niveau de journalisation  >= log_levels::trace.
+      /**
+       * Print a trace message.
        *
-       * @param fmt chaine de formattage (see printf for more informations)
-       * @param args arguments sp.cifique . imprimer
+       * Messages that contain information normally of use only when debugging a program.
+       *
+       * @tparam Args variadic of values to print.
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
+       * @param args data to print.
+       *
+       * @see log handles the actual logging at log_levels::trace.
        */
       template<typename... Args> void trace( const std::string &fmt, const Args&... args){
           log(log_levels::trace, fmt, args...);
       };
 
-      /** affiche un message debug si le niveau de journalisation  >= log_levels::debug.
+      /** Print a debug message.
        *
-       * @param fmt chaine de formattage (see printf for more informations)
-       * @param args arguments sp.cifique . imprimer
+       * Messages that contain information normally of use only when debugging a program.
+       *
+       * @tparam Args variadic of values to print.
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
+       * @param args data to print.
+       * @see log handles the actual logging at log_levels::debug.
        */
       template<typename... Args> void debug( const std::string &fmt, const Args&... args){
           log(log_levels::debug, fmt, args...);
       };
 
-      /** affiche un message d'info si le niveau de journalisation est >= log_levels::info.
+      /** Informational messages.
        *
-       * @param fmt chaine de formattage (see printf for more informations)
-       * @param args arguments specifying data to print.
+       * @tparam Args variadic of values to print.
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
+       * @param args data to print.
+       * @see log handles the actual logging at log_levels::info.
        */
       template<typename... Args> void info( const std::string &fmt, const Args&... args){
           log(log_levels::info, fmt, args...);
       };
 
-      /** affiche un message notice si le niveau de journalisation est >= log_levels::notice.
+      /** Normal but significant conditions
        *
-       * @param fmt chaine de formattage (see printf for more informations)
-       * @param args arguments specifying data to print.
+       * Conditions that are not error conditions, but that may require special handling.
+       *
+       * @tparam Args variadic of values to print.
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
+       * @param args data to print.
+       * @see log handles the actual logging at log_levels::notice.
        */
       template<typename... Args> void notice( const std::string &fmt, const Args&... args){
           log(log_levels::notice, fmt, args...);
       };
 
-      /** affiche un message warning si le niveau de journalisation est >= log_levels::warning
+      /** Warning conditions.
        *
-       * @param fmt chaine de formattage (see printf for more informations.
-       * @param args arguments specifying data to print.
+       * @tparam Args variadic of values to print.
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations.
+       * @param args data to print.
+       * @see log handles the actual logging at log_levels::warning.
        */
       template<typename... Args> void warning( const std::string &fmt, const Args&... args){
           log(log_levels::warning, fmt, args...);
       };
 
-      /** affiche un message err si le niveau de journalisation est >= log_levels::err.
+      /** Error conditions.
        *
-       * @param fmt chaine de formattage (see printf for more informations)
-       * @param args arguments specifying data to print.
+       * @tparam Args variadic of values to print.
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
+       * @param args data to print.
+       * @see log handles the actual logging at log_levels::err.
        */
       template<typename... Args> void err( const std::string &fmt, const Args&... args){
           log(log_levels::err, fmt, args...);
       };
 
-      /** affiche un message crit si le niveau de journalisation est >= log_levels::crit.
+      /** Critical conditions.
        *
-       * @param fmt chaine de formattage (see printf for more informations)
-       * @param args arguments specifying data to print.
+       * The system experiences critical conditions like hard device errors.
+       *
+       * @tparam Args variadic of values to print.
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
+       * @param args data to print.
+       * @see log handles the actual logging at log_levels::crit.
        */
       template<typename... Args> void crit( const std::string &fmt, const Args&... args){
           log(log_levels::crit, fmt, args...);
       };
 
-      /** affiche un message alert si le niveau de journalisation est  >= log_levels::alert.
+      /** Alert conditions.
        *
-       * @param fmt chaine de formattage (see printf for more informations)
-       * @param args arguments specifying data to print.
+       * Action must be taken immediately. A condition that should be corrected immediately, such as a corrupted system database.[
+       *
+       * @tparam Args variadic of values to print.
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
+       * @param args data to print.
+       * @see log handles the actual logging at log_levels::alert.
        */
       template<typename... Args> void alert( const std::string &fmt, const Args&... args){
           log(log_levels::alert, fmt, args...);
       };
 
-      /** affiche un message emerg si le niveau de journalisation est >= log_levels::emerg.
+      /** Emergency conditions.
        *
-       * @param fmt chaine de formattage (see printf for more informations)
-       * @param args arguments specifying data to print.
+       * System is unusable. A panic condition.
+       * 
+       * @tparam Args variadic of values to print.
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
+       * @param args data to print.
+       * @see log handles the actual logging at log_levels::emerg.
        */
       template<typename... Args> void emerg( const std::string &fmt, const Args&... args){
           log(log_levels::emerg, fmt, args...);
       };
 
-      /** log a message if current log level is >= level
+      /** log a message if current log level is >= level.
        *
+       * @tparam Args variadic of values to print.
        * @param level message logging level
-       * @param fmt formatting string (see printf for more informations)
-       * @param args message arguments
+       * @param fmt pointer to a null-terminated multibyte string specifying how to interpret the data. (see printf for more informations)
+       * @param args data to print.
        */
       template<typename... Args> void log( log_level level, const std::string &fmt, const Args&... args){
-        if ( _level >= level) {
-
-          // we make a copy of the formatting string (fmt) because we receive a const string
-          // and want to change things in i
-          std::string format = fmt;
-
-          printf(
-                // first, we build a format pattern made of the current pattern (which will hold the prefix and the fmt received
-                (
-                  _pattern +
-                  (format.at(format.size()-1) == '\n' ? format : format += '\n') // handle string termination
-                ).c_str(),
-              level,
-              date_time().c_str(),
-              _hostname,
-              _facility.c_str(),
-              _pname.c_str(),
-              _pid,
-              pthread::this_thread::get_id(),
-              _ecid.empty()? "- " : _ecid.c_str(),
-              args...
-          );
-        }
+        _sink->write(level, fmt.c_str(), args... );
       };
 
-      /** instancie un objet pour journaliser
-       *
-       * @param name nom du journal
-       * @param level initial log level (defaults to pmu::log::info)
-       */
-      logger( const std::string &name = "default",  const std::string &pname = "program", log_level level = log_levels::info );
-
-      /** dispose of logger instance ressources
-       */
-      virtual ~logger();
+      // -------------------------------------------------------------
+      //
 
       /** change the current log level.
        *
        * @param level new logging level
        */
-      void set_log_level( log_levels level ){
-        pthread::lock_guard<pthread::mutex> lock(_mutex);
-        _level = level;
-      };
+      void set_log_level( log_levels level );
 
-      /** @return niveau courrant de journalisation
+      /** @return current log level.
        */
-      log_levels level() const {
-         return _level;
-      };
+      log_levels level() const ;
 
-      /** change the current ecid.
+      /** change the current ecid (execution content ID).
        *
-       * Setting this to an empty string will stop logger to prin
+       * setting this to an empty string will deactivate the printing of ECIDs.
        *
        * @param ecid new ecid
        */
       void set_ecid( const std::string &ecid );
 
-      /** @return ecid courran
+      /** @return current tracking ecid (execution content ID).
        */
       std::string ecid() ;
 
-      /** @return loggers prefix pattern */
-      const std::string pattern() const{
-        return _pattern;
-      };
+      /** @return logger's name */
+      const std::string &name() const;
 
-      /** @return logger name */
-      std::string name() const{
-        return _name;
-      };
+      /** @return logger's program name */
+      const std::string &program_name() const;
 
-      /** @return logger's facility (see pmu::log::log_facility) */
-      const std::string facility() const {
-        return _facility;
-      };
-
-      /** modifie la facilit. . utiliser.
+      /** create a logger instance.
        *
-       * @param facility facility to use
+       * @param name logger name
+       * @param sink sink we want this logger to use
        */
-      void set_facility(log_facility facility);
+      logger( const std::string &name, sink *sink);
+
+      /** dispose of logger's ressources
+       */
+      virtual ~logger();
 
     private:
 
-      /** fill the buffer with the current date and time information
-       */
-      const std::string date_time();
+      sink        *_sink; //!< logger delegate to a sink the actual magic to write log messages
 
-      /** définit le préfix à utiliser
-       *
-       * @param pattern d.sir. (default "%s")
-       */
-      void set_pattern(std::string pattern);
-
-      /** set the logger name.
-       *
-       * @param name logger name (i.e. some/thing)
-       */
-      void set_name(const std::string &name);
-
-      std::string  _name ;
-      std::string  _pattern;
-      std::string  _facility;
-      log_level    _level;
-      pid_t        _pid;
-      std::string  _ecid;
-      std::string  _pname ; // program name
-      int          _lag;
-
-      char         _hostname[HOST_NAME_MAX];
-
-      pthread::read_write_lock _ecid_rwlock; //!< ecid access protection
-      pthread::mutex _mutex; //!< used to protect access to static class data
-
+      std::string _name; //!< logger's name
     }; // logger
 
     /** @} */
 
-  } // namespace log
-} // namespace pmu
+} // namespace logger
 #endif
