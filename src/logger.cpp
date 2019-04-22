@@ -51,6 +51,10 @@ namespace logger {
     /** @return logger name */
     const std::string &logger::name() const {
         return _name;
+    }
+
+    const std::string &logger::program_name() const {
+        return _sink->program_name();
     };
 
 } // namespace logger

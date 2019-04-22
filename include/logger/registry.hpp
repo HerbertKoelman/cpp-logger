@@ -27,11 +27,12 @@ namespace logger {
 
     /** Searches the registry for the wanted logger instance.
      *
-     * If the logger doesn't exist, then a new one is created and registered. Else the existing one is returned.:w
+     * If the logger doesn't exist, then a new one is created and registered. Else the existing one is returned. The factory
+     * create instances of stdout_sinks.
      *
      * @param name unique logger name
      * @return a logger instance
-     * @see stdout_sink sink type used when creating a new instance.
+     * @see logger::stdout_sink
      */
     logger_ptr get (const std::string &name );
 
@@ -54,6 +55,8 @@ namespace logger {
      * *WARN* This name will be used by loggers created after this call. Pre-existing ones are not affected.
      *
      * @param pname program name
+     * @see logger::sink#program_name
+     * @see logger::logger#program_name
      */
     void set_program_name(const std::string &pname);
 
@@ -67,7 +70,7 @@ namespace logger {
     class registry {
       public:
 
-        /** registry factory.
+        /** @return registry singleton
          */
         static registry &instance();
 
@@ -200,7 +203,7 @@ namespace logger {
      * @param name logger instance name
      * @param args sink's constructor arguments
      * @return a logger instance
-     * @see sink
+     * @see logger::sink
      */
     template<class T, typename... Args> logger_ptr get( const std::string &name, const Args&... args){
       return registry::instance().get<T>(name, args...);
