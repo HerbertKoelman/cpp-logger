@@ -22,8 +22,6 @@
 #include <logger/facilities.hpp>
 #include <logger/exceptions.hpp>
 
-#define MAXECIDLEN 64
-
 namespace logger {
     /** \addtogroup logger_log
      * @{
