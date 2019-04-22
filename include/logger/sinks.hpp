@@ -69,9 +69,14 @@ namespace logger {
         };
 
         /** @return logger name */
-        std::string name() const {
+        const std::string &name() const {
             return _name;
         };
+
+        /** @return program name */
+        const std::string &program_name() const {
+            return _pname ;
+        }
 
         /** change the current ecid.
          *

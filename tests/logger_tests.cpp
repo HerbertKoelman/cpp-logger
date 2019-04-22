@@ -87,15 +87,14 @@ TEST(logger, change_ecid) {
     EXPECT_EQ(err->ecid(), "[M ECID=\"NEW ECID\"]");
 }
 
-TEST(logger, DISABLED_change_program_name) {
-    logger::logger_ptr out = logger::get<logger::stdout_sink>("stdout-test-logger");
+TEST(logger, program_name) {
+
+    logger::set_program_name("google-tests");
+    logger::logger_ptr out = logger::get<logger::stdout_sink>("stdout-change-pname");
+
     EXPECT_NE(out, nullptr);
-    EXPECT_EQ(out->name(), "stdout-test-logger");
+    EXPECT_EQ(out->program_name(), "google-tests");
 
-    auto pname = out->name();
-    logger::set_program_name("goolge-tests");
-
-    EXPECT_EQ(out->name(), "google-tests");
 }
 
 TEST(logger, DISABLED_legacy) {

@@ -180,6 +180,9 @@ namespace logger {
       /** @return logger's name */
       const std::string &name() const;
 
+      /** @return logger's program name */
+      const std::string &program_name() const;
+
       /** create a logger instance.
        *
        * @param name logger name
