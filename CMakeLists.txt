@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.11)
 
 project(
   cpp-logger
-  VERSION 2.0.0
+  VERSION 2.1.0
   DESCRIPTION "Simple C++ logger (${GIT_LOG})")
 
 option(BUILD_TESTS "if set, then Unit tests are build" True)

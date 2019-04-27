@@ -15,8 +15,8 @@ namespace logger {
     sink::sink(const std::string &name, const std::string &pname, log_level level) :
     // init class data
             _name(name),
-            _level(level),
-            _pname(pname){
+            _pname(pname),
+            _level(level){
         // intentional...
 #ifdef DEBUG
         printf("DEBUG %s (%s,%d).\n", __FUNCTION__, __FILE__, __LINE__);

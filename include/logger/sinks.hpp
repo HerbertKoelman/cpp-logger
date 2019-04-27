@@ -225,6 +225,8 @@ namespace logger {
      *
      * send log messages to syslogd
      *
+     * > **WARN**  The syslog_sink, considers that TRACE and DEBUG are the same.
+     *
      * @author herbert koelman
      * @since v1.4.0
      */
