@@ -51,6 +51,7 @@ namespace logger {
         trace = LOG_TRACE  //!< trace information (this is not part the standard)
     };
 
+    //! Classes and definitions only related to syslog logging.
     namespace syslog {
 
         /** SysLog standard facility's codes */
