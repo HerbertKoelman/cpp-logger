@@ -93,7 +93,7 @@ namespace logger {
          * @param keyword related keyword (default is *user*)
          * @param description falicity description.
          */
-        syslog_facility(facility_code code = facility_code::user, std::string keyword = "user", std::string description = "User-level messages");
+        syslog_facility(syslog::facility_code code = syslog::facility_code::user, std::string keyword = "user", std::string description = "User-level messages");
 
         virtual ~syslog_facility();
     };
