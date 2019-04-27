@@ -87,35 +87,11 @@ namespace logger {
                 buffer[len] = '\n'; // override ending \0 (that's why we provisioned for one more character above)
             }
 
-            auto syslog_level = LOG_INFO;
-            switch (level) {
-                case log_level::crit:
-                    syslog_level = LOG_CRIT;
-                    break;
-                case log_level::emerg:
-                    syslog_level = LOG_EMERG;
-                    break;
-                case log_level::alert:
-                    syslog_level = LOG_ALERT;
-                    break;
-                case log_level::err:
-                    syslog_level = LOG_ERR;
-                    break;
-                case log_level::warning:
-                    syslog_level = LOG_WARNING;
-                    break;
-                case log_level::notice:
-                    syslog_level = LOG_NOTICE;
-                    break;
-                case log_level::info:
-                    syslog_level = LOG_INFO;
-                    break;
-                case log_level::debug:
-                case log_level::trace:
-                    syslog_level = LOG_DEBUG;
-                    break;
-                default:
-                    syslog_level = LOG_INFO;
+            auto syslog_level = level;
+
+            if ( level == log_level::trace ){
+                // The syslog_sink, considers that TRACE and DEBUG are the same.
+                syslog_level = log_level::debug ;
             }
 
             ::syslog ( syslog_level,
