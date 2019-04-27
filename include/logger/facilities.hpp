@@ -6,6 +6,7 @@
 #include <memory>
 #include <iostream>
 #include <logger/exceptions.hpp>
+#include <logger/definitions.hpp>
 
 #ifndef CPP_LOGGER_LOG_FACILITY_HPP
 #define CPP_LOGGER_LOG_FACILITY_HPP
@@ -92,7 +93,7 @@ namespace logger {
          * @param keyword related keyword (default is *user*)
          * @param description falicity description.
          */
-        syslog_facility(int code = 1, std::string keyword = "user", std::string description = "User-level messages");
+        syslog_facility(facility_code code = facility_code::user, std::string keyword = "user", std::string description = "User-level messages");
 
         virtual ~syslog_facility();
     };

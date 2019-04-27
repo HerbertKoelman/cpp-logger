@@ -38,7 +38,7 @@ namespace logger {
                 __FILE__,__LINE__);
 #endif
 
-            openlog(pname.c_str(), options, facility->code());
+            openlog(pname.c_str(), options, (int)facility->code());
 
         } catch ( std::exception &err ){
             throw logger_exception(err.what());
@@ -118,8 +118,7 @@ namespace logger {
                     syslog_level = LOG_INFO;
             }
 
-            syslog(
-                    syslog_level,
+            ::syslog ( syslog_level,
                     _pattern.c_str(),
                     _ecid.empty() ? "" : _ecid.c_str(),
                     buffer);
