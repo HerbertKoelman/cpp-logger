@@ -19,7 +19,7 @@ TEST(registry, unicity_check) {
     EXPECT_EQ(logger_count, logger::registry::instance().size());
 }
 
-TEST(registry, stderr_sink) {
+TEST(registry, get_stderr_sink) {
     logger::logger_ptr err = logger::get<logger::stderr_sink>("stderr-test-logger");
 
     EXPECT_NE(err, nullptr);
@@ -34,7 +34,7 @@ TEST(registry, stderr_sink) {
     EXPECT_TRUE( output.rfind("[L SUBSYS=stderr-test-logger] stderr sink test")!= std::string::npos);
 }
 
-TEST(registry, stdout_sink) {
+TEST(registry, get_stdout_sink) {
     logger::logger_ptr out = logger::get<logger::stdout_sink>("stdout-test-logger");
 
     EXPECT_NE(out, nullptr);
@@ -47,7 +47,7 @@ TEST(registry, stdout_sink) {
     EXPECT_TRUE( output.rfind("[L SUBSYS=stdout-test-logger] stdout sink test")!= std::string::npos);
 }
 
-TEST(registry, syslog_sink) {
+TEST(registry, get_syslog_sink) {
     logger::logger_ptr user_log = logger::get<logger::syslog_sink>("syslog-test-logger");
     EXPECT_NE(user_log, nullptr);
     EXPECT_EQ(user_log->name(), "syslog-test-logger");
@@ -69,6 +69,7 @@ TEST(logger, change_log_level) {
     EXPECT_EQ(err->name(), "stderr-test-logger");
 
     auto level = err->level();
+
     EXPECT_NE(level, logger::log_level::alert);
 
     logger::set_level(logger::log_level::alert);

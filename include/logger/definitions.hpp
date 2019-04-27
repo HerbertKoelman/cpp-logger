@@ -52,6 +52,28 @@ namespace logger {
         trace = LOG_TRACE  //!< trace information
     };
 
+    /** SysLog standard facility's codes */
+    enum facility_code{
+        kern = 0, //!<Kernel messages
+        user = 1, //!<User-level messages
+        mail = 2, //!< Mail system
+        daemon = 3, //!<System daemons
+        auth   = 4, //!< Security/authentication messages
+        syslog = 5, //!< Messages generated internally by syslogd
+        lpr	   = 6, //!< Line printer subsystem
+        news   = 7, //!<Network news subsystem
+        uucp   = 8, //!< UUCP subsystem
+        cron   = 9, //!< Clock daemon
+        authpriv = 10, //!< Security/authentication messages
+        ftp    = 11, //!< FTP daemon
+        ntp    = 12, //!< NTP subsystem
+        security = 13, //!< Log audit
+        console  = 14, //!< Log alert
+        solaris_cron = 15, //!< Scheduling daemon
+        local0 = 16, //!< Local 0
+        local1 = 17 //!< Local 1
+    };
+
     /** used to define method paramters (readability) */
     typedef log_levels log_level;
 
