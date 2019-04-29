@@ -8,7 +8,7 @@
 #define CPP_CPP_LOGGER_HPP
 
 
-//! \namespace log
+//! Logger interfaces and implementations
 namespace logger {
 
  /** \addtogroup logger_log Simple logging facility for C++.
