@@ -17,48 +17,6 @@ namespace logger {
      * @{
      */
 
-    /** log facility abstraction.
-     *
-     * A facility is used to specify the type of program that is logging the message.
-     *
-     * @since 2.0.0
-     * @author Herbert Koelman
-     */
-    class log_facility {
-    public:
-        /**
-         * @return facility's code of what kind of program is logging messages.
-         */
-        const int code();
-
-        /**
-         * @return facility's keyword of the kind of program that is logging messages.
-         */
-        const std::string &keyword();
-
-        /**
-         *
-         * @return facility's short description of what kind of program is logging messages.
-         */
-        const std::string &description();
-
-        /**
-         * @param code type of program that is logging the message
-         * @param keyword related keyword
-         * @param description falicity description.
-         */
-        log_facility(int code, const std::string &keyword, const std::string &description = "");
-
-        //virtual ~log_facility();
-
-    private:
-        int _code;
-        std::string _keyword;
-        std::string _description;
-    };
-
-    typedef std::shared_ptr<log_facility> log_facility_ptr; //!< a smart pointer to a log_facility
-
     namespace syslog {
 
         class facility;
@@ -74,8 +32,25 @@ namespace logger {
          * @since 2.0.0
          * @author Herbert Koelman
          */
-        class facility : public ::logger::log_facility {
+        class facility {
         public:
+
+            /**
+             * @return facility's code of what kind of program is logging messages.
+             */
+            const facility_code code();
+
+            /**
+             * @return facility's keyword of the kind of program that is logging messages.
+             */
+            const std::string &keyword();
+
+            /**
+             *
+             * @return facility's short description of what kind of program is logging messages.
+             */
+            const std::string &description();
+
             /**
              * @return default logging facility to use with SysLog.
              */
@@ -107,6 +82,9 @@ namespace logger {
             // TODO switch to this as soon as possible static std::unordered_map<facility_code, facility_ptr> _facilities;
             static std::unordered_map<int, facility_ptr> _facilities; //!< map of share pointers to SysLog facility instances (mainly for reuse)
 
+            facility_code _code;
+            std::string   _keyword;
+            std::string   _description;
         };
     }
     /** @} */
