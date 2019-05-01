@@ -4,8 +4,12 @@
 
 #include "logger/facilities.hpp"
 
-#include <mutex>
+#if __cplusplus >= 201703L
 #include <shared_mutex>
+#else
+#include <mutex>
+#endif
+
 #include <thread>
 
 #include <string>
@@ -58,15 +62,11 @@ namespace logger {
          *
          * @param level new logging level
          */
-        void set_log_level(log_levels level) {
-            _level = level;
-        };
+        void set_log_level(log_levels level);
 
         /** @return niveau courrant de journalisation
          */
-        log_levels level() const {
-            return _level;
-        };
+        log_levels level() ;
 
         /** @return logger name */
         const std::string &name() const {
@@ -106,17 +106,19 @@ namespace logger {
          */
         std::string log_level_name(log_level level);
 
-        std::string   _name; //!< logging domain name (as for now, this is equal to the logger name)
-        std::string   _pname; //!< program name
-        std::string   _ecid; //!< execution control ID. Helps to track everything that was logged by one business operation
-        log_level     _level;    //!< current logging level
+        const std::string   _name; //!< logging domain name (as for now, this is equal to the logger name)
+        const std::string   _pname; //!< program name
 
     private:
 #if __cplusplus >= 201703L
         std::shared_mutex _shared_mutex; //!< used to protect access to sink's data
 #else
-        std::mutex _mutex;       //!< used to protect access to sink's data
+        std::mutex        _mutex;        //!< used to protect access to sink's data
 #endif
+
+        std::string   _ecid; //!< execution control ID. Helps to track everything that was logged by one business operation
+        log_level     _level;    //!< current logging level
+
     }; // sink
 
     /** file sink.
