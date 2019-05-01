@@ -67,7 +67,7 @@ namespace logger {
 #endif
     }
 
-    void registry::add(logger_ptr logger) {
+    void registry::add(const logger_ptr &logger) {
         // check if the logger was already registered
         auto search = _loggers.find(logger->name());
         if (search == _loggers.end()) {
@@ -86,8 +86,8 @@ namespace logger {
         // intentional...
     }
 
-    registry::~registry() {
-        // intentional...
-    }
+//    registry::~registry() {
+//        // intentional...
+//    }
 
 } // namespace logger

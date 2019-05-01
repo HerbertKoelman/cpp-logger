@@ -94,3 +94,11 @@ TEST(syslog_facility, create_unheard_of) {
         EXPECT_STREQ(err.what(), "[never heard of this one] is not a syslog key");
     }
 }
+
+TEST(syslog_facility, facility_instances_unicity) {
+
+    logger::syslog::facility_ptr facility1 = logger::syslog::facility::create_for("local1");
+    logger::syslog::facility_ptr facility2 = logger::syslog::facility::create_for("local1");
+
+    EXPECT_EQ(facility1.get(), facility2.get());
+}

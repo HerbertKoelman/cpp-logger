@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include <iostream>
+#include <unordered_map>
 #include <logger/exceptions.hpp>
 #include <logger/definitions.hpp>
 
@@ -48,7 +49,7 @@ namespace logger {
          */
         log_facility(int code, const std::string &keyword, const std::string &description = "");
 
-        virtual ~log_facility();
+        //virtual ~log_facility();
 
     private:
         int _code;
@@ -74,31 +75,36 @@ namespace logger {
          * @author Herbert Koelman
          */
         class facility : public ::logger::log_facility {
-            public:
-                /**
-                 * @return default logging facility to use with SysLog.
-                 */
-                static facility_ptr default_facility();
+        public:
+            /**
+             * @return default logging facility to use with SysLog.
+             */
+            static facility_ptr default_facility();
 
-                /** Create the key related faiclity.
-                 *
-                 * @param key  facility's keyword
-                 * @return corresponding facility instance.
-                 */
-                static facility_ptr create_for(const std::string &key);
+            /** Create the key related faiclity.
+             *
+             * @param key  facility's keyword
+             * @return corresponding facility instance.
+             */
+            static facility_ptr create_for(const std::string &key);
 
-                // TODO this should be protected or private (protected:)
+            // TODO this should be protected or private (protected:)
 
-                /** New syslog faiclity instance.
-                 *
-                 * @param code type of program that is logging the message (default is *1*)
-                 * @param keyword related keyword (default is *user*)
-                 * @param description falicity description.
-                 */
-                facility(facility_code code = facility_code::user, const std::string &keyword = "user", const std::string &description = "User-level messages");
+            /** New syslog faiclity instance.
+             *
+             * @param code type of program that is logging the message (default is *1*)
+             * @param keyword related keyword (default is *user*)
+             * @param description falicity description.
+             */
+            explicit facility(facility_code code = facility_code::user, const std::string &keyword = "user", const std::string &description = "User-level messages");
 
-                virtual ~facility();
-            };
+            // virtual ~facility() ;
+
+        private:
+            // TODO switch to this as soon as possible static std::unordered_map<facility_code, facility_ptr> _facilities;
+            static std::unordered_map<int, facility_ptr> _facilities; //!< map of share pointers to SysLog facility instances (mainly for reuse)
+
+        };
     }
     /** @} */
 }

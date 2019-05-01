@@ -142,7 +142,7 @@ namespace logger {
          */
         file_sink(const std::string &name, const std::string &pname, log_level level, const log_facility_ptr &facility, FILE *file);
 
-        virtual ~file_sink();
+        // virtual ~file_sink() ;
 
         /** \copydoc sink::write()
          *
