@@ -17,7 +17,7 @@ namespace logger {
         printf ("DEBUG %s pattern: [%s](%s,%d)\n", __FUNCTION__, _pattern.c_str(), __FILE__, __LINE__);
 #endif
 
-        _pattern = LOGGER_LOG_PATTERN;
+        _pattern = "<%d>1 %s %s %s.%d.%d - %-16s";
 
         //set_facility(log_facility::sic_tux);
 
