@@ -104,16 +104,18 @@ namespace logger {
                 buffer[len] = '\n'; // override ending \0 (that's why we provisioned for one more character above)
             }
 
+            std::string ecid = this->ecid(); // we use ecid's accessor because access needs to be threadsafe
+
             fprintf(
                     _file_descriptor,
                     _pattern.c_str(),
-                    level,
+                    this->level(), // we use level's accessor because access needs to be threadsafe
                     date_time().c_str(),
                     _hostname.c_str(),
                     _pname.c_str(),
                     _pid,
                     std::this_thread::get_id(),
-                    _ecid.empty() ? "- " : _ecid.c_str(),
+                    ecid.empty() ? "- " : ecid.c_str(),
                     buffer
             );
         }
