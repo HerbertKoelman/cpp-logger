@@ -33,14 +33,21 @@ namespace logger {
     }
 
     std::string sink::ecid() {
+#if __cplusplus >= 201703L
         std::shared_lock lock(_shared_mutex);
+#else
+        std::unique_lock(_mutex);
+#endif
 
         return _ecid;
     }
 
     void sink::set_ecid(const std::string &ecid) {
-
+#if __cplusplus >= 201703L
         std::unique_lock lock(_shared_mutex);
+#else
+        std::unique_lock lock(_mutex);
+#endif
 
         if (!ecid.empty()) {
             _ecid = "[M ECID=\"" + ecid.substr(0, MAXECIDLEN) + "\"]";
