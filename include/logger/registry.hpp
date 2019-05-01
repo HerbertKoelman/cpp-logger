@@ -161,7 +161,7 @@ namespace logger {
           return logger;
         };
 
-        ~registry();
+        // ~registry();
 
       private:
 
@@ -169,7 +169,7 @@ namespace logger {
          *
          * @param logger logger instance
          */
-        void add(logger_ptr logger);
+        void add(const logger_ptr &logger);
 
         /** registry instance is a singleton and MUST be create through a factory.
          */

@@ -30,7 +30,7 @@ namespace logger {
         _hostname = hostname;
 
         timeval current_time;
-        gettimeofday(&current_time, NULL);
+        gettimeofday(&current_time, nullptr);
 
         struct std::tm local_time;
         localtime_r(&current_time.tv_sec, &local_time);
@@ -49,9 +49,9 @@ namespace logger {
         _lag = buffer;
     };
 
-    file_sink::~file_sink() {
-        //fflush(_file_descriptor);
-    };
+//    file_sink::~file_sink() {
+//        //fflush(_file_descriptor);
+//    };
 
     void file_sink::write(log_level level, const char *fmt, ...) {
 #ifdef DEBUG
@@ -79,7 +79,7 @@ namespace logger {
 
             // this call only returns the actual number of bytes needed to store the message.
             // It doesn't count the needed end-of-string
-            size_t buffer_size = vsnprintf(NULL, 0, fmt, args1) + 1; // plus 1 character to store \0
+            size_t buffer_size = vsnprintf(nullptr, 0, fmt, args1) + 1; // plus 1 character to store \0
             va_end(args1); // don't need this one anymore
 
             // add one more character to handle \n (see code below)
@@ -130,7 +130,7 @@ namespace logger {
         memset(target, 0, size);
 
         timeval current_time;
-        gettimeofday(&current_time, NULL);
+        gettimeofday(&current_time, nullptr);
         int micros = current_time.tv_usec;
 
         struct std::tm local_time;
