@@ -9,7 +9,7 @@
 
 TEST(syslog_facility, create_default) {
 
-    logger::syslog_facility_ptr facility = logger::syslog_facility::default_facility();
+    logger::syslog::facility_ptr facility = logger::syslog::facility::default_facility();
 
     EXPECT_NE(facility, nullptr);
     EXPECT_EQ(facility->code(), 1);
@@ -19,7 +19,7 @@ TEST(syslog_facility, create_default) {
 
 TEST(syslog_facility, create_kern) {
 
-	logger::syslog_facility_ptr facility = logger::syslog_facility::create_for("kern");
+	logger::syslog::facility_ptr facility = logger::syslog::facility::create_for("kern");
 
 	EXPECT_NE(facility, nullptr);
 	EXPECT_EQ(facility->code(), 0);
@@ -29,7 +29,7 @@ TEST(syslog_facility, create_kern) {
 
 TEST(syslog_facility, create_user) {
 
-	logger::syslog_facility_ptr facility = logger::syslog_facility::create_for("user");
+	logger::syslog::facility_ptr facility = logger::syslog::facility::create_for("user");
 
 	EXPECT_NE(facility, nullptr);
 	EXPECT_EQ(facility->code(), 1);
@@ -39,7 +39,7 @@ TEST(syslog_facility, create_user) {
 
 TEST(syslog_facility, create_mail) {
 
-	logger::syslog_facility_ptr facility = logger::syslog_facility::create_for("mail");
+	logger::syslog::facility_ptr facility = logger::syslog::facility::create_for("mail");
 
 	EXPECT_NE(facility, nullptr);
 	EXPECT_EQ(facility->code(), 2);
@@ -49,7 +49,7 @@ TEST(syslog_facility, create_mail) {
 
 TEST(syslog_facility, create_daemon) {
 
-	logger::syslog_facility_ptr facility = logger::syslog_facility::create_for("daemon");
+	logger::syslog::facility_ptr facility = logger::syslog::facility::create_for("daemon");
 
 	EXPECT_NE(facility, nullptr);
 	EXPECT_EQ(facility->code(), 3);
@@ -59,7 +59,7 @@ TEST(syslog_facility, create_daemon) {
 
 TEST(syslog_facility, create_auth) {
 
-	logger::syslog_facility_ptr facility = logger::syslog_facility::create_for("auth");
+	logger::syslog::facility_ptr facility = logger::syslog::facility::create_for("auth");
 
 	EXPECT_NE(facility, nullptr);
 	EXPECT_EQ(facility->code(), 4);
@@ -69,7 +69,7 @@ TEST(syslog_facility, create_auth) {
 
 TEST(syslog_facility, create_local0) {
 
-	logger::syslog_facility_ptr facility = logger::syslog_facility::create_for("local0");
+	logger::syslog::facility_ptr facility = logger::syslog::facility::create_for("local0");
 
 	EXPECT_NE(facility, nullptr);
 	EXPECT_EQ(facility->code(), 16);
@@ -79,7 +79,7 @@ TEST(syslog_facility, create_local0) {
 
 TEST(syslog_facility, create_local1) {
 
-	logger::syslog_facility_ptr facility = logger::syslog_facility::create_for("local1");
+	logger::syslog::facility_ptr facility = logger::syslog::facility::create_for("local1");
 
 	EXPECT_NE(facility, nullptr);
 	EXPECT_EQ(facility->code(), 17);
@@ -89,7 +89,7 @@ TEST(syslog_facility, create_local1) {
 
 TEST(syslog_facility, create_unheard_of) {
     try {
-        logger::syslog_facility_ptr facility = logger::syslog_facility::create_for("never heard of this one");
+        logger::syslog::facility_ptr facility = logger::syslog::facility::create_for("never heard of this one");
     } catch ( logger::logger_exception &err ){
         EXPECT_STREQ(err.what(), "[never heard of this one] is not a syslog key");
     }
