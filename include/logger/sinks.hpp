@@ -107,7 +107,6 @@ namespace logger {
         std::string log_level_name(log_level level);
 
         std::string   _name; //!< logging domain name (as for now, this is equal to the logger name)
-        std::string   _pattern;//!< message pattern (layout)
         std::string   _pname; //!< program name
         std::string   _ecid; //!< execution control ID. Helps to track everything that was logged by one business operation
         log_level     _level;    //!< current logging level
@@ -160,6 +159,8 @@ namespace logger {
         pid_t             _pid;      //!< process ID
         std::string       _lag;      //!< date time lag (i.e. +02:00)
         std::string       _hostname; //!< hostname (this will be displayed by log messages)
+    private:
+        std::string   _pattern;//!< message pattern (layout)
     };
 
     /** stdout sink.
@@ -241,6 +242,9 @@ namespace logger {
          * send messages to syslogd
          */
         virtual void write(log_level level, const char *fmt, ...) override ;
+
+    private:
+        std::string _pattern;
     };
 
     /** @} */
