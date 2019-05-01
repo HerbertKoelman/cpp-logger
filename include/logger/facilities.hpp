@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include <iostream>
+#include <unordered_map>
 #include <logger/exceptions.hpp>
 #include <logger/definitions.hpp>
 
@@ -46,9 +47,9 @@ namespace logger {
          * @param keyword related keyword
          * @param description falicity description.
          */
-        log_facility(int code, std::string keyword, std::string description = "");
+        log_facility(int code, const std::string &keyword, const std::string &description = "");
 
-        virtual ~log_facility();
+        //virtual ~log_facility();
 
     private:
         int _code;
@@ -58,46 +59,56 @@ namespace logger {
 
     typedef std::shared_ptr<log_facility> log_facility_ptr; //!< a smart pointer to a log_facility
 
-    class syslog_facility;
+    namespace syslog {
 
-    typedef std::shared_ptr<syslog_facility> syslog_facility_ptr; //!< a smart pointer to a syslog_facility
+        class facility;
 
-    /** RFC5424 log facility.
-     *
-     * This RFC is used by syslog implementations (more [here](https://en.wikipedia.org/wiki/Syslog#Facility).
-     *
-     * Factories are provided to create instances.
-     *
-     * @since 2.0.0
-     * @author Herbert Koelman
-     */
-    class syslog_facility : public log_facility {
-    public:
-        /**
-         * @return default logging facility to use with SysLog.
-         */
-        static syslog_facility_ptr default_facility();
+        typedef std::shared_ptr<facility> facility_ptr; //!< a smart pointer to a syslog_facility
 
-        /** Create the key related faiclity.
+        /** RFC5424 log facility.
          *
-         * @param key  facility's keyword
-         * @return corresponding facility instance.
-         */
-        static syslog_facility_ptr create_for(const std::string &key);
-
-        // TODO this should be protected or private (protected:)
-
-        /** New syslog faiclity instance.
+         * This RFC is used by syslog implementations (more [here](https://en.wikipedia.org/wiki/Syslog#Facility).
          *
-         * @param code type of program that is logging the message (default is *1*)
-         * @param keyword related keyword (default is *user*)
-         * @param description falicity description.
+         * Factories are provided to create instances.
+         *
+         * @since 2.0.0
+         * @author Herbert Koelman
          */
-        syslog_facility(syslog::facility_code code = syslog::facility_code::user, std::string keyword = "user", std::string description = "User-level messages");
+        class facility : public ::logger::log_facility {
+        public:
+            /**
+             * @return default logging facility to use with SysLog.
+             */
+            static facility_ptr default_facility();
 
-        virtual ~syslog_facility();
-    };
+            /** Create a facility for a given syslog key.
+             *
+             * This factory searches a map for a previously create instance. If one is found, it is returned. Otherwise a new instance
+             * is created and saved for future reuse.
+             *
+             * @param key  facility's keyword
+             * @return corresponding facility instance.
+             */
+            static facility_ptr create_for(const std::string &key);
 
+            // TODO this should be protected or private (protected:)
+
+            /** New syslog faiclity instance.
+             *
+             * @param code type of program that is logging the message (default is *1*)
+             * @param keyword related keyword (default is *user*)
+             * @param description falicity description.
+             */
+            explicit facility(facility_code code = facility_code::user, const std::string &keyword = "user", const std::string &description = "User-level messages");
+
+            // virtual ~facility() ;
+
+        private:
+            // TODO switch to this as soon as possible static std::unordered_map<facility_code, facility_ptr> _facilities;
+            static std::unordered_map<int, facility_ptr> _facilities; //!< map of share pointers to SysLog facility instances (mainly for reuse)
+
+        };
+    }
     /** @} */
 }
 

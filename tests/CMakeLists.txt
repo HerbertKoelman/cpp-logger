@@ -7,10 +7,10 @@ target_link_libraries(logger_tests GTest::GTest cpp-logger-static GTest::gtest_m
 add_executable(facility_tests facility_tests.cpp)
 target_link_libraries(facility_tests GTest::GTest GMock::GMock cpp-logger-static GTest::gtest_main)
 
-add_executable(exception_tests sink_tests.cpp)
+add_executable(exception_tests exception_tests.cpp)
 target_link_libraries(exception_tests GTest::GTest GMock::GMock cpp-logger-static GTest::gtest_main)
 
-add_executable(sink_tests exception_tests.cpp)
+add_executable(sink_tests sink_tests.cpp)
 target_link_libraries(sink_tests GTest::GTest GMock::GMock cpp-logger-static GTest::gtest_main)
 
 add_executable(logger_performance_tests logger_performance_tests.cpp)

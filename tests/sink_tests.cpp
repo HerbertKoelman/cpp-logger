@@ -7,7 +7,7 @@
 
 TEST(sink, file_sink) {
 
-    logger::file_sink sink("file descriptor", "app", logger::log_level::info, logger::syslog_facility::default_facility(), stdout);
+    logger::file_sink sink("file descriptor", "app", logger::log_level::info, logger::syslog::facility::default_facility(), stdout);
 
     EXPECT_EQ(sink.level(), logger::log_level::info);
     EXPECT_EQ(sink.name(), "file descriptor");
@@ -29,7 +29,7 @@ TEST(sink, stdout_sink) {
     std::string output = ::testing::internal::GetCapturedStdout();
     EXPECT_TRUE( output.rfind("[L SUBSYS=stdout] Hello, world !")!= std::string::npos);
 
-    logger::logger_ptr logger_1 = logger::get<logger::stdout_sink>("stdout", logger::syslog_facility::default_facility() );
+    logger::logger_ptr logger_1 = logger::get<logger::stdout_sink>("stdout", logger::syslog::facility::default_facility() );
     logger::logger_ptr logger_2 = logger::get<logger::stdout_sink>("stdout");
 
 }
@@ -45,7 +45,7 @@ TEST(sink, stderr_sink) {
     std::string output = ::testing::internal::GetCapturedStderr();
     EXPECT_TRUE( output.rfind("[L SUBSYS=stderr] Hello, world !")!= std::string::npos);
 
-    logger::logger_ptr logger_1 = logger::get<logger::stderr_sink>("stderr", logger::syslog_facility::default_facility() );
+    logger::logger_ptr logger_1 = logger::get<logger::stderr_sink>("stderr", logger::syslog::facility::default_facility() );
     logger::logger_ptr logger_2 = logger::get<logger::stderr_sink>("stderr");
 }
 

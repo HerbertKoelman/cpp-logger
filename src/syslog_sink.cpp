@@ -27,7 +27,7 @@ namespace logger {
                 options = LOG_PID;
             }
 
-            syslog_facility_ptr facility = syslog_facility::create_for(facility_key);
+            syslog::facility_ptr facility = syslog::facility::create_for(facility_key);
 
 #ifdef DEBUG
             printf("DEBUG %s calling openlog(%s, %d, %d)\n",
