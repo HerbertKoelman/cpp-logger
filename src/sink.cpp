@@ -32,6 +32,26 @@ namespace logger {
         // intentional
     }
 
+    void sink::set_log_level(log_levels level) {
+#if __cplusplus >= 201703L
+        std::unique_lock lock(_shared_mutex);
+#else
+        std::unique_lock lock(_mutex);
+#endif
+        _level = level;
+    };
+
+    /** @return niveau courrant de journalisation
+     */
+    log_levels sink::level() {
+#if __cplusplus >= 201703L
+        std::shared_lock lock(_shared_mutex);
+#else
+        std::unique_lock lock(_mutex);
+#endif
+        return _level;
+    };
+
     std::string sink::ecid() {
 #if __cplusplus >= 201703L
         std::shared_lock lock(_shared_mutex);

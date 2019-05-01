@@ -28,10 +28,10 @@ namespace logger {
         gethostname(hostname, HOST_NAME_MAX);
         _hostname = hostname;
 
-        timeval current_time;
+        timeval current_time{0};
         gettimeofday(&current_time, nullptr);
 
-        struct std::tm local_time;
+        struct std::tm local_time{0};
         localtime_r(&current_time.tv_sec, &local_time);
 
         char buffer[10];// lag is in the form of "-02:00"
@@ -127,11 +127,11 @@ namespace logger {
         memset(buffer, 0, size);
         memset(target, 0, size);
 
-        timeval current_time;
+        timeval current_time{0};
         gettimeofday(&current_time, nullptr);
         int micros = current_time.tv_usec;
 
-        struct std::tm local_time;
+        struct std::tm local_time{0};
         localtime_r(&current_time.tv_sec, &local_time);
         snprintf(target, size - 1, "%d-%02d-%02dT%02d:%02d:%02d.%06d%s",
                  local_time.tm_year + 1900, // tm_year is the number of years from 1900

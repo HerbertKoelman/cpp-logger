@@ -4,8 +4,12 @@
 
 #include "logger/facilities.hpp"
 
-#include <mutex>
+#if __cplusplus >= 201703L
 #include <shared_mutex>
+#else
+#include <mutex>
+#endif
+
 #include <thread>
 
 #include <string>
@@ -58,15 +62,11 @@ namespace logger {
          *
          * @param level new logging level
          */
-        void set_log_level(log_levels level) {
-            _level = level;
-        };
+        void set_log_level(log_levels level);
 
         /** @return niveau courrant de journalisation
          */
-        log_levels level() const {
-            return _level;
-        };
+        log_levels level() ;
 
         /** @return logger name */
         const std::string &name() const {
@@ -115,7 +115,7 @@ namespace logger {
 #if __cplusplus >= 201703L
         std::shared_mutex _shared_mutex; //!< used to protect access to sink's data
 #else
-        std::mutex _mutex;       //!< used to protect access to sink's data
+        std::mutex        _mutex;        //!< used to protect access to sink's data
 #endif
     }; // sink
 
