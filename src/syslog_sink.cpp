@@ -59,7 +59,9 @@ namespace logger {
         printf("DEBUG %s _level/level: %d/%d, pattern: [%s] (%s,%d)\n", __FUNCTION__, _level, level, _pattern.c_str(), __FILE__,__LINE__);
 #endif
 
-        if (_level >= level) {
+        log_level target_level =  this->level(); // we use level's accessor because access needs to be threadsafe
+
+        if (target_level >= level) {
 
             // fill a buffer with the user message
             va_list args1;
@@ -94,9 +96,11 @@ namespace logger {
                 syslog_level = log_level::debug ;
             }
 
+            std::string ecid = this->ecid(); // we use ecid's accessor because access needs to be threadsafe
+
             ::syslog ( syslog_level,
                     _pattern.c_str(),
-                    _ecid.empty() ? "" : _ecid.c_str(),
+                    ecid.empty() ? "" : ecid.c_str(),
                     buffer);
         }
     }; // write

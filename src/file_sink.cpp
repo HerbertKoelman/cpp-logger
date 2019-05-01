@@ -63,7 +63,9 @@ namespace logger {
             __FILE__,__LINE__);
 #endif
 
-        if (_level >= level) {
+        log_level target_level =  this->level(); // we use level's accessor because access needs to be threadsafe
+
+        if (target_level >= level) {
 
             // fill a buffer with the user message
             va_list args1;
@@ -109,7 +111,7 @@ namespace logger {
             fprintf(
                     _file_descriptor,
                     _pattern.c_str(),
-                    this->level(), // we use level's accessor because access needs to be threadsafe
+                    target_level,
                     date_time().c_str(),
                     _hostname.c_str(),
                     _pname.c_str(),

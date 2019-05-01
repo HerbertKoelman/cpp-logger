@@ -106,10 +106,8 @@ namespace logger {
          */
         std::string log_level_name(log_level level);
 
-        std::string   _name; //!< logging domain name (as for now, this is equal to the logger name)
-        std::string   _pname; //!< program name
-        std::string   _ecid; //!< execution control ID. Helps to track everything that was logged by one business operation
-        log_level     _level;    //!< current logging level
+        const std::string   _name; //!< logging domain name (as for now, this is equal to the logger name)
+        const std::string   _pname; //!< program name
 
     private:
 #if __cplusplus >= 201703L
@@ -117,6 +115,10 @@ namespace logger {
 #else
         std::mutex        _mutex;        //!< used to protect access to sink's data
 #endif
+
+        std::string   _ecid; //!< execution control ID. Helps to track everything that was logged by one business operation
+        log_level     _level;    //!< current logging level
+
     }; // sink
 
     /** file sink.
