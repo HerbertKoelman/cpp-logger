@@ -81,7 +81,10 @@ namespace logger {
              */
             static facility_ptr default_facility();
 
-            /** Create the key related faiclity.
+            /** Create a facility for a given syslog key.
+             *
+             * This factory searches a map for a previously create instance. If one is found, it is returned. Otherwise a new instance
+             * is created and saved for future reuse.
              *
              * @param key  facility's keyword
              * @return corresponding facility instance.
