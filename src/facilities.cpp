@@ -6,35 +6,23 @@
 
 namespace logger {
 
-    const int log_facility::code() {
-        return _code;
-    }
-
-    const std::string &log_facility::keyword() {
-        return _keyword;
-    }
-
-    const std::string &log_facility::description() {
-        return _description;
-    }
-
-    log_facility::log_facility(int code, const std::string &keyword, const std::string &description ) :
-      _code(code),
-      _keyword(keyword),
-      _description(description)
-    {
-        // intentional...
-    }
-
-//    log_facility::~log_facility() {
-//        // intentionale - std::cout << "destruction of facility instance: " << description() << std::endl ;
-//    }
-
     // syslog facility -------------------------------------------------------------------------------------------------
 
     namespace syslog {
 
-        /** initialize static facilities singleton.
+        const facility_code facility::code() {
+            return _code;
+        }
+
+        const std::string &facility::keyword() {
+            return _keyword;
+        }
+
+        const std::string &facility::description() {
+            return _description;
+        }
+
+        /* initialize static facilities singleton.
          *
          * This map avoids the need to recreate a facility instance and reuse existing ones.
          */
@@ -42,7 +30,7 @@ namespace logger {
         std::unordered_map<int, facility_ptr> facility::_facilities;
 
         facility::facility(syslog::facility_code code, const std::string &keyword, const std::string &description)
-                : log_facility((int) code, keyword, description) {
+                : _code(code), _keyword(keyword), _description(description) {
             // intentional...
         }
 

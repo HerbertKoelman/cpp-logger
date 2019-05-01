@@ -136,11 +136,10 @@ namespace logger {
          *
          * @param name nom du journal
          * @param pname program name
-         * @param facility facility code used to specify the type of program that is logging messages
          * @param file output file.
          * @param level initial log level (defaults to logger::log_levels::info)
          */
-        file_sink(const std::string &name, const std::string &pname, log_level level, const log_facility_ptr &facility, FILE *file);
+        file_sink(const std::string &name, const std::string &pname, log_level level, FILE *file);
 
         // virtual ~file_sink() ;
 
@@ -161,7 +160,6 @@ namespace logger {
         pid_t             _pid;      //!< process ID
         std::string       _lag;      //!< date time lag (i.e. +02:00)
         std::string       _hostname; //!< hostname (this will be displayed by log messages)
-        log_facility_ptr  _facility ; //!< logger's facility
     };
 
     /** stdout sink.
@@ -173,15 +171,6 @@ namespace logger {
      */
     class stdout_sink : public file_sink {
     public:
-
-        /** new instance.
-         *
-         * @param name sink name
-         * @param pname program name
-         * @param level initial log level (defaults to logger::log_levels::info)
-         * @param facility facility code used to specify the type of program that is logging messages
-         */
-        stdout_sink(const std::string &name, const std::string &pname, log_level level, const log_facility_ptr &facility);
 
         /** new instance.
          *
@@ -202,15 +191,6 @@ namespace logger {
      */
     class stderr_sink : public file_sink {
     public:
-
-        /** new instance.
-         *
-         * @param name nom du journal
-         * @param pname program name
-         * @param level initial log level (defaults to logger::log_levels::info)
-         * @param facility facility code used to specify the type of program that is logging messages
-         */
-        stderr_sink(const std::string &name, const std::string &pname, log_level level, const log_facility_ptr &facility);
 
        /** new instance.
          *
