@@ -107,7 +107,6 @@ namespace logger {
         std::string log_level_name(log_level level);
 
         std::string   _name; //!< logging domain name (as for now, this is equal to the logger name)
-        std::string   _pattern;//!< message pattern (layout)
         std::string   _pname; //!< program name
         std::string   _ecid; //!< execution control ID. Helps to track everything that was logged by one business operation
         log_level     _level;    //!< current logging level
@@ -136,11 +135,10 @@ namespace logger {
          *
          * @param name nom du journal
          * @param pname program name
-         * @param facility facility code used to specify the type of program that is logging messages
          * @param file output file.
          * @param level initial log level (defaults to logger::log_levels::info)
          */
-        file_sink(const std::string &name, const std::string &pname, log_level level, const log_facility_ptr &facility, FILE *file);
+        file_sink(const std::string &name, const std::string &pname, log_level level, FILE *file);
 
         // virtual ~file_sink() ;
 
@@ -161,7 +159,8 @@ namespace logger {
         pid_t             _pid;      //!< process ID
         std::string       _lag;      //!< date time lag (i.e. +02:00)
         std::string       _hostname; //!< hostname (this will be displayed by log messages)
-        log_facility_ptr  _facility ; //!< logger's facility
+    private:
+        std::string   _pattern; //!< message pattern (layout)
     };
 
     /** stdout sink.
@@ -173,15 +172,6 @@ namespace logger {
      */
     class stdout_sink : public file_sink {
     public:
-
-        /** new instance.
-         *
-         * @param name sink name
-         * @param pname program name
-         * @param level initial log level (defaults to logger::log_levels::info)
-         * @param facility facility code used to specify the type of program that is logging messages
-         */
-        stdout_sink(const std::string &name, const std::string &pname, log_level level, const log_facility_ptr &facility);
 
         /** new instance.
          *
@@ -202,15 +192,6 @@ namespace logger {
      */
     class stderr_sink : public file_sink {
     public:
-
-        /** new instance.
-         *
-         * @param name nom du journal
-         * @param pname program name
-         * @param level initial log level (defaults to logger::log_levels::info)
-         * @param facility facility code used to specify the type of program that is logging messages
-         */
-        stderr_sink(const std::string &name, const std::string &pname, log_level level, const log_facility_ptr &facility);
 
        /** new instance.
          *
@@ -261,6 +242,9 @@ namespace logger {
          * send messages to syslogd
          */
         virtual void write(log_level level, const char *fmt, ...) override ;
+
+    private:
+        std::string _pattern; //!< message pattern (layout)
     };
 
     /** @} */
