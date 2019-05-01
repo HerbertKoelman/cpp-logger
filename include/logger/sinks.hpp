@@ -113,9 +113,11 @@ namespace logger {
         log_level     _level;    //!< current logging level
 
     private:
-        std::mutex _mutex;       //!< used to protect access to static class data
-        std::shared_mutex _shared_mutex;
-
+#if __cplusplus >= 201703L
+        std::shared_mutex _shared_mutex; //!< used to protect access to sink's data
+#else
+        std::mutex _mutex;       //!< used to protect access to sink's data
+#endif
     }; // sink
 
     /** file sink.

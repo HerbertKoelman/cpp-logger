@@ -1,8 +1,10 @@
 ### What it does
 
-[cpp-logger](https://github.com/HerbertKoelman/cpp-logger) is a set of very simple classes that handles logging. Yes ! I know, yet one more. And you're right. The library was first implemented
-for AIX IBM's Unix. On AIX all provided libraries did not compile, so I had to write my own thing. I continue to use library to train C++ beginers.
-Therefore I kept maintaining it.
+[cpp-logger](https://github.com/HerbertKoelman/cpp-logger) is a set of very simple classes that handles logging. Yes ! I know, yet one more. And you're right.
+
+The library was first implemented for AIX IBM's Unix, on which existing libraries did not compile. So I had to write my own thing. 
+
+Today, this work is mainly used to train C++ beginners. That's why, I keep maintaining cpp-logger.
 
 To use this library:
 
