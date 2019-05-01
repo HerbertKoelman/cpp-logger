@@ -25,7 +25,7 @@
 #define LOG_TRACE   8
 
 #define MAXECIDLEN  64
-#define LOGGER_LOG_PATTERN "<%d>1 %s %s %s %s.%d.%d - %-16s"
+#define LOGGER_LOG_PATTERN "<%d>1 %s %s %s.%d.%d - %-16s"
 
 namespace logger {
 
