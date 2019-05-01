@@ -18,7 +18,7 @@ namespace logger {
         return _description;
     }
 
-    log_facility::log_facility(int code, std::string keyword, std::string description ) :
+    log_facility::log_facility(int code, const std::string &keyword, const std::string &description ) :
       _code(code),
       _keyword(keyword),
       _description(description)
@@ -26,46 +26,88 @@ namespace logger {
         // intentional...
     }
 
-    log_facility::~log_facility() {
-        // intentionale - std::cout << "destruction of facility instance: " << description() << std::endl ;
-    }
+//    log_facility::~log_facility() {
+//        // intentionale - std::cout << "destruction of facility instance: " << description() << std::endl ;
+//    }
 
     // syslog facility -------------------------------------------------------------------------------------------------
 
-    syslog_facility::syslog_facility(syslog::facility_code code, std::string keyword, std::string description) : log_facility((int)code, keyword, description) {
-        // intentional...
-    }
+    namespace syslog {
 
-    syslog_facility_ptr syslog_facility::create_for(const std::string &key){
+        /** initialize static facilities singleton.
+         *
+         * This map avoids the need to recreate a facility instance and reuse existing ones.
+         */
+        // TODO switch to this as soon as possible - std::unordered_map<facility_code, facility_ptr> facility::_facilities;
+        std::unordered_map<int, facility_ptr> facility::_facilities;
 
-        syslog_facility_ptr facility;
-
-        if ( key == "kern" ){
-        	facility = std::make_shared<syslog_facility>(syslog::facility_code::kern, "kern", "Kernel messages");
-        } else if ( key == "user" ) {
-	        facility = std::make_shared<syslog_facility>(syslog::facility_code::user, "user", "User-level messages");
-        } else if ( key == "mail" ) {
-	        facility = std::make_shared<syslog_facility>(syslog::facility_code::mail, "mail", "Mail system");
-        } else if ( key == "daemon" ) {
-	        facility = std::make_shared<syslog_facility>(syslog::facility_code::daemon, "daemon", "System daemons");
-        } else if ( key == "auth" ) {
-	        facility = std::make_shared<syslog_facility>(syslog::facility_code::auth, "auth", "Security/authorization messages");
-        } else if ( key == "local0" ) {
-	        facility = std::make_shared<syslog_facility>(syslog::facility_code::local0, "local0", "Local use (local0)");
-        } else if ( key == "local1" ) {
-	        facility = std::make_shared<syslog_facility>(syslog::facility_code::local1, "local1", "Local use (local1)");
-        } else {
-	        throw facility_exception("[" + key + "] is not a syslog key");
+        facility::facility(syslog::facility_code code, const std::string &keyword, const std::string &description)
+                : log_facility((int) code, keyword, description) {
+            // intentional...
         }
 
-        return facility;
-    }
+        facility_ptr facility::create_for(const std::string &key) {
 
-    syslog_facility_ptr syslog_facility::default_facility(){
-        return std::make_shared<syslog_facility>();
-    }
+            facility_code code ;
+            std::string keyword;
+            std::string description;
 
-    syslog_facility::~syslog_facility() {
-        // intentional - std::cout << "destruction of a syslog_facility" << std::endl;
-    }
-}
+            /* gather needed value to create a syslog::facility instance
+             */
+            if (key == "kern") {
+                code = syslog::facility_code::kern;
+                keyword = "kern";
+                description = "Kernel messages";
+            } else if (key == "user") {
+                code = syslog::facility_code::user;
+                keyword = "user";
+                description = "User-level messages";
+            } else if (key == "mail") {
+                code = syslog::facility_code::mail;
+                keyword = "mail";
+                description = "Mail system";
+            } else if (key == "daemon") {
+                code = syslog::facility_code::daemon;
+                keyword = "daemon";
+                description = "System daemons";
+            } else if (key == "auth") {
+                code = syslog::facility_code::auth;
+                keyword = "auth";
+                description = "Security/authorization messages";
+            } else if (key == "local0") {
+                code = syslog::facility_code::local0;
+                keyword = "local0";
+                description = "Local use (local0)";
+            } else if (key == "local1") {
+                code = syslog::facility_code::local1;
+                keyword = "local1";
+                description = "Local use (local1)";
+            } else {
+                throw facility_exception("[" + key + "] is not a syslog key");
+            }
+
+
+            facility_ptr facility;
+            auto search = _facilities.find(code);
+            if (search == _facilities.end()) {
+                // no facility found, need to create a new instance for code, key and description.
+                facility = std::make_shared<syslog::facility>(code, keyword, description);
+
+                // Save new instance
+                _facilities[facility->code()] = facility; // saved new facility instance
+            } else {
+                facility = search->second;
+            }
+
+            return facility;
+        }
+
+        facility_ptr facility::default_facility() {
+            return std::make_shared<facility>();
+        }
+
+//        facility::~facility() {
+//            // intentional - std::cout << "destruction of a facility" << std::endl;
+//        }
+    } // namespace syslog
+} // namespace logger

@@ -13,7 +13,7 @@ namespace logger {
 
 
     stdout_sink::stdout_sink(const std::string &name, const std::string &pname, log_level level):
-            file_sink(name, pname, level, syslog_facility::default_facility(), stdout){
+            file_sink(name, pname, level, syslog::facility::default_facility(), stdout){
 
     }
 
