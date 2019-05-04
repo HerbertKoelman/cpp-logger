@@ -21,7 +21,7 @@ namespace logger {
                 options,
                 __FILE__,__LINE__);
 #endif
-            _pattern = "[L SUBSYS=" + _name + "] %s %s";
+            _pattern = "[L SUBSYS=" + name + "] %s %s";
 
             if (options == 0) {
                 options = LOG_PID;
