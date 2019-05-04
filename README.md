@@ -77,7 +77,7 @@ Doxygen documentation can be generated with this target.
 
 > Doxygen can be downloaded [here](http://www.stack.nl/~dimitri/doxygen/index.html).
 
-The package comes with some unit testing that are built and can be run through the target **test**. The tests are depending on [GoogleTest](https://github.com/google/googletest), the package 
+The package comes with some unit testing that are built and can be run through the target **test**. The tests are depending on [GoogleTest 1.8.1](https://github.com/google/googletest), the package 
 is automatically downloaded using the CMake script `cmake/GTestExtConfig.cmake`. This means you need to have access to the Internet. So if that's not an option, you can disable testing by 
 setting the option `BUILD_TESTS` to **no** like this:
 
@@ -91,6 +91,26 @@ Here after a list of build targets usefull to mention:
 - package: create an archive (tar.gz)
 - doxygen: create doxygen html documentation (in <build-dir>/html)
 
+The library has been tested on:
+- Mac OS X
+  - Compiler : AppleClang 10.0.1.10010046
+  - OS version: 10.14.4 (Darwin 18.5.0)
+  - Performance: 
+      - CPU: Intel Core i7
+      - Memory: 8GB
+      - Command: time ./logger_performance_tests > /dev/null
+      - Result: 0m0,272s (user: 0m0,128s,sys:0m0,031s)
+- Fedora Linux
+  - Compiler: 8.3.1 20190223 (Red Hat 8.3.1-2)
+  - OS version: 4.20.16-100.fc28.x86_64
+  - Performance: 
+    - CPU: Intel(R) Celeron(R) 2957U @ 1.40GHz
+    - Memory: 8GB
+    - Command: time ./logger_performance_tests > /dev/null
+    - Result: 0m0,249s (user: 0m0,172s,sys:0m0,056s)
+  
+> Coming soon, Ubuntu 16 workstation.  
+  
 ### How to use it
 
 Sample code can be found in the `tests` directory. It shows how this stuff can be used.
@@ -106,26 +126,10 @@ libraries provided. The package contains :
 
 #### project links
 
-* [project's home](https://redmine.urbix-software.fr/projects/urbix-cpp-logger)
+* [Project's home](https://redmine.urbix-software.fr/projects/urbix-cpp-logger)
 * [GitHub home](https://github.com/HerbertKoelman/cpp-logger)
-* [project's doxygen]()
-
-#### Memory management on AIX
-
-> **WARNING** this was usefull, when I was mainly running this library on AIX (IBM's Unix). I'll remove this soon :-)
-
-Memory management on AIX is quite sophisticated, memory managementcan be fine tuned very precisely. Consider using these compiler/linker options when using pthreads:
-* -bmaxdata:0xN0000000 this option activates the large memory model, N is a number in the range of [1-8].
-* -bmaxmem=-1 this option tells the compiler to use as much memory it needs to optimize your code.
-
-Thread stack size:
-* 32bits programs allocate 96KB per thread on the program's heap.
-* 64bits programs allocate 192KB per thread on the program's heap.
-
-On many Linux implementations and on Mac OS X the stack size is defaulted to 8MB. You may consider setting this as a default.
-
-More detailed information can be found in this [RedBook](http://www.redbooks.ibm.com/redbooks/pdfs/sg245674.pdf) (chapter 8).
+* [Project's doxygen]()
 
 ### misc
 
-* author herbert koelman(herbert.koelman@me.com)
+* **Author**: herbert koelman(herbert.koelman@me.com)
