@@ -21,7 +21,7 @@ namespace logger {
 
         //set_facility(log_facility::sic_tux);
 
-        _pattern = std::string(LOGGER_LOG_PATTERN) + "[L SUBSYS=" + _name + "] %s";
+        _pattern = std::string(LOGGER_LOG_PATTERN) + "[L SUBSYS=" + name + "] %s";
 
         char hostname[HOST_NAME_MAX];
         hostname[0] = 0;
@@ -114,7 +114,7 @@ namespace logger {
                     target_level,
                     date_time().c_str(),
                     _hostname.c_str(),
-                    _pname.c_str(),
+                    program_name().c_str(),
                     _pid,
                     std::this_thread::get_id(),
                     ecid.empty() ? "- " : ecid.c_str(),
