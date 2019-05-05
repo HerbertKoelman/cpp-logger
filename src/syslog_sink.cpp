@@ -9,6 +9,16 @@
 
 namespace logger {
 
+    syslog_sink::syslog_sink(const std::string &facility_key, int options) :
+            sink("default", "pname", log_level::info){
+
+    }
+
+    syslog_sink::syslog_sink() :
+            sink("default", "pname", log_level::info){
+        // intentional...
+    };
+
     syslog_sink::syslog_sink(const std::string &name, const std::string &pname, log_level level, const std::string &facility_key, int options) :
             sink(name, pname, level) {
         try {
@@ -103,5 +113,6 @@ namespace logger {
                     ecid.empty() ? "" : ecid.c_str(),
                     buffer);
         }
-    }; // write
+    }
+
 } // namespace logger

@@ -27,11 +27,12 @@ TEST(registry, get_stderr_sink) {
 
     ::testing::internal::CaptureStderr();
 
-    err->info("stderr sink test (version: %s)", logger::cpp_logger_version());
+    err->info("stderr sink test (a word: %s)", "hello, world");
 
     std::string output = ::testing::internal::GetCapturedStderr();
 
-    EXPECT_TRUE( output.rfind("[L SUBSYS=stderr-test-logger] stderr sink test")!= std::string::npos);
+    auto pos = output.rfind("[L SUBSYS");
+    EXPECT_EQ("[L SUBSYS=stderr-test-logger] stderr sink test (a word: hello, world)\n", output.substr(pos));
 }
 
 TEST(registry, get_stdout_sink) {
@@ -41,10 +42,11 @@ TEST(registry, get_stdout_sink) {
     EXPECT_EQ(out->name(), "stdout-test-logger");
 
     ::testing::internal::CaptureStdout();
-    out->info("stdout sink test (version: %s)", logger::cpp_logger_version());
+    out->info("stdout sink test (a word: %s)", "Hello, world");
     std::string output = ::testing::internal::GetCapturedStdout();
 
-    EXPECT_TRUE( output.rfind("[L SUBSYS=stdout-test-logger] stdout sink test")!= std::string::npos);
+    auto pos = output.rfind("[L SUBSYS");
+    EXPECT_EQ("[L SUBSYS=stdout-test-logger] stdout sink test (a word: Hello, world)\n", output.substr(pos));
 }
 
 TEST(registry, get_syslog_sink) {
