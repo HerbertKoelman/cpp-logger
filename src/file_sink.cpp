@@ -9,6 +9,11 @@
 
 namespace logger {
 
+
+    file_sink::file_sink(FILE *file) :
+      file_sink("file-sink", "app", log_level::info, file){
+    }
+
     file_sink::file_sink(const std::string &name, const std::string &pname, log_level level, FILE *file) :
             sink(name, pname, level),
             _file_descriptor(file),
@@ -17,9 +22,12 @@ namespace logger {
         printf ("DEBUG %s pattern: [%s](%s,%d)\n", __FUNCTION__, _pattern.c_str(), __FILE__, __LINE__);
 #endif
 
-        _pattern = "<%d>1 %s %s %s.%d.%d - %-16s";
+        // TODO remove this
+        // _pattern = "<%d>1 %s %s %s.%d.%d - %-16s";
+        // _pattern = std::string(LOGGER_LOG_PATTERN) + "[L SUBSYS=" + name + "] %s";
 
-        _pattern = std::string(LOGGER_LOG_PATTERN) + "[L SUBSYS=" + name + "] %s";
+        // this will set sink's name and set/reset the static part of the messages this sink will produce.
+        set_name(name);
 
         char hostname[HOST_NAME_MAX];
         hostname[0] = 0;
@@ -46,6 +54,7 @@ namespace logger {
         _lag = buffer;
     };
 
+// TODO remove this
 //    file_sink::~file_sink() {
 //        //fflush(_file_descriptor);
 //    };
@@ -54,7 +63,6 @@ namespace logger {
         sink::set_name(name);
 
         _pattern = std::string(LOGGER_LOG_PATTERN) + "[L SUBSYS=" + name + "] %s";
-
     }
 
     void file_sink::write(log_level level, const char *fmt, ...) {
@@ -154,6 +162,5 @@ namespace logger {
 
         return std::string(target);
     }
-
 
 } // namespace logger

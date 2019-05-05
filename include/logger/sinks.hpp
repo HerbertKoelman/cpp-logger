@@ -155,6 +155,17 @@ namespace logger {
          */
         file_sink(const std::string &name, const std::string &pname, log_level level, FILE *file);
 
+        /** new instance.
+         *
+         * Default initial values:
+         * - name: "file-sink",
+         * - program_name: "app",
+         * - level: log_level::info
+         *
+         * @param file output file.
+         */
+        explicit file_sink(FILE *file);
+
         // virtual ~file_sink() ;
 
         /** \copydoc sink::write()
@@ -228,7 +239,7 @@ namespace logger {
 
         /** new instance.
          */
-        stderr_sink();
+        explicit stderr_sink();
 
     };
 
@@ -274,7 +285,7 @@ namespace logger {
        /** new instance.
          *
          */
-        syslog_sink();
+        explicit syslog_sink();
 
         virtual ~syslog_sink();
 
@@ -283,6 +294,10 @@ namespace logger {
          * send messages to syslogd
          */
         virtual void write(log_level level, const char *fmt, ...) override ;
+
+    protected:
+
+        void set_name(const std::string &name) override ;
 
     private:
         std::string _pattern; //!< message pattern (layout)
