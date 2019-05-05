@@ -19,8 +19,6 @@ namespace logger {
 
         _pattern = "<%d>1 %s %s %s.%d.%d - %-16s";
 
-        //set_facility(log_facility::sic_tux);
-
         _pattern = std::string(LOGGER_LOG_PATTERN) + "[L SUBSYS=" + name + "] %s";
 
         char hostname[HOST_NAME_MAX];
@@ -51,6 +49,13 @@ namespace logger {
 //    file_sink::~file_sink() {
 //        //fflush(_file_descriptor);
 //    };
+
+    void file_sink::set_name(const std::string &name) {
+        sink::set_name(name);
+
+        _pattern = std::string(LOGGER_LOG_PATTERN) + "[L SUBSYS=" + name + "] %s";
+
+    }
 
     void file_sink::write(log_level level, const char *fmt, ...) {
 #ifdef DEBUG
@@ -149,4 +154,6 @@ namespace logger {
 
         return std::string(target);
     }
+
+
 } // namespace logger

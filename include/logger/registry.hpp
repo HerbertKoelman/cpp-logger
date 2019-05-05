@@ -145,10 +145,17 @@ namespace logger {
 
           if ( search == _loggers.end() ){
             // no logger was registered yet, instantiate a new one.
+            sink *sink = new T(args...);
+
+            // we can setup these properties because regisrty and sink classes are friends.
+            sink->set_name(name);
+            sink->set_program_name(_pname);
+            sink->set_log_level(_level);
+
             logger = logger_ptr(
               new class logger(
                 name,
-                new T(name, _pname, _level, args...)
+                sink
               )
             );
 

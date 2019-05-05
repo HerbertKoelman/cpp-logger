@@ -44,6 +44,8 @@ namespace logger {
     class sink {
     public:
 
+        friend class registry; //!< this will let registry's factory setup sinks in a simplified way
+
         /** write operation.
          *
          * A sink should override this virtual pure method in order to provide the write method to logger instances.
@@ -104,7 +106,19 @@ namespace logger {
 
         /** @return display name for a given log level
          */
-        std::string log_level_name(log_level level);
+        virtual std::string log_level_name(log_level level);
+
+        /** set program name.
+         *
+         * @param name program name.
+         */
+         virtual void set_program_name(const std::string &name);
+
+         /** set sink's subsystem name.
+          *
+          * @param name subset name.
+          */
+         virtual void set_name (const std::string &name);
 
     private:
 #if __cplusplus >= 201703L
@@ -134,7 +148,7 @@ namespace logger {
 
         /** new instance.
          *
-         * @param name nom du journal
+         * @param name sink name
          * @param pname program name
          * @param file output file.
          * @param level initial log level (defaults to logger::log_levels::info)
@@ -151,6 +165,12 @@ namespace logger {
         virtual void write(log_level level, const char *fmt, ...) override ;
 
     protected:
+
+        /** Set sybsystem name and reset fixed part of the output pattern.
+         *
+         * @param name sink name
+         */
+        void set_name(const std::string &name) override ;
 
         /** fill the buffer with the current date and time information
          */
@@ -182,6 +202,10 @@ namespace logger {
          */
         stdout_sink(const std::string &name, const std::string &pname, log_level level);
 
+        /** new instance.
+         */
+        explicit stdout_sink() ;
+
     };
 
     /** stderr sink.
@@ -202,6 +226,9 @@ namespace logger {
          */
         stderr_sink(const std::string &name, const std::string &pname, log_level level);
 
+        /** new instance.
+         */
+        stderr_sink();
 
     };
 
@@ -230,11 +257,24 @@ namespace logger {
 
        /** new instance.
          *
+         * @param facility_key syslog facility to use (default is "user")
+         * @param options syslog options
+         * @throws sink_exception if init went wrong
+         */
+        syslog_sink(const std::string &facility_key, int options);
+
+       /** new instance.
+         *
          * @param name nom du journal
          * @param pname program name
          * @param level initial log level (defaults to logger::log_levels::info)
          */
         syslog_sink(const std::string &name, const std::string &pname, log_level level);
+
+       /** new instance.
+         *
+         */
+        syslog_sink();
 
         virtual ~syslog_sink();
 
