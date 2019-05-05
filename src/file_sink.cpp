@@ -6,6 +6,8 @@
 #include <sys/time.h>
 #include "logger/sinks.hpp"
 #include <cstring>
+#include <chrono>
+#include <iomanip>
 
 namespace logger {
 
@@ -130,6 +132,10 @@ namespace logger {
 
         memset(buffer, 0, size);
         memset(target, 0, size);
+
+        auto now  = std::chrono::system_clock::now();
+        time_t now_c  = std::chrono::system_clock::to_time_t(now);
+        std::cout << std::put_time(std::localtime(&now_c), "%FT%T.%z") << std::endl;
 
         timeval current_time{0};
         gettimeofday(&current_time, nullptr);
