@@ -77,9 +77,10 @@ Doxygen documentation can be generated with this target.
 
 > Doxygen can be downloaded [here](http://www.stack.nl/~dimitri/doxygen/index.html).
 
-The package comes with some unit testing that are built and can be run through the target **test**. The tests are depending on [GoogleTest 1.8.1](https://github.com/google/googletest), the package 
-is automatically downloaded using the CMake script `cmake/GTestExtConfig.cmake`. This means you need to have access to the Internet. So if that's not an option, you can disable testing by 
-setting the option `BUILD_TESTS` to **no** like this:
+The package comes with some unit testing that are built and can be run through the target **test**. The tests are depending 
+on [GoogleTest 1.8.1](https://github.com/google/googletest), the package is automatically downloaded using the CMake 
+script `cmake/GTestExtConfig.cmake`. This means you need to have access to the Internet. So if that's not an option, you can 
+disable testing by setting the option `BUILD_TESTS` to **no** like this:
 
     mkdir build
     cd build
@@ -109,9 +110,75 @@ The library has been tested on:
     - Command: time ./logger_performance_tests > /dev/null
     - Result: 0m0,249s (user: 0m0,172s,sys:0m0,056s)
   
-> Coming soon, Ubuntu 16 workstation.  
-  
+> Coming soon, performance feedback on Ubuntu (32bits) 16 workstation.  
+
+### How it's done
+
+The module is made of two distinct parts. On one side, we address the writing of log messages somewhere (`logger::logger`) and 
+on the other side, we provide a set of classes and interfaces that does the actual writting of messages (`logger::sink`). Finally, 
+a way to reuse and share logger instances is provided through a factory (`logger::registry`).
+
+Out of the box, the library comes with four `logger::sink` implementations:
+- `logger::file_sink`: write messages into a file. The following sinks are extending this class
+  - `logger::stdout_sink`: send/write messages to the standard output stream (`stdout`)
+  - `logger::stderr_sink`: send/write messages to the standard error stream (`stderr`)
+- `logger::syslog_sink`: send messages to the `syslog` facility, which is in charge of doing whatever must be done with the messages sent by your application.
+
+A logger instance can be created this way:
+
+```cpp
+std::string name { "consumer-thread"};
+
+// create a logger instance and pass it a sink instance that handles the actual writting of your messages.
+logger::logger_ptr logger{
+    new logger::logger{
+            name,
+            new logger::stdout_sink(name, "APP", logger::log_level::info) // logger::logger is in charge of deleting the sink instance
+    }
+};
+
+logger->info("consumer ready to handle incomming messages (status: %s)", "initialized");
+```
+
+As one can see, this is not the simplest way to go. Therefore, the library provides a set of factory methods/functions that are in charge 
+creating and setting up `logger::logger` instances. The above code can be replaced by this:
+```cpp
+logger::logger_ptr logger = logger::get<logger::stdout_sink>("consumer-thread");
+
+logger->info("consumer ready to handle incomming messages (status: %s)", "initialized");
+```
+
+> **WARN** creating logger instances by using factories, is the preferred way to go.
+
+The factory is in charge of setting things up and regsiter new instances. If an instance with the same name has already been created, 
+then the factory returns a shared pointer to that instance.
+
+The logger factory functions:
+- `template logger::get<>(name, args...)` 
+- `logger::get(name)`
+
+These functions known how to create a new instance and register the newly created one (using `logger::regisrty::add`). The factory
+automatically sets:
+- the program name property of the sink
+- the current logging level.
+
+The following functions are affecting all the registered loggers.
+- `logger::set_level()`: set the current logging level of all regsitered loggers.
+- `logger::set_ecid()`: set the execution correlation ID of registered loggers.
+
+```cpp
+logger::set_level(logger::log_level::alert); // from now on, all loggers will only display alert messages or above.
+
+log->info("Hello, world..."); // This it not displayed as log level was set to alert and above.
+```
+ 
 ### How to use it
+
+#### Create your own logger sink
+
+> **WARN** `logger::sink` implementations must be thread safe, as they can be shared by many threads.
+
+#### Add logging to your program
 
 Sample code can be found in the `tests` directory. It shows how this stuff can be used.
 
