@@ -1,4 +1,5 @@
 next
+- logger::registry factory is no longer relying on a specific contructor signature (#94)
 - update README with some performance feedback (#92)
 - Reuse already created syslog::facilities(#81)
 - file, stderr and stdout sinks are no longer using facilities (#78)
