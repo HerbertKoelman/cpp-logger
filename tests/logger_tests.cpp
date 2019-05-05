@@ -78,14 +78,14 @@ TEST(logger, change_log_level) {
 }
 
 TEST(logger, change_ecid) {
-    logger::logger_ptr err = logger::get<logger::stdout_sink>("stderr-test-logger");
-    EXPECT_NE(err, nullptr);
-    EXPECT_EQ(err->name(), "stderr-test-logger");
+    logger::logger_ptr out = logger::get<logger::stdout_sink>("stdout-test-logger");
+    EXPECT_NE(out, nullptr);
+    EXPECT_EQ(out->name(), "stdout-test-logger");
 
     logger::set_ecid("NEW ECID");
 
-    auto ecid = err->ecid();
-    EXPECT_EQ(err->ecid(), "[M ECID=\"NEW ECID\"]");
+    auto ecid = out->ecid();
+    EXPECT_EQ(out->ecid(), "[M ECID=\"NEW ECID\"]");
 }
 
 TEST(logger, program_name) {
@@ -96,6 +96,26 @@ TEST(logger, program_name) {
     EXPECT_NE(out, nullptr);
     EXPECT_EQ(out->program_name(), "google-tests");
 
+}
+
+TEST(logger, stdout_logger) {
+
+    std::string name { "logger-name"};
+    logger::logger_ptr logger{
+            new logger::logger{
+                    name,
+                    new logger::stdout_sink(name, "program", logger::log_level::info) // logger::logger is in charge of deleting the sink instance
+            }
+    };
+
+    ASSERT_NE(logger, nullptr);
+
+    ::testing::internal::CaptureStdout();
+    logger->info("stdout sink test, name: %s", name.c_str());
+    std::string output = ::testing::internal::GetCapturedStdout();
+    auto pos = output.rfind("[L SUBSYS");
+
+    EXPECT_EQ("[L SUBSYS=logger-name] stdout sink test, name: logger-name\n", output.substr(pos));
 }
 
 TEST(logger, DISABLED_legacy) {
