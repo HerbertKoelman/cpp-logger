@@ -100,4 +100,14 @@ namespace logger {
 
     }
 
+    void sink::set_program_name(const std::string &name) {
+
+        _pname = name;
+    }
+
+    void sink::set_name(const std::string &name) {
+
+        _name = name;
+    }
+
 } // namespace logger

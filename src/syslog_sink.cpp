@@ -9,8 +9,19 @@
 
 namespace logger {
 
-    syslog_sink::syslog_sink(const std::string &name, const std::string &pname, log_level level, const std::string &facility_key, int options) :
+    syslog_sink::syslog_sink(const std::string &facility_key, int options) :
+            syslog_sink("default", "pname", log_level::info){
+
+    }
+
+    syslog_sink::syslog_sink() :
+            syslog_sink("default", "pname", log_level::info){
+        // intentional...
+    };
+
+    syslog_sink::syslog_sink(const std::string &name, const std::string &pname, log_level level, const std::string &facility_key, int options):
             sink(name, pname, level) {
+
         try {
 #ifdef DEBUG
             printf("DEBUG %s name: %s, pname: %s, level: %d, facility: %d, options: %d\n", __FUNCTION__,
@@ -21,7 +32,7 @@ namespace logger {
                 options,
                 __FILE__,__LINE__);
 #endif
-            _pattern = "[L SUBSYS=" + name + "] %s %s";
+            set_name(name);
 
             if (options == 0) {
                 options = LOG_PID;
@@ -103,5 +114,11 @@ namespace logger {
                     ecid.empty() ? "" : ecid.c_str(),
                     buffer);
         }
-    }; // write
+    }
+
+    void syslog_sink::set_name(const std::string &name) {
+        sink::set_name(name);
+        _pattern = "[L SUBSYS=" + name + "] %s %s";
+    }
+
 } // namespace logger
