@@ -1,4 +1,5 @@
 next
+- now syslog::facility class is declared constexpr, no more facility maps or factory method (#97)
 - replace #define with constexpr (#86)
 - use std::atomic wherever possible (#96)
 - logger::registry factory is no longer relying on a specific contructor signature (#94)

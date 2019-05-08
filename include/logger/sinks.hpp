@@ -250,7 +250,7 @@ namespace logger {
 
     /** syslog sink.
      *
-     * send log messages to syslogd
+     * Send log messages to syslogd (more [here(https://en.wikipedia.org/wiki/Syslog))
      *
      * > **WARN**  The syslog_sink, considers that TRACE and DEBUG are the same.
      *
@@ -265,19 +265,20 @@ namespace logger {
          * @param name nom du journal
          * @param pname program name
          * @param level initial log level (defaults to logger::log_levels::info)
-         * @param facility_key syslog facility to use (default is "user")
+         * @param facility syslog facility to use (default is "user")
          * @param options syslog options
          * @throws sink_exception if init went wrong
          */
-        syslog_sink(const std::string &name, const std::string &pname, log_level level, const std::string &facility_key, int options);
+        syslog_sink(const std::string &name, const std::string &pname, log_level level, const syslog::facility &facility, int options);
 
        /** new instance.
          *
-         * @param facility_key syslog facility to use (default is "user")
+         * @param facility syslog facility to use (default is "user")
          * @param options syslog options
          * @throws sink_exception if init went wrong
+         * @see syslog::user_facility
          */
-        syslog_sink(const std::string &facility_key, int options);
+        syslog_sink(const syslog::facility &facility, int options);
 
        /** new instance.
          *
@@ -298,7 +299,7 @@ namespace logger {
          *
          * send messages to syslogd
          */
-        virtual void write(log_level level, const char *fmt, ...) override ;
+        void write(log_level level, const char *fmt, ...) override ;
 
     protected:
 
