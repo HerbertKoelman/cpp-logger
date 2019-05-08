@@ -9,6 +9,15 @@
 
 TEST(syslog_facility, create_default) {
 
+/* TODO remove this sample const class usage
+    std::string one_thing = logger::syslog::CONST_ONE.thing();
+
+    std::cout << "function operator: " << std::endl;
+    logger::syslog::CONST_ONE();
+    std::cout << "const one: " << logger::syslog::CONST_ONE.thing() << " - std::string: " << one_thing << std::endl;
+    std::cout << "Code: " << logger::syslog::CONST_ONE.code() << ", " << logger::syslog::CONST_TWO.code() << std::endl;
+*/
+
     logger::syslog::facility_ptr facility = logger::syslog::facility::default_facility();
 
     EXPECT_NE(facility, nullptr);
@@ -25,6 +34,8 @@ TEST(syslog_facility, create_kern) {
 	EXPECT_EQ(facility->code(), 0);
 	EXPECT_EQ(facility->keyword(), "kern");
 	EXPECT_EQ(facility->description(), "Kernel messages");
+
+	std::cout << facility.get() << std::endl ;
 }
 
 TEST(syslog_facility, create_user) {
