@@ -49,7 +49,7 @@ set(USED_COMPILER_FEATURES
         cxx_std_17
         )
 
-* For future use
+# For future use
 #include(WriteCompilerDetectionHeader)
 #write_compiler_detection_header(
 #        FILE "${CMAKE_CURRENT_BINARY_DIR}/logger_compiler_detection.h"
