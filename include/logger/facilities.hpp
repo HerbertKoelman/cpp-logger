@@ -6,11 +6,12 @@
 #include <memory>
 #include <iostream>
 #include <unordered_map>
-#include <logger/exceptions.hpp>
-#include <logger/definitions.hpp>
 
 #ifndef CPP_LOGGER_LOG_FACILITY_HPP
 #define CPP_LOGGER_LOG_FACILITY_HPP
+
+#include <logger/exceptions.hpp>
+#include <logger/definitions.hpp>
 
 namespace logger {
     /** \addtogroup logger_log
@@ -38,18 +39,18 @@ namespace logger {
             /**
              * @return facility's code of what kind of program is logging messages.
              */
-            const facility_code code();
+            const facility_code code() const;
 
             /**
              * @return facility's keyword of the kind of program that is logging messages.
              */
-            const std::string &keyword();
+            const std::string &keyword() const;
 
             /**
              *
              * @return facility's short description of what kind of program is logging messages.
              */
-            const std::string &description();
+            const std::string &description() const;
 
             /**
              * @return default logging facility to use with SysLog.
@@ -86,6 +87,41 @@ namespace logger {
             std::string   _keyword;
             std::string   _description;
         };
+
+/* TODO remove this sample const class
+        class const_class {
+        public:
+            constexpr const char *thing() const{
+                return _thing;
+            }
+
+            constexpr facility_code code() const{
+                return _code;
+            }
+
+            void operator()() const {
+                std::cout << _thing << "-" << _code << std::endl;
+            }
+            constexpr const_class(const char *thing, facility_code code): _thing(thing), _code(code){
+                // intentional
+            }
+        private:
+            const char *_thing;
+            const facility_code _code;
+        };
+
+        constexpr const_class CONST_ONE{"const expression class one", facility_code::user};
+        constexpr const_class CONST_TWO{"const expression class two", facility_code::uucp};
+*/
+//        constexpr facility user_facility{facility_code::user, "user", "User-level messages"};
+//
+//        /** Send facility description string to an output stream
+//         *
+//         * @param stream
+//         * @param facility
+//         * @return facility description string
+//         */
+//        std::ostream& operator<< (std::ostream& stream, const facility& facility);
     }
     /** @} */
 }

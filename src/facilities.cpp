@@ -10,15 +10,15 @@ namespace logger {
 
     namespace syslog {
 
-        const facility_code facility::code() {
+        const facility_code facility::code() const {
             return _code;
         }
 
-        const std::string &facility::keyword() {
+        const std::string &facility::keyword() const {
             return _keyword;
         }
 
-        const std::string &facility::description() {
+        const std::string &facility::description() const {
             return _description;
         }
 
@@ -96,6 +96,12 @@ namespace logger {
 
 //        facility::~facility() {
 //            // intentional - std::cout << "destruction of a facility" << std::endl;
+//        }
+
+//
+//        std::ostream &operator<<(std::ostream &stream, const facility &facility) {
+//            stream << "facility: " << facility.keyword() << " - " << facility.description() << "(code: " << facility.code() << ")";
+//            return stream;
 //        }
     } // namespace syslog
 } // namespace logger
