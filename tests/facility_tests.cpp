@@ -25,6 +25,8 @@ TEST(syslog_facility, create_kern) {
 	EXPECT_EQ(facility->code(), 0);
 	EXPECT_EQ(facility->keyword(), "kern");
 	EXPECT_EQ(facility->description(), "Kernel messages");
+
+	std::cout << facility.get() << std::endl ;
 }
 
 TEST(syslog_facility, create_user) {
