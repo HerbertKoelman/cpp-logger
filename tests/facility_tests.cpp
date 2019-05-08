@@ -7,109 +7,71 @@
 #include <logger/cpp-logger.hpp>
 #include "gtest/gtest.h"
 
-TEST(syslog_facility, create_default) {
+TEST(facility, kern) {
 
-/* TODO remove this sample const class usage
-    std::string one_thing = logger::syslog::CONST_ONE.thing();
+    EXPECT_EQ(logger::syslog::kern_facility.code(), 0);
+    EXPECT_STREQ(logger::syslog::kern_facility.keyword(), "kern");
+    EXPECT_STREQ(logger::syslog::kern_facility.description(), "Kernel messages");
 
-    std::cout << "function operator: " << std::endl;
-    logger::syslog::CONST_ONE();
-    std::cout << "const one: " << logger::syslog::CONST_ONE.thing() << " - std::string: " << one_thing << std::endl;
-    std::cout << "Code: " << logger::syslog::CONST_ONE.code() << ", " << logger::syslog::CONST_TWO.code() << std::endl;
+    std::cout << "facility: " << logger::syslog::kern_facility << std::endl;
+}
+
+TEST(facility, user) {
+
+    EXPECT_EQ(logger::syslog::user_facility.code(), 1);
+    EXPECT_STREQ(logger::syslog::user_facility.keyword(), "user");
+    EXPECT_STREQ(logger::syslog::user_facility.description(), "User-level messages");
+
+    std::cout << "facility: " << logger::syslog::user_facility << std::endl;
+}
+
+TEST(facility, mail) {
+
+    EXPECT_EQ(logger::syslog::mail_facility.code(), 2);
+    EXPECT_STREQ(logger::syslog::mail_facility.keyword(), "mail");
+    EXPECT_STREQ(logger::syslog::mail_facility.description(), "Mail system");
+
+    std::cout << "facility: " << logger::syslog::mail_facility << std::endl;
+}
+
+TEST(facility, daemon) {
+
+    EXPECT_EQ(logger::syslog::daemon_facility.code(), 3);
+    EXPECT_STREQ(logger::syslog::daemon_facility.keyword(), "daemon");
+    EXPECT_STREQ(logger::syslog::daemon_facility.description(), "System daemons");
+
+    std::cout << "facility: " << logger::syslog::daemon_facility << std::endl;
+}
+
+/*
+constexpr facility user_facility{facility_code::auth,   "auth", "Security/authorization messages"};
+constexpr facility user_facility{facility_code::local0, "local0", "Local use (local0)"};
+constexpr facility user_facility{facility_code::local1, "local1", "Local use (local1)"};
 */
 
-    logger::syslog::facility_ptr facility = logger::syslog::facility::default_facility();
+TEST(facility, auth) {
 
-    EXPECT_NE(facility, nullptr);
-    EXPECT_EQ(facility->code(), 1);
-    EXPECT_EQ(facility->keyword(), "user");
-    EXPECT_EQ(facility->description(), "User-level messages");
+    EXPECT_EQ(logger::syslog::auth_facility.code(), 4);
+    EXPECT_STREQ(logger::syslog::auth_facility.keyword(), "auth");
+    EXPECT_STREQ(logger::syslog::auth_facility.description(), "Security/authorization messages");
+
+    std::cout << "facility: " << logger::syslog::auth_facility << std::endl;
 }
 
-TEST(syslog_facility, create_kern) {
+TEST(facility, local0) {
 
-	logger::syslog::facility_ptr facility = logger::syslog::facility::create_for("kern");
+    EXPECT_EQ(logger::syslog::local0_facility.code(), 16);
+    EXPECT_STREQ(logger::syslog::local0_facility.keyword(), "local0");
+    EXPECT_STREQ(logger::syslog::local0_facility.description(), "Local use (local0)");
 
-	EXPECT_NE(facility, nullptr);
-	EXPECT_EQ(facility->code(), 0);
-	EXPECT_EQ(facility->keyword(), "kern");
-	EXPECT_EQ(facility->description(), "Kernel messages");
-
-	std::cout << facility.get() << std::endl ;
+    std::cout << "facility: " << logger::syslog::local0_facility << std::endl;
 }
 
-TEST(syslog_facility, create_user) {
+TEST(facility, local1) {
 
-	logger::syslog::facility_ptr facility = logger::syslog::facility::create_for("user");
+    EXPECT_EQ(logger::syslog::local1_facility.code(), 17);
+    EXPECT_STREQ(logger::syslog::local1_facility.keyword(), "local1");
+    EXPECT_STREQ(logger::syslog::local1_facility.description(), "Local use (local1)");
 
-	EXPECT_NE(facility, nullptr);
-	EXPECT_EQ(facility->code(), 1);
-	EXPECT_EQ(facility->keyword(), "user");
-	EXPECT_EQ(facility->description(), "User-level messages");
-}
-
-TEST(syslog_facility, create_mail) {
-
-	logger::syslog::facility_ptr facility = logger::syslog::facility::create_for("mail");
-
-	EXPECT_NE(facility, nullptr);
-	EXPECT_EQ(facility->code(), 2);
-	EXPECT_EQ(facility->keyword(), "mail");
-	EXPECT_EQ(facility->description(), "Mail system");
-}
-
-TEST(syslog_facility, create_daemon) {
-
-	logger::syslog::facility_ptr facility = logger::syslog::facility::create_for("daemon");
-
-	EXPECT_NE(facility, nullptr);
-	EXPECT_EQ(facility->code(), 3);
-	EXPECT_EQ(facility->keyword(), "daemon");
-	EXPECT_EQ(facility->description(), "System daemons");
-}
-
-TEST(syslog_facility, create_auth) {
-
-	logger::syslog::facility_ptr facility = logger::syslog::facility::create_for("auth");
-
-	EXPECT_NE(facility, nullptr);
-	EXPECT_EQ(facility->code(), 4);
-	EXPECT_EQ(facility->keyword(), "auth");
-	EXPECT_EQ(facility->description(), "Security/authorization messages");
-}
-
-TEST(syslog_facility, create_local0) {
-
-	logger::syslog::facility_ptr facility = logger::syslog::facility::create_for("local0");
-
-	EXPECT_NE(facility, nullptr);
-	EXPECT_EQ(facility->code(), 16);
-	EXPECT_EQ(facility->keyword(), "local0");
-	EXPECT_EQ(facility->description(), "Local use (local0)");
-}
-
-TEST(syslog_facility, create_local1) {
-
-	logger::syslog::facility_ptr facility = logger::syslog::facility::create_for("local1");
-
-	EXPECT_NE(facility, nullptr);
-	EXPECT_EQ(facility->code(), 17);
-	EXPECT_EQ(facility->keyword(), "local1");
-	EXPECT_EQ(facility->description(), "Local use (local1)");
-}
-
-TEST(syslog_facility, create_unheard_of) {
-    try {
-        logger::syslog::facility_ptr facility = logger::syslog::facility::create_for("never heard of this one");
-    } catch ( logger::logger_exception &err ){
-        EXPECT_STREQ(err.what(), "[never heard of this one] is not a syslog key");
-    }
-}
-
-TEST(syslog_facility, facility_instances_unicity) {
-
-    logger::syslog::facility_ptr facility1 = logger::syslog::facility::create_for("local1");
-    logger::syslog::facility_ptr facility2 = logger::syslog::facility::create_for("local1");
-
-    EXPECT_EQ(facility1.get(), facility2.get());
+    std::cout << "facility: " << logger::syslog::local0_facility << std::endl;
 }

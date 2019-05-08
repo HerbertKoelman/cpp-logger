@@ -18,7 +18,4 @@ namespace logger {
         // intentional
     }
 
-    facility_exception::facility_exception(const std::string &message) : logger_exception(message) {
-       // intentional
-    }
 }

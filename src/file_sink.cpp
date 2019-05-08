@@ -22,10 +22,6 @@ namespace logger {
         printf ("DEBUG %s pattern: [%s](%s,%d)\n", __FUNCTION__, _pattern.c_str(), __FILE__, __LINE__);
 #endif
 
-        // TODO remove this
-        // _pattern = "<%d>1 %s %s %s.%d.%d - %-16s";
-        // _pattern = std::string(LOGGER_LOG_PATTERN) + "[L SUBSYS=" + name + "] %s";
-
         // this will set sink's name and set/reset the static part of the messages this sink will produce.
         set_name(name);
 
