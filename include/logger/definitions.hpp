@@ -10,22 +10,12 @@
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
+#include "facilities.hpp"
 
 #ifndef CPP_LOG_DEFINITIONS_HPP
 #define CPP_LOG_DEFINITIONS_HPP
 
-#define LOG_EMERG   0
-#define LOG_ALERT   1
-#define LOG_CRIT    2
-#define LOG_ERR     3
-#define LOG_WARNING 4
-#define LOG_NOTICE  5
-#define LOG_INFO    6
-#define LOG_DEBUG   7
-#define LOG_TRACE   8
-
-#define MAXECIDLEN  64
-#define LOGGER_LOG_PATTERN "<%d>1 %s %s %s.%d.%d - %-16s"
+// #define LOGGER_LOG_PATTERN "<%d>1 %s %s %s.%d.%d - %-16s"
 
 namespace logger {
 
@@ -33,22 +23,36 @@ namespace logger {
      * @{
      */
 
-    const static long HOST_NAME_MAX = sysconf(_SC_HOST_NAME_MAX);
+    /* The constexpr specifier declares that it is possible to evaluate the value of the function or variable at compile time.
+     */
+    constexpr short LOG_EMERG    = 0;
+    constexpr short LOG_ALERT    = 1;
+    constexpr short LOG_CRIT     = 2;
+    constexpr short LOG_ERR      = 3;
+    constexpr short LOG_WARNING  = 4;
+    constexpr short LOG_NOTICE   = 5;
+    constexpr short LOG_INFO     = 6;
+    constexpr short LOG_DEBUG    = 7;
+    constexpr short LOG_TRACE    = 8;
+    constexpr short MAXECIDLEN   = 64;
+    constexpr char const *LOGGER_LOG_PATTERN = "<%d>1 %s %s %s.%d.%d - %-16s";
+
+    const long HOST_NAME_MAX = sysconf(_SC_HOST_NAME_MAX);
     //if (host_name_max <= 0) host_name_max = _POSIX_HOST_NAME_MAX;
 
     class logger;
 
     /** known logging levels */
     enum log_levels {
-        emerg = LOG_EMERG, //!< system is unusable
-        alert = LOG_ALERT, //!< action must be taken immediately
-        crit  = LOG_CRIT,  //!< critical conditions
-        err   = LOG_ERR,   //!< error conditions
-        warning = LOG_WARNING, //!< warning condition
-        notice  = LOG_NOTICE,  //!< normal but signification condition
-        info  = LOG_INFO,  //!< informational (default)
-        debug = LOG_DEBUG, //!< debug information
-        trace = LOG_TRACE  //!< trace information (this is not part the standard)
+        emerg    = LOG_EMERG, //!< system is unusable
+        alert    = LOG_ALERT, //!< action must be taken immediately
+        crit     = LOG_CRIT,  //!< critical conditions
+        err      = LOG_ERR,   //!< error conditions
+        warning  = LOG_WARNING, //!< warning condition
+        notice   = LOG_NOTICE,  //!< normal but signification condition
+        info     = LOG_INFO,  //!< informational (default)
+        debug    = LOG_DEBUG, //!< debug information
+        trace    = LOG_TRACE  //!< trace information (this is not part the standard)
     };
 
     //! Classes and definitions only related to syslog logging.

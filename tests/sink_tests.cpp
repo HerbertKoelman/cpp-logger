@@ -92,6 +92,7 @@ TEST(sink, syslog_sink) {
     EXPECT_EQ(sink.name(), "syslog");
 
 
-    logger::logger_ptr logger_1 = logger::get<logger::syslog_sink>("syslog", "local0", 0);
+    logger::logger_ptr logger_1 = logger::get<logger::syslog_sink>("syslog", "user", 0);
+    logger_1->info("Hello, world ! (cpp-logger version %s", logger::cpp_logger_version());
     logger::logger_ptr logger_2 = logger::get<logger::syslog_sink>("syslog");
 }
