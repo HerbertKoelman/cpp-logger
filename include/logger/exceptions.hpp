@@ -56,22 +56,6 @@ namespace logger {
 
     };
 
-    /** thrown by facilities.
-     *
-     * @since 2.0.0
-     * @see logger::log_facility
-     */
-    class facility_exception: public logger_exception {
-    public:
-
-        /** new facility exception.
-        *
-        * @param message an error message (default is "facility failed")
-        */
-        facility_exception( const std::string &message = "facility failed" );
-
-    };
-
     /** @} */
 }
 #endif //CPP_LOGGER_EXCEPTIONS_HPP

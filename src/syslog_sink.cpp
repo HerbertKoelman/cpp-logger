@@ -38,8 +38,6 @@ namespace logger {
                 options = LOG_PID;
             }
 
-            syslog::facility_ptr facility = syslog::facility::create_for(facility_key);
-
 #ifdef DEBUG
             printf("DEBUG %s calling openlog(%s, %d, %d)\n",
                 __FUNCTION__,
@@ -49,7 +47,7 @@ namespace logger {
                 __FILE__,__LINE__);
 #endif
 
-            openlog(pname.c_str(), options, (int)facility->code());
+            openlog(pname.c_str(), options, (int)syslog::user_facility.code());
 
         } catch ( std::exception &err ){
             throw logger_exception(err.what());
