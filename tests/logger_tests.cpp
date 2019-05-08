@@ -57,7 +57,7 @@ TEST(registry, get_syslog_sink) {
 
     logger::logger_ptr local1_log = logger::get<logger::syslog_sink>(
             "syslog-test-local1-logger",
-            "local1",
+            logger::syslog::local1_facility,
             0);
 
     EXPECT_NE(local1_log, nullptr);

@@ -32,7 +32,7 @@ TEST(sink, stdout_sink) {
     auto pos = output.rfind("[L SUBSYS");
     EXPECT_EQ("[L SUBSYS=stdout] Hello, world !\n", ( pos != std::string::npos ? output.substr(pos) : "pattern \"[L SUBSYS\" not found"));
 
-    logger::logger_ptr logger_2 = logger::get<logger::stdout_sink>("stdout");
+    logger::logger_ptr logger_2 = logger::get<logger::stdout_sink>("sink_stdout_sink_test");
 
 }
 
@@ -66,7 +66,11 @@ TEST(sink, stderr_sink) {
     auto pos = output.rfind("[L SUBSYS");
     EXPECT_EQ("[L SUBSYS=stderr] Hello, world !\n", ( pos != std::string::npos ? output.substr(pos) : "pattern \"[L SUBSYS\" not found"));
 
-    logger::logger_ptr logger_2 = logger::get<logger::stderr_sink>("stderr");
+    auto test_case_meta_data = ::testing::UnitTest::GetInstance();
+    auto current_test_case = test_case_meta_data->current_test_case();
+    auto current_test_info = test_case_meta_data->current_test_info();
+
+    logger::logger_ptr logger_2 = logger::get<logger::stderr_sink>(std::string(current_test_case->name()) + "." + current_test_info->name());
     logger_2->warning("New output format...");
 }
 
@@ -92,7 +96,7 @@ TEST(sink, syslog_sink) {
     EXPECT_EQ(sink.name(), "syslog");
 
 
-    logger::logger_ptr logger_1 = logger::get<logger::syslog_sink>("syslog", "user", 0);
+    logger::logger_ptr logger_1 = logger::get<logger::syslog_sink>("syslog", logger::syslog::user_facility, 0);
     logger_1->info("Hello, world ! (cpp-logger version %s", logger::cpp_logger_version());
     logger::logger_ptr logger_2 = logger::get<logger::syslog_sink>("syslog");
 }
