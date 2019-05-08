@@ -28,11 +28,3 @@ TEST(exceptions, sink_exception) {
         EXPECT_STREQ(err.what(), "sink failed");
     }
 }
-
-TEST(exceptions, facility_exception) {
-    try {
-        throw logger::facility_exception() ;
-    } catch ( std::exception &err ) {
-        EXPECT_STREQ(err.what(), "facility failed");
-    }
-}

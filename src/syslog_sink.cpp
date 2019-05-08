@@ -9,17 +9,17 @@
 
 namespace logger {
 
-    syslog_sink::syslog_sink(const std::string &facility_key, int options) :
-            syslog_sink("default", "pname", log_level::info){
+    syslog_sink::syslog_sink(const syslog::facility &facility, int options) :
+            syslog_sink("default", "pname", log_level::info, facility, options){
 
     }
 
     syslog_sink::syslog_sink() :
-            syslog_sink("default", "pname", log_level::info){
+            syslog_sink("default", "pname", log_level::info, syslog::user_facility, 0){
         // intentional...
     };
 
-    syslog_sink::syslog_sink(const std::string &name, const std::string &pname, log_level level, const std::string &facility_key, int options):
+    syslog_sink::syslog_sink(const std::string &name, const std::string &pname, log_level level, const syslog::facility &facility, int options):
             sink(name, pname, level) {
 
         try {
@@ -38,8 +38,6 @@ namespace logger {
                 options = LOG_PID;
             }
 
-            syslog::facility_ptr facility = syslog::facility::create_for(facility_key);
-
 #ifdef DEBUG
             printf("DEBUG %s calling openlog(%s, %d, %d)\n",
                 __FUNCTION__,
@@ -49,7 +47,7 @@ namespace logger {
                 __FILE__,__LINE__);
 #endif
 
-            openlog(pname.c_str(), options, (int)facility->code());
+            openlog(pname.c_str(), options, (int)facility.code());
 
         } catch ( std::exception &err ){
             throw logger_exception(err.what());
@@ -57,7 +55,7 @@ namespace logger {
     };
 
     syslog_sink::syslog_sink(const std::string &name, const std::string &pname, log_level level) :
-            syslog_sink(name, pname, level, "user", 0) {
+            syslog_sink(name, pname, level, syslog::user_facility, 0) {
         // intentional
     }
 

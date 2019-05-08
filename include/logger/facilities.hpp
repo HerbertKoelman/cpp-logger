@@ -20,15 +20,11 @@ namespace logger {
 
     namespace syslog {
 
-        class facility;
-
-        typedef std::shared_ptr<facility> facility_ptr; //!< a smart pointer to a syslog_facility
-
-        /** RFC5424 log facility.
+        /** Represent a RFC5424 log facility.
          *
-         * This RFC is used by syslog implementations (more [here](https://en.wikipedia.org/wiki/Syslog#Facility).
+         * This RFC is used by syslog implementations (more [here](https://en.wikipedia.org/wiki/Syslog#Facility)).
          *
-         * Factories are provided to create instances.
+         * This is class is used to create constant expressions. That means that instances are created once at compile-time
          *
          * @since 2.0.0
          * @author Herbert Koelman
@@ -39,35 +35,24 @@ namespace logger {
             /**
              * @return facility's code of what kind of program is logging messages.
              */
-            const facility_code code() const;
+            constexpr facility_code code() const {
+                return _code;
+            }
 
             /**
              * @return facility's keyword of the kind of program that is logging messages.
              */
-            const std::string &keyword() const;
+            constexpr const char *keyword() const {
+                return _keyword;
+            }
 
             /**
              *
              * @return facility's short description of what kind of program is logging messages.
              */
-            const std::string &description() const;
-
-            /**
-             * @return default logging facility to use with SysLog.
-             */
-            static facility_ptr default_facility();
-
-            /** Create a facility for a given syslog key.
-             *
-             * This factory searches a map for a previously create instance. If one is found, it is returned. Otherwise a new instance
-             * is created and saved for future reuse.
-             *
-             * @param key  facility's keyword
-             * @return corresponding facility instance.
-             */
-            static facility_ptr create_for(const std::string &key);
-
-            // TODO this should be protected or private (protected:)
+            constexpr const char *description() const {
+                return _description;
+            }
 
             /** New syslog faiclity instance.
              *
@@ -75,53 +60,47 @@ namespace logger {
              * @param keyword related keyword (default is *user*)
              * @param description falicity description.
              */
-            explicit facility(facility_code code = facility_code::user, const std::string &keyword = "user", const std::string &description = "User-level messages");
+            constexpr facility(facility_code code, const char *keyword, const char *description )
+              : _code(code), _keyword(keyword), _description(description) {
+                // intentional...
+            }
 
             // virtual ~facility() ;
 
         private:
-            // TODO switch to this as soon as possible static std::unordered_map<facility_code, facility_ptr> _facilities;
-            static std::unordered_map<int, facility_ptr> _facilities; //!< map of share pointers to SysLog facility instances (mainly for reuse)
-
-            facility_code _code;
-            std::string   _keyword;
-            std::string   _description;
-        };
-
-/* TODO remove this sample const class
-        class const_class {
-        public:
-            constexpr const char *thing() const{
-                return _thing;
-            }
-
-            constexpr facility_code code() const{
-                return _code;
-            }
-
-            void operator()() const {
-                std::cout << _thing << "-" << _code << std::endl;
-            }
-            constexpr const_class(const char *thing, facility_code code): _thing(thing), _code(code){
-                // intentional
-            }
-        private:
-            const char *_thing;
             const facility_code _code;
+            const char   *_keyword;
+            const char   *_description;
         };
 
-        constexpr const_class CONST_ONE{"const expression class one", facility_code::user};
-        constexpr const_class CONST_TWO{"const expression class two", facility_code::uucp};
-*/
-//        constexpr facility user_facility{facility_code::user, "user", "User-level messages"};
-//
-//        /** Send facility description string to an output stream
-//         *
-//         * @param stream
-//         * @param facility
-//         * @return facility description string
-//         */
-//        std::ostream& operator<< (std::ostream& stream, const facility& facility);
+        /* Create constant standard facility instances */
+        constexpr facility kern_facility{facility_code::kern,     "kern", "Kernel messages"};     //!< kernel facility
+        constexpr facility user_facility{facility_code::user,     "user", "User-level messages"}; //!< user facility
+        constexpr facility mail_facility{facility_code::mail,     "mail", "Mail system"};         //!< used to log mail related issues
+        constexpr facility daemon_facility{facility_code::daemon, "daemon", "System daemons"};    //!< daemon facility
+        constexpr facility auth_facility{facility_code::auth,     "auth", "Security/authorization messages"}; //!< used to log authentication issues
+        constexpr facility syslog_facility{facility_code::syslog, "syslog", "Messages generated internally by syslogd"}; //!< syslog internal messages (should probably nerver be used)
+        constexpr facility lpr_facility{facility_code::lpr,       "lpr", "Line printer subsystem"}; //!< used to report printing related issues.
+        constexpr facility news_facility{facility_code::news,     "news", "Network news subsystem"}; //!< user to report network news related issues.
+        constexpr facility uucp_facility{facility_code::uucp,     "uucp", "UUCP subsystem"}; //!< Unix-toUnix related issues (probably too old to make sense today)
+        constexpr facility cron_facility{facility_code::cron,     "cron", "Clock daemon"};   //!< cron related issues
+        constexpr facility authpriv_facility{facility_code::authpriv, "authpriv", "Security/authentication messages"};
+        constexpr facility ftp_facility{facility_code::ftp,       "ftp", "FTP daemon"}; //!< file transfert related issues
+        constexpr facility ntp_facility{facility_code::ntp,       "ntp", "NTP subsystem"}; //!< network time related issues
+        constexpr facility security_facility{facility_code::security, "security", "Log audit"}; //!< security related issue
+        constexpr facility console_facility{facility_code::console,   "console", "Log alert"}; //!< log something on the console
+
+        /* Create constant standard freee to use facility instances */
+        constexpr facility local0_facility{facility_code::local0, "local0", "Local use (local0)"};
+        constexpr facility local1_facility{facility_code::local1, "local1", "Local use (local1)"};
+
+        /** Send facility description string to an output stream
+         *
+         * @param stream
+         * @param facility
+         * @return facility description string
+         */
+        std::ostream& operator<< (std::ostream& stream, const facility& facility);
     }
     /** @} */
 }
