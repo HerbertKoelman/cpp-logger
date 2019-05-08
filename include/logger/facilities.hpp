@@ -88,6 +88,31 @@ namespace logger {
             std::string   _description;
         };
 
+/* TODO remove this sample const class
+        class const_class {
+        public:
+            constexpr const char *thing() const{
+                return _thing;
+            }
+
+            constexpr facility_code code() const{
+                return _code;
+            }
+
+            void operator()() const {
+                std::cout << _thing << "-" << _code << std::endl;
+            }
+            constexpr const_class(const char *thing, facility_code code): _thing(thing), _code(code){
+                // intentional
+            }
+        private:
+            const char *_thing;
+            const facility_code _code;
+        };
+
+        constexpr const_class CONST_ONE{"const expression class one", facility_code::user};
+        constexpr const_class CONST_TWO{"const expression class two", facility_code::uucp};
+*/
 //        constexpr facility user_facility{facility_code::user, "user", "User-level messages"};
 //
 //        /** Send facility description string to an output stream

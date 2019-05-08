@@ -1,4 +1,5 @@
 next
+- replace #define with constexpr (#86)
 - use std::atomic wherever possible (#96)
 - logger::registry factory is no longer relying on a specific contructor signature (#94)
 - update README with some performance feedback (#92)
