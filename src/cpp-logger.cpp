@@ -9,7 +9,6 @@
 #ifndef cpp_logger_hpp
 #define cpp_logger_hpp
 
-#include "config.h"
 #include "logger/cpp-logger.hpp"
 
 namespace logger {

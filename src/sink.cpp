@@ -36,8 +36,6 @@ namespace logger {
         _level = level;
     };
 
-    /** @return niveau courrant de journalisation
-     */
     log_levels sink::level() {
         return _level;
     };
@@ -46,7 +44,7 @@ namespace logger {
 #if __cplusplus >= 201703L
         std::shared_lock lock(_shared_mutex);
 #else
-        std::unique_lock(_mutex);
+        std::lock_guard<std::mutex> lock(_mutex);
 #endif
 
         return _ecid;
@@ -56,7 +54,7 @@ namespace logger {
 #if __cplusplus >= 201703L
         std::unique_lock lock(_shared_mutex);
 #else
-        std::unique_lock lock(_mutex);
+        std::lock_guard<std::mutex> lock(_mutex);
 #endif
 
         if (!ecid.empty()) {
