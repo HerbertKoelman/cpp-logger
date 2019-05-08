@@ -10,12 +10,12 @@
 #include <mutex>
 #endif
 
-#include <thread>
-
-#include <string>
+#include <thread> // std::mutex
+#include <atomic>
 #include <cstdio>   // std::vsnprintf(...)
 #include <cstdarg>  // std::va_list, ...
-#include <vector>
+#include <string>   // std::string
+#include <vector>   // std::unordered_map
 #include <unistd.h> // std::getpid
 #include <limits>
 
@@ -127,8 +127,12 @@ namespace logger {
         std::mutex        _mutex;        //!< used to protect access to sink's data
 #endif
 
+        // when _ecid is accessed, we need to do more than just set/get it's value. Therefore, we cannot use std::atomic
         std::string   _ecid;   //!< execution control ID. Helps to track everything that was logged by one business operation
-        log_level     _level;  //!< current logging level
+
+        std::atomic<log_level>     _level;  //!< current logging level
+
+        // these are read-only, we don't need to handle concurrency
         std::string   _name;   //!< logging domain name (as for now, this is equal to the logger name)
         std::string   _pname;  //!< program name
 
@@ -187,11 +191,12 @@ namespace logger {
          */
         const std::string date_time();
 
+    private:
+
         FILE             *_file_descriptor; //!< file descriptor of a log file
         pid_t             _pid;      //!< process ID
         std::string       _lag;      //!< date time lag (i.e. +02:00)
         std::string       _hostname; //!< hostname (this will be displayed by log messages)
-    private:
         std::string   _pattern; //!< message pattern (layout)
     };
 
