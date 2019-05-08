@@ -9,11 +9,6 @@ project(
   VERSION 2.2.0
   DESCRIPTION "Simple C++ logger (${GIT_LOG})")
 
-option(BUILD_TESTS "if set, then Unit tests are build" True)
-set(CMAKE_CXX_STANDARD 17)
-
-configure_file(src/config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/config.h)
-
 #find_package(Git CONFIG)
 #find_package(Conan)
 
@@ -33,7 +28,7 @@ else()
   endif()
 endif()
 
-configure_file(src/config.h.in ../include/logger/config.h)
+# configure_file(src/config.h.in ../include/logger/config.h)
 
 # project's public headers
 include_directories(include src)
@@ -50,26 +45,42 @@ set(LOGGER_SOURCE
         src/facilities.cpp include/logger/facilities.hpp
         src/exceptions.cpp include/logger/exceptions.hpp)
 
-add_library(cpp-logger-static STATIC ${LOGGER_SOURCE})
-target_link_libraries(cpp-logger-static pthread)
-set_target_properties(cpp-logger-static PROPERTIES OUTPUT_NAME logger)
+set(USED_COMPILER_FEATURES
+        cxx_std_17
+        )
 
-add_library(cpp-logger-shared SHARED  ${LOGGER_SOURCE} )
-target_link_libraries(cpp-logger-shared pthread)
-set_target_properties(cpp-logger-shared PROPERTIES OUTPUT_NAME logger)
+* For future use
+#include(WriteCompilerDetectionHeader)
+#write_compiler_detection_header(
+#        FILE "${CMAKE_CURRENT_BINARY_DIR}/logger_compiler_detection.h"
+#        PREFIX LOGGER
+#        COMPILERS GNU AppleClang Clang
+#        PROLOG "// Requested features: ${USED_COMPILER_FEATURES}"
+#        FEATURES
+#        ${USED_COMPILER_FEATURES}
+#        cxx_variadic_templates
+#)
 
-if ( BUILD_TESTS )
-  # Testing -------------------------------------------------------
-  #
-  # Load and compile GTest
-  # Aliases: GTest::GTest, GTest::gtest_main, GMock::GMock
-  find_package(GTestExt PATHS cmake)
-  if (GTestExt_FOUND)
-    message(STATUS "Found Google Test (GTest)...")
-    enable_testing()
-    add_subdirectory(tests)
-  endif()
-endif(BUILD_TESTS)
+add_library            (cpp-logger-static STATIC ${LOGGER_SOURCE})
+target_link_libraries  (cpp-logger-static pthread)
+target_compile_features(cpp-logger-static PUBLIC ${USED_COMPILER_FEATURES})
+set_target_properties  (cpp-logger-static PROPERTIES OUTPUT_NAME logger)
+
+add_library            (cpp-logger-shared SHARED  ${LOGGER_SOURCE} )
+target_link_libraries  (cpp-logger-shared pthread)
+target_compile_features(cpp-logger-shared PUBLIC  ${USED_COMPILER_FEATURES})
+set_target_properties  (cpp-logger-shared PROPERTIES OUTPUT_NAME logger)
+
+# Testing -------------------------------------------------------
+#
+# Load and compile GTest
+# Aliases: GTest::GTest, GTest::gtest_main, GMock::GMock
+find_package(GTestExt PATHS cmake)
+if (GTestExt_FOUND AND BUILD_TESTS)
+  enable_testing()
+  message(STATUS "Adding project's unit tests (in ./tests)...")
+  add_subdirectory(tests)
+endif()
 
 # doxygen -------------------------------------------------------
 #
