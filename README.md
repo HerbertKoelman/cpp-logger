@@ -1,6 +1,7 @@
 ### What it does
 
-[cpp-logger](https://github.com/HerbertKoelman/cpp-logger) is a set of very simple classes that handles logging. Yes ! I know, yet one more. And you're right.
+[cpp-logger](https://github.com/HerbertKoelman/cpp-logger) is a set of very simple classes that handles logging. Yes ! I know, 
+yet one more. And you're right.
 
 The library was first implemented for AIX IBM's Unix, on which existing libraries did not compile. So I had to write my own thing. 
 
@@ -14,6 +15,8 @@ To use this library:
     ...
     $ make install
     ...
+
+> **WARN** your compiler need to support the language standard [C++17](https://en.cppreference.com/w/cpp/compiler_support).
 
 Install moves files into your system's default location for headers and libraries (often /usr/local/include and /usr/local/lib). You can relocate installation by setting CMAKE_INSTALL_PREFIX 
 cmake property.
@@ -124,31 +127,13 @@ Out of the box, the library comes with four `logger::sink` implementations:
   - `logger::stderr_sink`: send/write messages to the standard error stream (`stderr`)
 - `logger::syslog_sink`: send messages to the `syslog` facility, which is in charge of doing whatever must be done with the messages sent by your application.
 
-A logger instance can be created this way:
-
-```cpp
-std::string name { "consumer-thread"};
-
-// create a logger instance and pass it a sink instance that handles the actual writting of your messages.
-logger::logger_ptr logger{
-    new logger::logger{
-            name,
-            new logger::stdout_sink(name, "APP", logger::log_level::info) // logger::logger is in charge of deleting the sink instance
-    }
-};
-
-logger->info("consumer ready to handle incomming messages (status: %s)", "initialized");
-```
-
-As one can see, this is not the simplest way to go. Therefore, the library provides a set of factory methods/functions that are in charge 
-creating and setting up `logger::logger` instances. The above code can be replaced by this:
+The library provides a set of factory methods/functions that are in charge of creating and setting up `logger::logger` instances. 
+The above code can be replaced by this:
 ```cpp
 logger::logger_ptr logger = logger::get<logger::stdout_sink>("consumer-thread");
 
 logger->info("consumer ready to handle incomming messages (status: %s)", "initialized");
 ```
-
-> **WARN** creating logger instances by using factories, is the preferred way to go.
 
 The factory is in charge of setting things up and regsiter new instances. If an instance with the same name has already been created, 
 then the factory returns a shared pointer to that instance.
@@ -157,10 +142,12 @@ The logger factory functions:
 - `template logger::get<>(name, args...)` 
 - `logger::get(name)`
 
-These functions known how to create a new instance and register the newly created one (using `logger::regisrty::add`). The factory
+These functions known how to create a new instance and register created one for future reuse (using `logger::regisrty::add`). The factory
 automatically sets:
 - the program name property of the sink
 - the current logging level.
+
+> **WARN** it is possible to create loggers without using the factories, but using factories is our the preferred way.
 
 The following functions are affecting all the registered loggers.
 - `logger::set_level()`: set the current logging level of all regsitered loggers.
@@ -176,7 +163,82 @@ log->info("Hello, world..."); // This it not displayed as log level was set to a
 
 #### Create your own logger sink
 
-> **WARN** `logger::sink` implementations must be thread safe, as they can be shared by many threads.
+The library is devided into two parts:
+1. One that is ment for the library users, people that just want log things.
+1. Another that is in charge of dump messages somewhere.
+
+The first need is adressed through the `logger::logger`interface and the factory methods. The second need is addressed by 
+extending the abstract class `logger::sink`.
+
+Let's say you need to write messages using QNX's system logger facility. On QNX, logging is done by calling the [`slogf(...)`](http://www.qnx.com/developers/docs/6.3.0SP3/neutrino/lib_ref/s/slogf.html)
+function. This function is expecting the following parameters:
+1. *opcode*: A combination of a major and minor code. Create the opcode using the `_SLOG_SETCODE(major, minor)` macro that's defined in <sys/slog.h>. The major and minor codes are defined in <sys/slogcodes.h>.
+2. *severity*: The severity of the log message; see "Severity levels," below.
+3. *fmt*: A standard printf() string followed by printf() arguments.
+
+You might consider writing a sink that would look like this:
+```cpp
+class slog_sink: public logger::sink {
+public:
+
+    explicit slog_sink(int opcode): logger::sink{"slog","app", logger::log_level::info}, _opcode{opcode}{
+        // intentional
+    }
+
+    void write(logger::log_level level, const char *fmt, ...) override {
+
+        logger::log_level target_level =  this->level(); // level's accessor is threadsafe
+
+        if (target_level >= level) {
+
+            // fill a buffer with the user message
+            va_list args1;
+            va_list args2;
+
+            va_start(args1, fmt); // initialize va_list
+            va_copy(args2, args1); // save a copy args1 -> args2
+
+            // this call only returns the actual number of bytes needed to store the message.
+            // It doesn't count the needed end-of-string
+            size_t buffer_size = vsnprintf(NULL, 0, fmt, args1) + 1; // plus 1 character to store \0
+            va_end(args1); // don't need this one anymore
+
+            // add one more character to handle \n (see code below)
+            char buffer[buffer_size + 1];
+            memset(buffer, 0, buffer_size + 1);
+
+            // fill buffer with message ...
+            vsnprintf(buffer, buffer_size, fmt, args2);
+            size_t len = strlen(buffer);
+            va_end(args2);
+
+            // add a new line if not already there
+            if (buffer[len - 1] != '\n') {
+                buffer[len] = '\n'; // override ending \0 (that's why we provisioned for one more character above)
+            }
+
+            std::string ecid = this->ecid(); // get current value once.
+            std::string pattern = "[L SUBSYS=" + name() + "] %s %s";
+
+            slogf(_opcode,
+                  level,
+                  _pattern.c_str(),
+                  ecid.empty() ? "" : ecid.c_str(),
+                  buffer);
+        }
+
+    }
+
+private:
+    int         _opcode;
+};
+```
+
+Now, this class can be instanciated and registred, like any other `logger::sink`, by using a logger factory:
+```cpp
+logger::logger_ptr logger = logger::get<slog_sink>("slog_test", _SLOG_SETCODE(1, 0));
+logger->info( "Tada, you're done");
+```
 
 #### Add logging to your program
 
@@ -189,7 +251,25 @@ libraries provided. The package contains :
 
 **More specific exemple will come soon...**
 
-### Usefull links
+### Misc
+
+#### Manually create a logger
+
+A logger instance can be created this way:
+
+```cpp
+std::string name { "consumer-thread"};
+
+// create a logger instance and pass it a sink instance that handles the actual writting of your messages.
+logger::logger_ptr logger{
+    new logger::logger{
+            name,
+            new logger::stdout_sink(name, "APP", logger::log_level::info) // logger::logger is in charge of deleting the sink instance
+    }
+};
+
+logger->info("consumer ready to handle incomming messages (status: %s)", "initialized");
+```
 
 #### project links
 
