@@ -1,4 +1,4 @@
-next
+2.2.0
 - you can find sample that shows how you can write your own logger sinks in tests/sink_tests.cpp (#95)
 - in CMake we use target_compile_features() to set compiler related language standard options, for now we rely on C++17 (#98)
 - now syslog::facility class is declared constexpr, no more facility maps or factory method (#97)
