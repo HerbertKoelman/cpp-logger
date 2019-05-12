@@ -1,5 +1,16 @@
+2.2.0
+- you can find sample that shows how you can write your own logger sinks in tests/sink_tests.cpp (#95)
+- in CMake we use target_compile_features() to set compiler related language standard options, for now we rely on C++17 (#98)
+- now syslog::facility class is declared constexpr, no more facility maps or factory method (#97)
+- replace #define with constexpr (#86)
+- use std::atomic wherever possible (#96)
+- logger::registry factory is no longer relying on a specific contructor signature (#94)
+- update README with some performance feedback (#92)
+- Reuse already created syslog::facilities(#81)
+- file, stderr and stdout sinks are no longer using facilities (#78)
+- Fixed bugs: #82, #85, #84, #91
 2.1.0
-- Fixed bugs : #77 #76 #73, #79, #80
+- Fixed bugs : #77, #76, #73, #79, #80
 2.0.0
 - revisited the facility notion which was too specific (#41)
 - use only english (#55)

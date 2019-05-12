@@ -32,15 +32,30 @@ namespace logger {
         // intentional
     }
 
+    void sink::set_log_level(log_levels level) {
+        _level = level;
+    };
+
+    log_levels sink::level() {
+        return _level;
+    };
+
     std::string sink::ecid() {
+#if __cplusplus >= 201703L
         std::shared_lock lock(_shared_mutex);
+#else
+        std::lock_guard<std::mutex> lock(_mutex);
+#endif
 
         return _ecid;
     }
 
     void sink::set_ecid(const std::string &ecid) {
-
+#if __cplusplus >= 201703L
         std::unique_lock lock(_shared_mutex);
+#else
+        std::lock_guard<std::mutex> lock(_mutex);
+#endif
 
         if (!ecid.empty()) {
             _ecid = "[M ECID=\"" + ecid.substr(0, MAXECIDLEN) + "\"]";
@@ -71,6 +86,16 @@ namespace logger {
                 return "UNKNOWN";
         }
 
+    }
+
+    void sink::set_program_name(const std::string &name) {
+
+        _pname = name;
+    }
+
+    void sink::set_name(const std::string &name) {
+
+        _name = name;
     }
 
 } // namespace logger

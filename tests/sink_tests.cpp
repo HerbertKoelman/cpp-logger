@@ -7,7 +7,7 @@
 
 TEST(sink, file_sink) {
 
-    logger::file_sink sink("file descriptor", "app", logger::log_level::info, logger::syslog_facility::default_facility(), stdout);
+    logger::file_sink sink("file descriptor", "app", logger::log_level::info, stdout);
 
     EXPECT_EQ(sink.level(), logger::log_level::info);
     EXPECT_EQ(sink.name(), "file descriptor");
@@ -24,13 +24,31 @@ TEST(sink, stdout_sink) {
 
     EXPECT_EQ(sink.level(), logger::log_level::info);
     EXPECT_EQ(sink.name(), "stdout");
+
     ::testing::internal::CaptureStdout();
     sink.write(logger::log_level::info, "Hello, %s !", "world");
     std::string output = ::testing::internal::GetCapturedStdout();
-    EXPECT_TRUE( output.rfind("[L SUBSYS=stdout] Hello, world !")!= std::string::npos);
 
-    logger::logger_ptr logger_1 = logger::get<logger::stdout_sink>("stdout", logger::syslog_facility::default_facility() );
-    logger::logger_ptr logger_2 = logger::get<logger::stdout_sink>("stdout");
+    auto pos = output.rfind("[L SUBSYS");
+    EXPECT_EQ("[L SUBSYS=stdout] Hello, world !\n", ( pos != std::string::npos ? output.substr(pos) : "pattern \"[L SUBSYS\" not found"));
+
+    logger::logger_ptr logger_2 = logger::get<logger::stdout_sink>("sink_stdout_sink_test");
+
+}
+
+TEST(sink, stdout_sink_default) {
+
+    logger::stdout_sink sink;
+
+    EXPECT_EQ(sink.level(), logger::log_level::info);
+    EXPECT_EQ(sink.name(), "default");
+
+    ::testing::internal::CaptureStdout();
+    sink.write(logger::log_level::info, "Hello, %s !", "world");
+    std::string output = ::testing::internal::GetCapturedStdout();
+
+    auto pos = output.rfind("[L SUBSYS");
+    EXPECT_EQ("[L SUBSYS=default] Hello, world !\n", ( pos != std::string::npos ? output.substr(pos) : "pattern \"[L SUBSYS\" not found"));
 
 }
 
@@ -40,13 +58,34 @@ TEST(sink, stderr_sink) {
 
     EXPECT_EQ(sink.level(), logger::log_level::info);
     EXPECT_EQ(sink.name(), "stderr");
+
     ::testing::internal::CaptureStderr();
     sink.write(logger::log_level::info, "Hello, %s !", "world");
     std::string output = ::testing::internal::GetCapturedStderr();
-    EXPECT_TRUE( output.rfind("[L SUBSYS=stderr] Hello, world !")!= std::string::npos);
 
-    logger::logger_ptr logger_1 = logger::get<logger::stderr_sink>("stderr", logger::syslog_facility::default_facility() );
-    logger::logger_ptr logger_2 = logger::get<logger::stderr_sink>("stderr");
+    auto pos = output.rfind("[L SUBSYS");
+    EXPECT_EQ("[L SUBSYS=stderr] Hello, world !\n", ( pos != std::string::npos ? output.substr(pos) : "pattern \"[L SUBSYS\" not found"));
+
+    auto test_case_meta_data = ::testing::UnitTest::GetInstance();
+    auto current_test_case = test_case_meta_data->current_test_case();
+    auto current_test_info = test_case_meta_data->current_test_info();
+
+    logger::logger_ptr logger_2 = logger::get<logger::stderr_sink>(std::string(current_test_case->name()) + "." + current_test_info->name());
+    logger_2->warning("New output format...");
+}
+
+TEST(sink, stderr_sink_default) {
+    logger::stderr_sink sink;
+
+    EXPECT_EQ(sink.level(), logger::log_level::info);
+    EXPECT_EQ(sink.name(), "default");
+
+    ::testing::internal::CaptureStderr();
+    sink.write(logger::log_level::info, "Hello, %s !", "world");
+    std::string output = ::testing::internal::GetCapturedStderr();
+
+    auto pos = output.rfind("[L SUBSYS");
+    EXPECT_EQ("[L SUBSYS=default] Hello, world !\n", ( pos != std::string::npos ? output.substr(pos) : "pattern \"[L SUBSYS\" not found"));
 }
 
 TEST(sink, syslog_sink) {
@@ -57,7 +96,79 @@ TEST(sink, syslog_sink) {
     EXPECT_EQ(sink.name(), "syslog");
 
 
-    logger::logger_ptr logger_1 = logger::get<logger::syslog_sink>("syslog", "local0", 0);
+    logger::logger_ptr logger_1 = logger::get<logger::syslog_sink>("syslog", logger::syslog::user_facility, 0);
+    logger_1->info("Hello, world ! (cpp-logger version %s", logger::cpp_logger_version());
     logger::logger_ptr logger_2 = logger::get<logger::syslog_sink>("syslog");
+}
+
+class slog_sink: public logger::sink {
+public:
+
+    explicit slog_sink(int opcode): logger::sink{"slog","app", logger::log_level::info}, _opcode{opcode}{
+        // intentional
+    }
+
+    void write(logger::log_level level, const char *fmt, ...) override {
+
+        logger::log_level target_level =  this->level(); // level's accessor is threadsafe
+
+        if (target_level >= level) {
+
+            // fill a buffer with the user message
+            va_list args1;
+            va_list args2;
+
+            va_start(args1, fmt); // initialize va_list
+            va_copy(args2, args1); // save a copy args1 -> args2
+
+            // this call only returns the actual number of bytes needed to store the message.
+            // It doesn't count the needed end-of-string
+            size_t buffer_size = vsnprintf(NULL, 0, fmt, args1) + 1; // plus 1 character to store \0
+            va_end(args1); // don't need this one anymore
+
+            // add one more character to handle \n (see code below)
+            char buffer[buffer_size + 1];
+            memset(buffer, 0, buffer_size + 1);
+
+            // fill buffer with message ...
+            vsnprintf(buffer, buffer_size, fmt, args2);
+            size_t len = strlen(buffer);
+            va_end(args2);
+
+            // add a new line if not already there
+            if (buffer[len - 1] != '\n') {
+                buffer[len] = '\n'; // override ending \0 (that's why we provisioned for one more character above)
+            }
+
+            std::string ecid = this->ecid(); // get current value once.
+            std::string pattern = "[L SUBSYS=" + name() + "] %s %s";
+
+            //slogf(_opcode,
+            //      level,
+            //      _pattern.c_str(),
+            //      ecid.empty() ? "" : ecid.c_str(),
+            //      buffer);
+
+            std::printf(
+                       pattern.c_str(),
+                       ecid.empty() ? "" : ecid.c_str(),
+                       buffer);
+        }
+
+    }
+
+private:
+    int         _opcode;
+};
+
+TEST(sink, extend_sink) {
+
+    slog_sink sink{0};
+
+    EXPECT_EQ(sink.level(), logger::log_level::info);
+    EXPECT_EQ(sink.name(), "slog");
+
+    logger::logger_ptr logger = logger::get<slog_sink>("slog_test", 0);
+    logger->info( "Tada, you're done");
 
 }

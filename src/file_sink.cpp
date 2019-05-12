@@ -9,7 +9,12 @@
 
 namespace logger {
 
-    file_sink::file_sink(const std::string &name, const std::string &pname, log_level level, const log_facility_ptr &facility, FILE *file) :
+
+    file_sink::file_sink(FILE *file) :
+      file_sink("file-sink", "app", log_level::info, file){
+    }
+
+    file_sink::file_sink(const std::string &name, const std::string &pname, log_level level, FILE *file) :
             sink(name, pname, level),
             _file_descriptor(file),
             _pid(getpid()) {
@@ -17,22 +22,18 @@ namespace logger {
         printf ("DEBUG %s pattern: [%s](%s,%d)\n", __FUNCTION__, _pattern.c_str(), __FILE__, __LINE__);
 #endif
 
-        _facility = facility ;
-        _pattern = LOGGER_LOG_PATTERN;
-
-        //set_facility(log_facility::sic_tux);
-
-        _pattern = std::string(LOGGER_LOG_PATTERN) + "[L SUBSYS=" + _name + "] %s";
+        // this will set sink's name and set/reset the static part of the messages this sink will produce.
+        set_name(name);
 
         char hostname[HOST_NAME_MAX];
         hostname[0] = 0;
         gethostname(hostname, HOST_NAME_MAX);
         _hostname = hostname;
 
-        timeval current_time;
-        gettimeofday(&current_time, NULL);
+        timeval current_time{0};
+        gettimeofday(&current_time, nullptr);
 
-        struct std::tm local_time;
+        struct std::tm local_time{0};
         localtime_r(&current_time.tv_sec, &local_time);
 
         char buffer[10];// lag is in the form of "-02:00"
@@ -49,9 +50,16 @@ namespace logger {
         _lag = buffer;
     };
 
-    file_sink::~file_sink() {
-        //fflush(_file_descriptor);
-    };
+// TODO remove this
+//    file_sink::~file_sink() {
+//        //fflush(_file_descriptor);
+//    };
+
+    void file_sink::set_name(const std::string &name) {
+        sink::set_name(name);
+
+        _pattern = std::string(LOGGER_LOG_PATTERN) + "[L SUBSYS=" + name + "] %s";
+    }
 
     void file_sink::write(log_level level, const char *fmt, ...) {
 #ifdef DEBUG
@@ -64,7 +72,9 @@ namespace logger {
             __FILE__,__LINE__);
 #endif
 
-        if (_level >= level) {
+        log_level target_level =  this->level(); // we use level's accessor because access needs to be threadsafe
+
+        if (target_level >= level) {
 
             // fill a buffer with the user message
             va_list args1;
@@ -79,7 +89,7 @@ namespace logger {
 
             // this call only returns the actual number of bytes needed to store the message.
             // It doesn't count the needed end-of-string
-            size_t buffer_size = vsnprintf(NULL, 0, fmt, args1) + 1; // plus 1 character to store \0
+            size_t buffer_size = vsnprintf(nullptr, 0, fmt, args1) + 1; // plus 1 character to store \0
             va_end(args1); // don't need this one anymore
 
             // add one more character to handle \n (see code below)
@@ -105,17 +115,18 @@ namespace logger {
                 buffer[len] = '\n'; // override ending \0 (that's why we provisioned for one more character above)
             }
 
+            std::string ecid = this->ecid(); // we use ecid's accessor because access needs to be threadsafe
+
             fprintf(
                     _file_descriptor,
                     _pattern.c_str(),
-                    level,
+                    target_level,
                     date_time().c_str(),
-                    _facility->keyword().c_str(),
                     _hostname.c_str(),
-                    _pname.c_str(),
+                    program_name().c_str(),
                     _pid,
                     std::this_thread::get_id(),
-                    _ecid.empty() ? "- " : _ecid.c_str(),
+                    ecid.empty() ? "- " : ecid.c_str(),
                     buffer
             );
         }
@@ -129,11 +140,11 @@ namespace logger {
         memset(buffer, 0, size);
         memset(target, 0, size);
 
-        timeval current_time;
-        gettimeofday(&current_time, NULL);
+        timeval current_time{0};
+        gettimeofday(&current_time, nullptr);
         int micros = current_time.tv_usec;
 
-        struct std::tm local_time;
+        struct std::tm local_time{0};
         localtime_r(&current_time.tv_sec, &local_time);
         snprintf(target, size - 1, "%d-%02d-%02dT%02d:%02d:%02d.%06d%s",
                  local_time.tm_year + 1900, // tm_year is the number of years from 1900
@@ -147,4 +158,5 @@ namespace logger {
 
         return std::string(target);
     }
+
 } // namespace logger

@@ -9,8 +9,19 @@
 
 namespace logger {
 
-    syslog_sink::syslog_sink(const std::string &name, const std::string &pname, log_level level, const std::string &facility_key, int options) :
+    syslog_sink::syslog_sink(const syslog::facility &facility, int options) :
+            syslog_sink("default", "pname", log_level::info, facility, options){
+
+    }
+
+    syslog_sink::syslog_sink() :
+            syslog_sink("default", "pname", log_level::info, syslog::user_facility, 0){
+        // intentional...
+    };
+
+    syslog_sink::syslog_sink(const std::string &name, const std::string &pname, log_level level, const syslog::facility &facility, int options):
             sink(name, pname, level) {
+
         try {
 #ifdef DEBUG
             printf("DEBUG %s name: %s, pname: %s, level: %d, facility: %d, options: %d\n", __FUNCTION__,
@@ -21,13 +32,11 @@ namespace logger {
                 options,
                 __FILE__,__LINE__);
 #endif
-            _pattern = "[L SUBSYS=" + _name + "] %s %s";
+            set_name(name);
 
             if (options == 0) {
                 options = LOG_PID;
             }
-
-            syslog_facility_ptr facility = syslog_facility::create_for(facility_key);
 
 #ifdef DEBUG
             printf("DEBUG %s calling openlog(%s, %d, %d)\n",
@@ -38,7 +47,7 @@ namespace logger {
                 __FILE__,__LINE__);
 #endif
 
-            openlog(pname.c_str(), options, (int)facility->code());
+            openlog(pname.c_str(), options, (int)facility.code());
 
         } catch ( std::exception &err ){
             throw logger_exception(err.what());
@@ -46,7 +55,7 @@ namespace logger {
     };
 
     syslog_sink::syslog_sink(const std::string &name, const std::string &pname, log_level level) :
-            syslog_sink(name, pname, level, "user", 0) {
+            syslog_sink(name, pname, level, syslog::user_facility, 0) {
         // intentional
     }
 
@@ -59,7 +68,9 @@ namespace logger {
         printf("DEBUG %s _level/level: %d/%d, pattern: [%s] (%s,%d)\n", __FUNCTION__, _level, level, _pattern.c_str(), __FILE__,__LINE__);
 #endif
 
-        if (_level >= level) {
+        log_level target_level =  this->level(); // we use level's accessor because access needs to be threadsafe
+
+        if (target_level >= level) {
 
             // fill a buffer with the user message
             va_list args1;
@@ -94,10 +105,18 @@ namespace logger {
                 syslog_level = log_level::debug ;
             }
 
+            std::string ecid = this->ecid(); // we use ecid's accessor because access needs to be threadsafe
+
             ::syslog ( syslog_level,
                     _pattern.c_str(),
-                    _ecid.empty() ? "" : _ecid.c_str(),
+                    ecid.empty() ? "" : ecid.c_str(),
                     buffer);
         }
-    }; // write
+    }
+
+    void syslog_sink::set_name(const std::string &name) {
+        sink::set_name(name);
+        _pattern = "[L SUBSYS=" + name + "] %s %s";
+    }
+
 } // namespace logger

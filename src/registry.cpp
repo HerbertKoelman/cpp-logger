@@ -52,7 +52,10 @@ namespace logger {
         }
 
         _level = level;
-        // printf("DEBUG registry logger level is now %d\n", _level);
+
+#ifdef DEBUG
+        printf("DEBUG registry logger level is now %d\n", _level);
+#endif
     }
 
     void registry::set_ecid(const std::string &ecid) {
@@ -67,7 +70,10 @@ namespace logger {
 #endif
     }
 
-    void registry::add(logger_ptr logger) {
+    void registry::add(const logger_ptr &logger) {
+        // we don(t need to protect the map access beacause it's done by the only method that accesses
+        // this one.
+
         // check if the logger was already registered
         auto search = _loggers.find(logger->name());
         if (search == _loggers.end()) {

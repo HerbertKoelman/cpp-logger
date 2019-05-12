@@ -121,7 +121,7 @@ namespace logger {
 
         /** @return a logger instance that uses stdout (if not found a new one is created)
          *
-         * @see stdout_sink
+         * @see stdout_sink send messages on stdout.
          */
         logger_ptr get(const std::string &name){
           return get<stdout_sink>(name);
@@ -133,7 +133,7 @@ namespace logger {
          * @param name logger instance name
          * @param args logger's sink arguments
          * @return a logger instance (if not found a new one is created)
-         * @see sink
+         * @see sink interface between the logger and the target output
          */
         template<class T, typename... Args> logger_ptr get( const std::string &name, const Args&... args){
           std::lock_guard<std::mutex> lck(_mutex);
@@ -145,10 +145,17 @@ namespace logger {
 
           if ( search == _loggers.end() ){
             // no logger was registered yet, instantiate a new one.
+            sink *sink = new T(args...);
+
+            // we can setup these properties because regisrty and sink classes are friends.
+            sink->set_name(name);
+            sink->set_program_name(_pname);
+            sink->set_log_level(_level);
+
             logger = logger_ptr(
               new class logger(
                 name,
-                new T(name, _pname, _level, args...)
+                sink
               )
             );
 
@@ -167,9 +174,12 @@ namespace logger {
 
         /** register/add a new logger instance
          *
+         * **WARN** we don't need to protect the map access beacause it's done by the only method that accesses this one.
+         *
          * @param logger logger instance
+         * @see get<>
          */
-        void add(logger_ptr logger);
+        void add(const logger_ptr &logger);
 
         /** registry instance is a singleton and MUST be create through a factory.
          */

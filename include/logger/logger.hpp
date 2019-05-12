@@ -169,7 +169,7 @@ namespace logger {
        *
        * setting this to an empty string will deactivate the printing of ECIDs.
        *
-       * @param ecid new ecid
+       * @param ecid execution content ID.
        */
       void set_ecid( const std::string &ecid );
 

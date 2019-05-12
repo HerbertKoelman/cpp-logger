@@ -10,21 +10,12 @@
 namespace logger {
 
     stderr_sink::stderr_sink(const std::string &name, const std::string &pname, log_level level) :
-            file_sink(name,
-                      pname,
-                      level,
-                      syslog_facility::default_facility(),
-                      stderr) {
+            file_sink(name, pname, level, stderr) {
         // intentional...
     }
 
-    stderr_sink::stderr_sink(const std::string &name, const std::string &pname, log_level level, const log_facility_ptr &facility):
-            file_sink(name,
-                      pname,
-                      level,
-                      facility,
-                      stderr){
-
-    };
+    stderr_sink::stderr_sink() :
+        file_sink("default", "pname", log_level::info, stderr){
+    }
 
 } // namespace logger
