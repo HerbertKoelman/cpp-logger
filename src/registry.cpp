@@ -30,6 +30,10 @@ namespace logger {
         registry::instance().set_program_name(pname);
     }
 
+    void reset_registry() {
+        registry::instance().reset();
+    }
+
     // Registry implementation ------------------------------------------------------
     //
     registry &registry::instance() {
@@ -88,11 +92,12 @@ namespace logger {
         _loggers.erase(name);
     }
 
-    registry::registry() : _level(log_levels::info), _pname("program") {
-        // intentional...
+    void registry::reset() {
+        std::lock_guard<std::mutex> lck(_mutex);
+        _loggers.clear();
     }
 
-    registry::~registry() {
+    registry::registry() noexcept : _level(log_levels::info), _pname("program") {
         // intentional...
     }
 

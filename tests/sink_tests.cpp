@@ -90,24 +90,39 @@ TEST(sink, stderr_sink_default) {
 
 TEST(sink, syslog_sink) {
 
-    logger::syslog_sink sink("syslog", "app", logger::log_level::info);
+    logger::syslog_sink sink("syslog", "sink_tests", logger::log_level::info);
 
     EXPECT_EQ(sink.level(), logger::log_level::info);
     EXPECT_EQ(sink.name(), "syslog");
+    sink.write(logger::log_level::warning,"write something to SysLog: %s", logger::cpp_logger_version());
 
 
+    logger::set_program_name("sink_tests"); // default program name is app, change it to sink_tests
     logger::logger_ptr logger_1 = logger::get<logger::syslog_sink>("syslog", logger::syslog::user_facility, 0);
-    logger_1->info("Hello, world ! (cpp-logger version %s", logger::cpp_logger_version());
+    logger_1->info("Hello, world ! (cpp-logger version %s)", logger::cpp_logger_version());
     logger::logger_ptr logger_2 = logger::get<logger::syslog_sink>("syslog");
 }
 
+/** This a sample specialized sink.
+ *
+ */
 class slog_sink: public logger::sink {
 public:
 
+    /** Setup QNX's system log access.
+     *
+     * @param opcode
+     */
     explicit slog_sink(int opcode): logger::sink{"slog","app", logger::log_level::info}, _opcode{opcode}{
         // intentional
     }
 
+    /** Send something to QNX's system log.
+     *
+     * @param level message's level
+     * @param fmt a printf like format string.
+     * @param ... format string parameters (like in printf)
+     */
     void write(logger::log_level level, const char *fmt, ...) override {
 
         logger::log_level target_level =  this->level(); // level's accessor is threadsafe
