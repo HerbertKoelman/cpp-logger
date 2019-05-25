@@ -60,7 +60,7 @@ namespace logger {
              * @param keyword related keyword (default is *user*)
              * @param description falicity description.
              */
-            constexpr facility(facility_code code, const char *keyword, const char *description )
+            constexpr facility(facility_code code, const char *keyword, const char *description ) noexcept
               : _code(code), _keyword(keyword), _description(description) {
                 // intentional...
             }
@@ -69,8 +69,8 @@ namespace logger {
 
         private:
             const facility_code _code;
-            const char   *_keyword;
-            const char   *_description;
+            const char         *_keyword;
+            const char         *_description;
         };
 
         /* Create constant standard facility instances */

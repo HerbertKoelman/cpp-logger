@@ -29,7 +29,7 @@ namespace logger {
          *
          * @param message an error message (default is "logger failed")
          */
-        logger_exception( const std::string &message = "logger failed" );
+        explicit logger_exception( const std::string &message = "logger failed" );
 
         virtual ~logger_exception(){
             // intentional
@@ -52,7 +52,7 @@ namespace logger {
         *
         * @param message an error message (default is "sink failed")
         */
-        sink_exception( const std::string &message = "sink failed" );
+        explicit sink_exception( const std::string &message = "sink failed" );
 
     };
 

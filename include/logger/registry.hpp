@@ -60,6 +60,15 @@ namespace logger {
      */
     void set_program_name(const std::string &pname);
 
+    /**
+     * Empty registry logger map.
+     *
+     * > **WARN** a all registered logger were removed from the registry map.
+     *
+     * @see logger::registry#reset()
+     */
+    void reset_registry() ;
+
     /** The registry is a map of loggers.
      *
      * It makes it possible to re-use pre-existing loggers. each logger is indexed by it's name and type (sink). When a
@@ -168,7 +177,7 @@ namespace logger {
           return logger;
         };
 
-        ~registry();
+        ~registry() = default;
 
       private:
 
@@ -183,7 +192,7 @@ namespace logger {
 
         /** registry instance is a singleton and MUST be create through a factory.
          */
-        registry();
+        registry() noexcept ;
 
 #if __IBMCPP_TR1__ // NOSONAR this macro is set with the compiler command line argumen
         std::tr1::unordered_map <std::string, logger_ptr> _loggers; //!< known loggers
