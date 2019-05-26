@@ -2,14 +2,14 @@
  * logger::registry - herbert koelman
  */
 
-#include <memory>
-#include <string>
+#include <memory> // std::unique_ptr, std::make_unique
+#include <string> // std::string
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
 #include <unordered_map>
 
-#include <mutex>
+#include <mutex> // std::mutex
 
 #include "logger/definitions.hpp"
 #include <logger/logger.hpp>
@@ -81,7 +81,7 @@ namespace logger {
 
         /** @return registry singleton
          */
-        static registry &instance();
+        static registry &instance() ;
 
         /** unregister/remove an existing logger
          *
@@ -178,6 +178,7 @@ namespace logger {
         };
 
         ~registry() = default;
+        // ~registry() { std::cout << "DEBUG delete registry..." << std::endl ; };
 
       private:
 
@@ -204,7 +205,7 @@ namespace logger {
         log_level      _level; //!< used when new logger instances are created by the regsitry
         std::string    _pname;
 
-        static registry       _registry; //!< singleton
+        static std::unique_ptr<registry>       _registry; //!< singleton
     };
 
     /* IT IS not possible to forward declare method of a class. Therefore this function MUST implemented after the

@@ -11,7 +11,7 @@ namespace logger {
 
     /** singleton
      */
-    registry       registry::_registry = registry();
+    std::unique_ptr<registry>  registry::_registry{new registry()};
 
     logger_ptr get(const std::string &name) {
 
@@ -37,7 +37,7 @@ namespace logger {
     // Registry implementation ------------------------------------------------------
     //
     registry &registry::instance() {
-        return _registry;
+        return *_registry;
     }
 
     void registry::set_program_name(const std::string &pname) {
@@ -99,6 +99,7 @@ namespace logger {
 
     registry::registry() noexcept : _level(log_levels::info), _pname("program") {
         // intentional...
+        //std::cout << "DEBUG Create regsistry instance..." << std::endl;
     }
 
 } // namespace logger
