@@ -50,11 +50,6 @@ namespace logger {
         _lag = buffer;
     };
 
-// TODO remove this
-//    file_sink::~file_sink() {
-//        //fflush(_file_descriptor);
-//    };
-
     void file_sink::set_name(const std::string &name) {
         sink::set_name(name);
 

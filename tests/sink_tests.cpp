@@ -117,6 +117,20 @@ public:
         // intentional
     }
 
+    template<typename... Args> void write (logger::log_level level, const std::string &fmt, const Args&... args){
+
+
+        std::cout << "Hello" << std::endl;
+
+        std::string ecid = this->ecid(); // get current value once.
+        std::string pattern = "[L SUBSYS=" + name() + "] %s " + fmt ;
+
+        std::printf(
+                pattern.c_str(),
+                ecid.empty() ? "" : ecid.c_str(),
+                args...);
+    }
+
     /** Send something to QNX's system log.
      *
      * @param level message's level
@@ -182,6 +196,8 @@ TEST(sink, extend_sink) {
 
     EXPECT_EQ(sink.level(), logger::log_level::info);
     EXPECT_EQ(sink.name(), "slog");
+
+    sink.write(logger::log_level::warning, (std::string)"%s: %d, %s: %ld.\n", "number", 10, "long number", (long) 10000);
 
     logger::logger_ptr logger = logger::get<slog_sink>("slog_test", 0);
     logger->info( "Tada, you're done");
