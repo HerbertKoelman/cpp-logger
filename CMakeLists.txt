@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.11)
 
 project(
   cpp-logger
-  VERSION 2.2.0
+  VERSION 2.2.1
   DESCRIPTION "Simple C++ logger (${GIT_LOG})")
 
 #find_package(Git CONFIG)
@@ -46,7 +46,7 @@ set(LOGGER_SOURCE
         src/exceptions.cpp include/logger/exceptions.hpp)
 
 set(USED_COMPILER_FEATURES
-        cxx_std_17
+        cxx_std_11
         )
 
 # For future use
@@ -88,7 +88,7 @@ find_package(Doxygen REQUIRED dot OPTIONAL_COMPONENTS mscgen dia)
 if (Doxygen_FOUND)
   set(DOXYGEN_EXAMPLE_PATH tests)
   set(DOXYGEN_EXTRACT_ALL yes)
-  set(DOXYGEN_PROJECT_BRIEF "Simple C++ wrapper to pthread functions.")
+  set(DOXYGEN_PROJECT_BRIEF ${PROJECT_DESCRUPTION})
   set(DOXYGEN_USE_MDFILE_AS_MAINPAGE "${CMAKE_SOURCE_DIR}/README.md")
   doxygen_add_docs(doxygen README.md src include COMMENT "generate on-line documentation")
 endif()
@@ -97,6 +97,7 @@ endif()
 #
 install( TARGETS cpp-logger-static cpp-logger-shared DESTINATION lib )
 install( DIRECTORY include DESTINATION include COMPONENT Devel)
+install( DIRECTORY ${PROJECT_BINARY_DIR}/html/ DESTINATION doc/cpp-logger COMPONENT Documentation)
 
 # CPACK ---------------------------------------------------------
 #

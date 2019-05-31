@@ -56,10 +56,6 @@ namespace logger {
          */
         virtual void write(log_level level, const char *fmt, ...) = 0;
 
-        /** dispose of logger instance ressources
-         */
-        virtual ~sink();
-
         /** change the current log level.
          *
          * @param level new logging level
@@ -92,6 +88,10 @@ namespace logger {
          */
         std::string ecid();
 
+        /** dispose of logger instance ressources
+         */
+        virtual ~sink();
+
     protected:
 
         /** new class instance.
@@ -102,7 +102,7 @@ namespace logger {
          * @param pname program name
          * @param level initial log level (defaults to logger::log_level::info)
          */
-        sink(const std::string &name = "default", const std::string &pname = "prog", log_level level = log_levels::info);
+        explicit sink(const std::string &name = "default", const std::string &pname = "prog", log_level level = log_levels::info);
 
         /** @return display name for a given log level
          */
@@ -177,7 +177,7 @@ namespace logger {
          * This sink writes messages in FILE.
          *
          */
-        virtual void write(log_level level, const char *fmt, ...) override ;
+        void write(log_level level, const char *fmt, ...) override ;
 
     protected:
 
@@ -266,10 +266,10 @@ namespace logger {
          * @param pname program name
          * @param level initial log level (defaults to logger::log_levels::info)
          * @param facility syslog facility to use (default is "user")
-         * @param options syslog options
+         * @param options syslog options, the argument is an OR of any of these LOG_CONS, LOG_NDELAY, LOG_NOWAIT, LOG_ODELAY, LOG_PID (this is the default)
          * @throws sink_exception if init went wrong
          */
-        syslog_sink(const std::string &name, const std::string &pname, log_level level, const syslog::facility &facility, int options);
+        syslog_sink(const std::string &name, const std::string &pname, log_level level, const syslog::facility &facility, int options );
 
        /** new instance.
          *
@@ -293,7 +293,7 @@ namespace logger {
          */
         explicit syslog_sink();
 
-        virtual ~syslog_sink();
+        ~syslog_sink() = default ; //override ;
 
         /** \copydoc  sink::write
          *

@@ -11,7 +11,7 @@ namespace logger {
 
     /** singleton
      */
-    registry       registry::_registry = registry();
+    std::unique_ptr<registry>  registry::_registry{new registry()};
 
     logger_ptr get(const std::string &name) {
 
@@ -30,10 +30,14 @@ namespace logger {
         registry::instance().set_program_name(pname);
     }
 
+    void reset_registry() {
+        registry::instance().reset();
+    }
+
     // Registry implementation ------------------------------------------------------
     //
     registry &registry::instance() {
-        return _registry;
+        return *_registry;
     }
 
     void registry::set_program_name(const std::string &pname) {
@@ -88,12 +92,14 @@ namespace logger {
         _loggers.erase(name);
     }
 
-    registry::registry() : _level(log_levels::info), _pname("program") {
-        // intentional...
+    void registry::reset() {
+        std::lock_guard<std::mutex> lck(_mutex);
+        _loggers.clear();
     }
 
-    registry::~registry() {
+    registry::registry() noexcept : _level(log_levels::info), _pname("program") {
         // intentional...
+        //std::cout << "DEBUG Create regsistry instance..." << std::endl;
     }
 
 } // namespace logger

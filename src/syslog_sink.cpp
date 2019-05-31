@@ -47,7 +47,7 @@ namespace logger {
                 __FILE__,__LINE__);
 #endif
 
-            openlog(pname.c_str(), options, (int)facility.code());
+            openlog(program_name().c_str(), options, (int)facility.code());
 
         } catch ( std::exception &err ){
             throw logger_exception(err.what());
@@ -59,9 +59,9 @@ namespace logger {
         // intentional
     }
 
-    syslog_sink::~syslog_sink() {
-        // intentional
-    };
+//    syslog_sink::~syslog_sink() {
+//        // intentional
+//    };
 
     void syslog_sink::write(log_level level, const char *fmt, ...) {
 #ifdef DEBUG

@@ -65,7 +65,7 @@ namespace logger {
 #ifdef DEBUG
         printf("DEBUG %s _level/level: %d/%d, level name: %s, pattern: [%s] (%s,%d)\n",
             __FUNCTION__,
-            _level,
+            level(),
             level,
             log_level_name(level).c_str(),
             _pattern.c_str(),

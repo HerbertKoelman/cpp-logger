@@ -2,14 +2,14 @@
  * logger::registry - herbert koelman
  */
 
-#include <memory>
-#include <string>
+#include <memory> // std::unique_ptr, std::make_unique
+#include <string> // std::string
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
 #include <unordered_map>
 
-#include <mutex>
+#include <mutex> // std::mutex
 
 #include "logger/definitions.hpp"
 #include <logger/logger.hpp>
@@ -60,6 +60,15 @@ namespace logger {
      */
     void set_program_name(const std::string &pname);
 
+    /**
+     * Empty registry logger map.
+     *
+     * > **WARN** a all registered logger were removed from the registry map.
+     *
+     * @see logger::registry#reset()
+     */
+    void reset_registry() ;
+
     /** The registry is a map of loggers.
      *
      * It makes it possible to re-use pre-existing loggers. each logger is indexed by it's name and type (sink). When a
@@ -72,7 +81,7 @@ namespace logger {
 
         /** @return registry singleton
          */
-        static registry &instance();
+        static registry &instance() ;
 
         /** unregister/remove an existing logger
          *
@@ -168,7 +177,8 @@ namespace logger {
           return logger;
         };
 
-        ~registry();
+        ~registry() = default;
+        // ~registry() { std::cout << "DEBUG delete registry..." << std::endl ; };
 
       private:
 
@@ -183,7 +193,7 @@ namespace logger {
 
         /** registry instance is a singleton and MUST be create through a factory.
          */
-        registry();
+        registry() noexcept ;
 
 #if __IBMCPP_TR1__ // NOSONAR this macro is set with the compiler command line argumen
         std::tr1::unordered_map <std::string, logger_ptr> _loggers; //!< known loggers
@@ -195,7 +205,7 @@ namespace logger {
         log_level      _level; //!< used when new logger instances are created by the regsitry
         std::string    _pname;
 
-        static registry       _registry; //!< singleton
+        static std::unique_ptr<registry>       _registry; //!< singleton
     };
 
     /* IT IS not possible to forward declare method of a class. Therefore this function MUST implemented after the
