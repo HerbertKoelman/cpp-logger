@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.11)
 
 project(
   cpp-logger
-  VERSION 2.3.0
+  VERSION 2.2.2
   DESCRIPTION "Simple C++ logger (${GIT_LOG})")
 
 #find_package(Git CONFIG)
