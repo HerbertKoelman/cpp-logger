@@ -1,5 +1,5 @@
 os: linux
-dist: trusty
+# dist: trusty
 language: cpp
 compiler: gcc
 
@@ -10,10 +10,16 @@ branches:
 
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
       - doxygen
       - graphviz
-   
+      - g++-6
+env:
+  global:
+    - CXX=/usr/bin/g++-6 CC=/usr/bin/gcc-6
+
 script:
   - mkdir cmake-build
   - cd cmake-build && cmake ..
