@@ -1,5 +1,7 @@
 ### What it does
 
+[![Build Status](https://travis-ci.com/HerbertKoelman/cpp-logger.svg?branch=master)](https://travis-ci.com/HerbertKoelman/cpp-logger)
+
 [cpp-logger](https://github.com/HerbertKoelman/cpp-logger) is a set of very simple classes that handles logging. Yes ! I know, 
 yet one more. And you're right.
 
