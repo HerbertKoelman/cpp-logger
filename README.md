@@ -1,6 +1,6 @@
 ### What it does
 
-We use travis [Travis](https://travis-ci.com/HerbertKoelman/cpp-logger) to build and test this work.
+We use [Travis](https://travis-ci.com/HerbertKoelman/cpp-logger) to build and test this work.
 
 [![Build Status](https://travis-ci.com/HerbertKoelman/cpp-logger.svg?branch=master)](https://travis-ci.com/HerbertKoelman/cpp-logger)
 
