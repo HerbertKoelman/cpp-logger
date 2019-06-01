@@ -46,7 +46,7 @@ set(LOGGER_SOURCE
         src/exceptions.cpp include/logger/exceptions.hpp)
 
 set(USED_COMPILER_FEATURES
-        cxx_std_11
+        cxx_std_17
         )
 
 # For future use

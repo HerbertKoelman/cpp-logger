@@ -4,6 +4,8 @@
  */
 #include <logger/cpp-logger.hpp>
 #include "gtest/gtest.h"
+#include <ctime>
+#include <sys/time.h>
 
 TEST(sink, file_sink) {
 
@@ -114,7 +116,30 @@ public:
      * @param opcode
      */
     explicit slog_sink(int opcode): logger::sink{"slog","app", logger::log_level::info}, _opcode{opcode}{
-        // intentional
+
+        char hostname[logger::HOST_NAME_MAX];
+        hostname[0] = 0;
+        gethostname(hostname, logger::HOST_NAME_MAX);
+        _hostname = hostname;
+
+        timeval current_time{0};
+        gettimeofday(&current_time, nullptr);
+
+        struct std::tm local_time{0};
+        localtime_r(&current_time.tv_sec, &local_time);
+
+        char buffer[10];// lag is in the form of "-02:00"
+        memset(buffer, 0, 10);
+
+        int lag = (timezone / 3600) * (-1 * ((local_time.tm_isdst == 1) ? 200 : 100));
+        int hours = lag / 100;
+        int minutes = lag - (hours * 100);
+        snprintf(buffer, 7, "%s%0.2d:%0.2d",
+                 ((lag < 0) ? "-" : "+"),
+                 hours,
+                 minutes
+        );
+        _lag = buffer;
     }
 
     template<typename... Args> void write (logger::log_level level, const std::string &fmt, const Args&... args){
@@ -123,71 +148,53 @@ public:
         std::cout << "Hello" << std::endl;
 
         std::string ecid = this->ecid(); // get current value once.
-        std::string pattern = "[L SUBSYS=" + name() + "] %s " + fmt ;
+        std::string pattern = "<%d> %s %s : [L SUBSYS=" + name() + "] %s " + fmt ;
 
         std::printf(
                 pattern.c_str(),
+                level,
+                date_time().c_str(),
+                _hostname.c_str(),
                 ecid.empty() ? "" : ecid.c_str(),
                 args...);
     }
 
-    /** Send something to QNX's system log.
-     *
-     * @param level message's level
-     * @param fmt a printf like format string.
-     * @param ... format string parameters (like in printf)
-     */
+    const std::string date_time() {
+        int size = 50;
+        char buffer[size];
+        char target[size];
+
+        memset(buffer, 0, size);
+        memset(target, 0, size);
+
+        timeval current_time{0};
+        gettimeofday(&current_time, nullptr);
+        int micros = current_time.tv_usec;
+
+        struct std::tm local_time{0};
+        localtime_r(&current_time.tv_sec, &local_time);
+        snprintf(target, size - 1, "%d-%02d-%02dT%02d:%02d:%02d.%06d%s",
+                 local_time.tm_year + 1900, // tm_year is the number of years from 1900
+                 local_time.tm_mon + 1,   // tm_mon is the month number starting from 0
+                 local_time.tm_mday,
+                 local_time.tm_hour,
+                 local_time.tm_min,
+                 local_time.tm_sec,
+                 micros,
+                 _lag.c_str());
+
+        return std::string(target);
+    }
+
+
     void write(logger::log_level level, const char *fmt, ...) override {
-
-        logger::log_level target_level =  this->level(); // level's accessor is threadsafe
-
-        if (target_level >= level) {
-
-            // fill a buffer with the user message
-            va_list args1;
-            va_list args2;
-
-            va_start(args1, fmt); // initialize va_list
-            va_copy(args2, args1); // save a copy args1 -> args2
-
-            // this call only returns the actual number of bytes needed to store the message.
-            // It doesn't count the needed end-of-string
-            size_t buffer_size = vsnprintf(NULL, 0, fmt, args1) + 1; // plus 1 character to store \0
-            va_end(args1); // don't need this one anymore
-
-            // add one more character to handle \n (see code below)
-            char buffer[buffer_size + 1];
-            memset(buffer, 0, buffer_size + 1);
-
-            // fill buffer with message ...
-            vsnprintf(buffer, buffer_size, fmt, args2);
-            size_t len = strlen(buffer);
-            va_end(args2);
-
-            // add a new line if not already there
-            if (buffer[len - 1] != '\n') {
-                buffer[len] = '\n'; // override ending \0 (that's why we provisioned for one more character above)
-            }
-
-            std::string ecid = this->ecid(); // get current value once.
-            std::string pattern = "[L SUBSYS=" + name() + "] %s %s";
-
-            //slogf(_opcode,
-            //      level,
-            //      _pattern.c_str(),
-            //      ecid.empty() ? "" : ecid.c_str(),
-            //      buffer);
-
-            std::printf(
-                       pattern.c_str(),
-                       ecid.empty() ? "" : ecid.c_str(),
-                       buffer);
-        }
-
+        std::printf("We should pass here !!!\n");
     }
 
 private:
     int         _opcode;
+    std::string _lag;
+    std::string _hostname;
 };
 
 TEST(sink, extend_sink) {
@@ -197,7 +204,7 @@ TEST(sink, extend_sink) {
     EXPECT_EQ(sink.level(), logger::log_level::info);
     EXPECT_EQ(sink.name(), "slog");
 
-    sink.write(logger::log_level::warning, (std::string)"%s: %d, %s: %ld.\n", "number", 10, "long number", (long) 10000);
+    sink.write(logger::log_level::warning, (std::string)"TEMPLATE -->> %s: %d, %s: %ld.\n", "number", 10, "long number", 10000L);
 
     logger::logger_ptr logger = logger::get<slog_sink>("slog_test", 0);
     logger->info( "Tada, you're done");
