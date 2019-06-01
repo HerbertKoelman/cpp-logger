@@ -2,8 +2,6 @@
 
 ### What it does
 
-We use [Travis](https://travis-ci.com/HerbertKoelman/cpp-logger) to build and test this work.
-
 [cpp-logger](https://github.com/HerbertKoelman/cpp-logger) is a set of very simple classes that handles logging. Yes ! I know, 
 one more. And you're right.
 
