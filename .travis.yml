@@ -2,6 +2,11 @@ os: linux
 language: cpp
 compiler: gcc
 
+branches:
+  only:
+    - master
+    - develop
+
 addons:
   apt:
     packages:
@@ -12,4 +17,4 @@ script:
   - mkdir cmake-build
   - cd cmake-build
   - cmake .. 
-  - make all test
+  - make all test 
