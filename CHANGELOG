@@ -1,3 +1,6 @@
+2.3.0:
+- Added a contribution guide (#107)
+- fixed bugs #109, #105
 2.2.1:
 - fix CppCheck and clang-tydy issues (#101,#102)
 2.2.0
