@@ -1,8 +1,14 @@
+# autho: Herbert Koelman
+# created on: 1/6/2019
 os: linux
+
+# use Ubuntu Xenial (version 16)
+# This comes with cmake 3.11 which is required to build GoogleTest
 dist: xenial
 language: cpp
 compiler: gcc
 
+# Run travis on these branches only...
 branches:
   only:
     - master
