@@ -1,11 +1,17 @@
 ### What it does
 
+We use travis [Travis](https://travis-ci.com/HerbertKoelman/cpp-logger) to build and test this work.
+
+[![Build Status](https://travis-ci.com/HerbertKoelman/cpp-logger.svg?branch=master)](https://travis-ci.com/HerbertKoelman/cpp-logger)
+
 [cpp-logger](https://github.com/HerbertKoelman/cpp-logger) is a set of very simple classes that handles logging. Yes ! I know, 
-yet one more. And you're right.
+one more. And you're right.
 
-The library was first implemented for AIX IBM's Unix, on which existing libraries did not compile. So I had to write my own thing. 
+The library was first implemented for AIX IBM's Unix, on which existing libraries did not compile. So I had to write my own thing.
 
-Today, this work is mainly used to train C++ beginners. That's why, I keep maintaining cpp-logger.
+> **FYI** It's still used to log messages by programs that are in production :-)
+
+Today, this library is mainly used to train C++ beginners. That's why, I keep maintaining cpp-logger.
 
 To use this library:
 
