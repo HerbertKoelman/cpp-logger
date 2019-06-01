@@ -1,8 +1,8 @@
 ### What it does
 
-[Travis](https://travis-ci.com/HerbertKoelman/cpp-logger) build status:
-- develop: [![Build Status](https://travis-ci.com/HerbertKoelman/cpp-logger.svg?branch=develop)](https://travis-ci.com/HerbertKoelman/cpp-logger) 
-- master: [![Build Status](https://travis-ci.com/HerbertKoelman/cpp-logger.svg?branch=master)](https://travis-ci.com/HerbertKoelman/cpp-logger)
+We use travis [Travis](https://travis-ci.com/HerbertKoelman/cpp-logger) to build and test this work.
+
+[![Build Status](https://travis-ci.com/HerbertKoelman/cpp-logger.svg?branch=master)](https://travis-ci.com/HerbertKoelman/cpp-logger)
 
 [cpp-logger](https://github.com/HerbertKoelman/cpp-logger) is a set of very simple classes that handles logging. Yes ! I know, 
 one more. And you're right.
