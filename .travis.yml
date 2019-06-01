@@ -1,0 +1,15 @@
+os: linux
+language: cpp
+compiler: gcc
+
+addons:
+  apt:
+    packages:
+      - doxygen
+      - graphviz
+   
+script:
+  - mkdir cmake-build
+  - cd cmake-build
+  - cmake .. 
+  - make all test
