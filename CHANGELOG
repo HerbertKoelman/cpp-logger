@@ -1,3 +1,8 @@
+2.2.2:
+- Added a contribution guide (#107)
+- Limit to master and develop (#104)
+- Activate travis-ci CI (#103)
+- fixed bugs #109, #105
 2.2.1:
 - fix CppCheck and clang-tydy issues (#101,#102)
 2.2.0
