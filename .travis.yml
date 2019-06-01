@@ -1,4 +1,5 @@
 os: linux
+dist: trusty
 language: cpp
 compiler: gcc
 
@@ -15,6 +16,5 @@ addons:
    
 script:
   - mkdir cmake-build
-  - cd cmake-build
-  - cmake .. 
+  - cd cmake-build && cmake ..
   - make all test 
