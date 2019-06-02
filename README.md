@@ -5,7 +5,7 @@
 [cpp-logger](https://github.com/HerbertKoelman/cpp-logger) is a set of very simple classes that handles logging. Yes ! I know, 
 one more. And you're right.
 
-The library was first implemented for IBM's Unix: AIX. Existing libraries did not compile, so I had to write my own thing.
+The library was first implemented for IBM's Unix: AIX. Existing libraries did not compile on AIX, so I had to write my own thing.
 
 > **FYI** It's still used to log messages by programs that are in production :-)
 
@@ -232,7 +232,7 @@ private:
 };
 ```
 
-Now, the sink can be used like any other `logger::sink`, by using the logger factory:
+Now, the sink can be used like any other `logger::sink`:
 ```cpp
 logger::logger_ptr logger = logger::get<slog_sink>("slog_test", _SLOG_SETCODE(1, 0));
 logger->info( "Tada, you're done");
@@ -273,7 +273,6 @@ logger->info("consumer ready to handle incomming messages (status: %s)", "initia
 
 * [Project's home](https://redmine.urbix-software.fr/projects/urbix-cpp-logger)
 * [GitHub home](https://github.com/HerbertKoelman/cpp-logger)
-* [Project's doxygen]()
 
 ### misc
 
