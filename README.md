@@ -5,7 +5,7 @@
 [cpp-logger](https://github.com/HerbertKoelman/cpp-logger) is a set of very simple classes that handles logging. Yes ! I know, 
 one more. And you're right.
 
-The library was first implemented for AIX IBM's Unix, on which existing libraries did not compile. So I had to write my own thing.
+The library was first implemented for IBM's Unix: AIX. Existing libraries did not compile, so I had to write my own thing.
 
 > **FYI** It's still used to log messages by programs that are in production :-)
 
@@ -20,13 +20,11 @@ To use this library:
     $ make install
     ...
 
-> **WARN** your compiler need to support the language standard [C++17](https://en.cppreference.com/w/cpp/compiler_support).
+> **WARN** your compiler need to support the language standard [C++11](https://en.cppreference.com/w/cpp/compiler_support) or higher.
 
-Install moves files into your system's default location for headers and libraries (often /usr/local/include and /usr/local/lib). You can relocate installation by setting CMAKE_INSTALL_PREFIX 
-cmake property.
+Install moves files into your system's default location for headers and libraries (often `/usr/local/include` and `/usr/local/lib`). You can relocate installation by setting the cmake property `CMAKE_INSTALL_PREFIX`.
 
-You can run the provide unit tests with this command `make all tests`. Google test will only display if the tests did run fine or not. If you need more you can find it in 
-`<build-dir>/tests/Testing/Temporary/`. Probably you'll be interested in opening this one : `LastTest.log`.
+Unit tests are provided in `./tests`. You can build and run them with this command `make all tests`. CTest provides full diagnostic in `<build-dir>/tests/Testing/Temporary/`. Probably you'll be interested in opening this one : `LastTest.log`.
      
      $ tail LastTest.log
      ...
@@ -43,7 +41,7 @@ You can run the provide unit tests with this command `make all tests`. Google te
      [ RUN      ] exceptions.facility_exception
      [       OK ] exceptions.facility_exception (0 ms)
      [----------] 4 tests from exceptions (0 ms total)
-     
+     ...
      [----------] Global test environment tear-down
      [==========] 4 tests from 1 test case ran. (0 ms total)
      [  PASSED  ] 4 tests.
@@ -57,7 +55,24 @@ You can run the provide unit tests with this command `make all tests`. Google te
      
      End testing: Apr 22 13:39 CEST
 
-The module come with some performance tests. These tests can be run manualy by issuing a command such as the following:
+Unit tests are using [GoogleTest 1.8.1](https://github.com/google/googletest). The test framework is automatically downloaded and setup by the cmake package `cmake/GTestExtConfig.cmake`.
+
+Doxygen documentation can be generated with this target.
+
+    make doxygen
+
+> Doxygen can be downloaded [here](http://www.doxygen.nl).
+
+Here after a list of build targets usefull to mention:
+- test : run all registered units programs.
+- package: create an archive (tar.gz)
+- doxygen: create doxygen html documentation (in <build-dir>/html)
+
+> Testing can disable by setting the BUILD_TESTS option to false.
+
+### Performance
+
+You can check performance with `./logger_performance_tests`:
      
      $ time ./logger_performance_tests --gtest_filter=logger_performance.stdout_sink
      ...
@@ -77,27 +92,6 @@ The module come with some performance tests. These tests can be run manualy by i
      sys	0m0.026s
 
 On my Mac Mini, the performance tests shows that I can write 10000 log entries in 157 ms (around 62000 entries/s).
-
-Doxygen documentation can be generated with this target.
-
-    make doxygen
-
-> Doxygen can be downloaded [here](http://www.stack.nl/~dimitri/doxygen/index.html).
-
-The package comes with some unit testing that are built and can be run through the target **test**. The tests are depending 
-on [GoogleTest 1.8.1](https://github.com/google/googletest), the package is automatically downloaded using the CMake 
-script `cmake/GTestExtConfig.cmake`. This means you need to have access to the Internet. So if that's not an option, you can 
-disable testing by setting the option `BUILD_TESTS` to **no** like this:
-
-    mkdir build
-    cd build
-    cmake -DBUILD_TESTS=no .. && make all
-    make install
-
-Here after a list of build targets usefull to mention:
-- test : run all registered units programs.
-- package: create an archive (tar.gz)
-- doxygen: create doxygen html documentation (in <build-dir>/html)
 
 The library has been tested on:
 - Mac OS X
@@ -146,7 +140,7 @@ The logger factory functions:
 - `template logger::get<>(name, args...)` 
 - `logger::get(name)`
 
-These functions known how to create a new instance and register created one for future reuse (using `logger::regisrty::add`). The factory
+These factories know how to create a new instance and register them for reuse (using `logger::regisrty::add`). The factory
 automatically sets:
 - the program name property of the sink
 - the current logging level.
@@ -169,9 +163,9 @@ log->info("Hello, world..."); // This it not displayed as log level was set to a
 
 The library is devided into two parts:
 1. One that is ment for the library users, people that just want log things.
-1. Another that is in charge of dump messages somewhere.
+2. Another that is in charge of dump messages somewhere.
 
-The first need is adressed through the `logger::logger`interface and the factory methods. The second need is addressed by 
+The first part is adressed through the `logger::logger`interface and the factory methods. The second is addressed by 
 extending the abstract class `logger::sink`.
 
 Let's say you need to write messages using QNX's system logger facility. On QNX, logging is done by calling the [`slogf(...)`](http://www.qnx.com/developers/docs/6.3.0SP3/neutrino/lib_ref/s/slogf.html)
@@ -180,7 +174,7 @@ function. This function is expecting the following parameters:
 2. *severity*: The severity of the log message; see "Severity levels," below.
 3. *fmt*: A standard printf() string followed by printf() arguments.
 
-You might consider writing a sink that would look like this:
+You can extend `cpp-logger` by writing a sink that would look like this:
 ```cpp
 class slog_sink: public logger::sink {
 public:
@@ -238,7 +232,7 @@ private:
 };
 ```
 
-Now, this class can be instanciated and registred, like any other `logger::sink`, by using a logger factory:
+Now, the sink can be used like any other `logger::sink`, by using the logger factory:
 ```cpp
 logger::logger_ptr logger = logger::get<slog_sink>("slog_test", _SLOG_SETCODE(1, 0));
 logger->info( "Tada, you're done");
