@@ -109,15 +109,21 @@ The library has been tested on:
       - Command: time ./logger_performance_tests > /dev/null
       - Result: 0m0,272s (user: 0m0,128s,sys:0m0,031s)
 - Fedora Linux
-  - Compiler: 8.3.1 20190223 (Red Hat 8.3.1-2)
+  - Compiler: GCC 8.3.1 20190223 (Red Hat 8.3.1-2)
   - OS version: 4.20.16-100.fc28.x86_64
   - Performance: 
     - CPU: Intel(R) Celeron(R) 2957U @ 1.40GHz
     - Memory: 8GB
     - Command: time ./logger_performance_tests > /dev/null
     - Result: 0m0,249s (user: 0m0,172s,sys:0m0,056s)
-  
-> Coming soon, performance feedback on Ubuntu (32bits) 16 workstation.  
+- Ubuntu Linux
+  - Compiler: GCC 5.4.0-6 20160609 (Ubuntu Xenial)
+  - OS version: 4.15.0-48-generic #51~16.04.1-Ubuntu
+  - Performance: 
+    - CPU: Intel(R) Core(TM) i5-7300U CPU @ 2.60GHz
+    - Memory: 5GB
+    - Command: time ./logger_performance_tests > /dev/null
+    - Result: 0m0.846s (user: 0m0.313s, sys: 0m0.074s)
 
 ### How it's done
 
