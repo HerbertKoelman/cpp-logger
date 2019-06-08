@@ -31,6 +31,6 @@ script:
 
 # create coveralls.io report
 after_success:
-  - coveralls --exclude googletest-build --exclude googletest-download --exclude googletest-src --exclude lib --gcov-options '\-lp'
+  - coveralls --root CMakeFiles --exclude googletest-build --exclude googletest-download --exclude googletest-src --exclude lib --gcov-options '\-m \-lp'
 
     
