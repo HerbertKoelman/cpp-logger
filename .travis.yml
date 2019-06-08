@@ -8,6 +8,10 @@ dist: xenial
 language: cpp
 compiler: gcc
 
+# install things for coverall.io
+before_install:
+  - pip install --user cpp-coveralls
+  
 # Run travis on these branches only...
 branches:
   only:
@@ -22,5 +26,11 @@ addons:
 
 script:
   - mkdir cmake-build
-  - cd cmake-build && cmake ..
+  - cd cmake-build && cmake -DGCOV=yes ..
   - make all test 
+
+# create coveralls.io report
+after_success:
+  - coveralls --root CMakeFiles/cpp-logger-static.dir/
+
+    
