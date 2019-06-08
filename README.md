@@ -237,6 +237,85 @@ libraries provided. The package contains :
 
 #### Using GCOV and LCOV
 
+You can generate coverage infos by using the GCOV option. When passed to cmake, it will build the code (and the unit tests) using the `--coverage`flag. It will also add the gcov library to 
+the test programs setup.
+
+```
+$ cmake -DGCOV=yes ..
+...
+$ make all test
+```
+
+These commands will build and generate gcov related informations. These files are suffixed with `gcda`and `gcno`. These gcov files can now be used by lcov to generate the coverage reports this way:
+
+```
+$ lcov --directory CMakeFiles/cpp-logger-static.dir/src/ --capture --output-file coverage.info
+Capturing coverage data from CMakeFiles/cpp-logger-static.dir/src/
+Found gcov version: 8.3.1
+Scanning CMakeFiles/cpp-logger-static.dir/src/ for .gcda files ...
+Found 10 data files in CMakeFiles/cpp-logger-static.dir/src/
+Processing src/file_sink.cpp.gcda
+Processing src/exceptions.cpp.gcda
+Processing src/syslog_sink.cpp.gcda
+Processing src/stdout_sink.cpp.gcda
+Processing src/stderr_sink.cpp.gcda
+Processing src/sink.cpp.gcda
+Processing src/registry.cpp.gcda
+Processing src/logger.cpp.gcda
+Processing src/facilities.cpp.gcda
+Processing src/cpp-logger.cpp.gcda
+Finished .info-file creation
+```
+
+The command `lcov --summary coverage.info` displays the coverage information. As you can see this include the system header files. To limit the report to your code you can remove unwanted coverage information by using the command `lcov` like this:
+```
+$ lcov --remove coverage.info '/usr/*' --output-file coverage.info
+Reading tracefile coverage.info
+Removing /usr/include/c++/8/atomic
+Removing /usr/include/c++/8/bits/alloc_traits.h
+Removing /usr/include/c++/8/bits/allocator.h
+Removing /usr/include/c++/8/bits/basic_string.h
+...
+Removing /usr/include/c++/8/tuple
+Removing /usr/include/c++/8/utility
+Removing /usr/include/c++/8/x86_64-redhat-linux/bits/gthr-default.h
+Deleted 30 files
+Writing data to coverage.info
+Summary coverage rate:
+  lines......: 75.6% (214 of 283 lines)
+  functions..: 76.6% (49 of 64 functions)
+  branches...: no data found
+```
+
+The above command removed everything that comes from the `/usr/*`directory. The final report is obtained with `lcov --summary coverage.info`:
+```
+Reading tracefile coverage.info
+                                     |Lines       |Functions  |Branches    
+Filename                             |Rate     Num|Rate    Num|Rate     Num
+===========================================================================
+[/shared/home/herbert/c++/cpp-logger/]
+include/logger/exceptions.hpp        | 0.0%      6| 0.0%     2|    -      0
+include/logger/facilities.hpp        |33.3%      6|33.3%     3|    -      0
+include/logger/registry.hpp          | 5.9%     17|33.3%     3|    -      0
+include/logger/sinks.hpp             | 100%      3| 100%     3|    -      0
+src/cpp-logger.cpp                   | 100%      2| 100%     1|    -      0
+src/exceptions.cpp                   | 0.0%      6| 0.0%     3|    -      0
+src/facilities.cpp                   | 100%      3| 100%     1|    -      0
+src/file_sink.cpp                    |95.1%     61|80.0%     5|    -      0
+src/logger.cpp                       | 100%     27| 100%     9|    -      0
+src/registry.cpp                     |83.0%     47|78.6%    14|    -      0
+src/sink.cpp                         |53.1%     49|80.0%    10|    -      0
+src/stderr_sink.cpp                  | 100%      6| 100%     2|    -      0
+src/stdout_sink.cpp                  | 100%      6| 100%     2|    -      0
+src/syslog_sink.cpp                  |93.2%     44| 100%     6|    -      0
+===========================================================================
+                               Total:|75.6%    283|76.6%    64|    -      0
+```
+
+> **WARN** to use gcov and lcov, you will need to install the related packages (on Fedora `sudo dnf install lcov`)
+
+To get an html report you can use `genhtml -o coverage-report coverage.info`
+
 #### Manually create a logger
 
 A logger instance can be created this way:
