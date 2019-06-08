@@ -31,6 +31,6 @@ script:
 
 # create coveralls.io report
 after_success:
-  - coveralls --root CMakeFiles --exclude googletest-build --exclude googletest-download --exclude googletest-src --exclude lib --gcov-options '\-m \-lp'
+  - echo "PWD: `pwd`" && coveralls --root . -E ".*gtest.*" -E ".*googletest.*"  -E ".*CMakeFiles.*"
 
     
