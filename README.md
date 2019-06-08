@@ -1,15 +1,17 @@
-## cpp-logger [![Build Status](https://travis-ci.com/HerbertKoelman/cpp-logger.svg?branch=master)](https://travis-ci.com/HerbertKoelman/cpp-logger)
+## cpp-logger [![Build Status](https://travis-ci.com/HerbertKoelman/cpp-logger.svg?branch=master)](https://travis-ci.com/HerbertKoelman/cpp-logger) [![Coverage Status](https://coveralls.io/repos/github/HerbertKoelman/cpp-logger/badge.svg?branch=master)](https://coveralls.io/github/HerbertKoelman/cpp-logger?branch=master)
 
 ### What it does
 
 [cpp-logger](https://github.com/HerbertKoelman/cpp-logger) is a set of very simple classes that handles logging. Yes ! I know, 
 one more. And you're right.
 
-The library was first implemented for AIX IBM's Unix, on which existing libraries did not compile. So I had to write my own thing.
+The library was first implemented for IBM's Unix: AIX. Existing libraries did not compile on AIX, so I had to write my own thing.
 
 > **FYI** It's still used to log messages by programs that are in production :-)
 
 Today, this library is mainly used to train C++ beginners. That's why, I keep maintaining cpp-logger.
+
+#### Build
 
 To use this library:
 
@@ -20,44 +22,35 @@ To use this library:
     $ make install
     ...
 
-> **WARN** your compiler need to support the language standard [C++17](https://en.cppreference.com/w/cpp/compiler_support).
+> **WARN** your compiler need to support the language standard [C++11](https://en.cppreference.com/w/cpp/compiler_support) or higher.
 
-Install moves files into your system's default location for headers and libraries (often /usr/local/include and /usr/local/lib). You can relocate installation by setting CMAKE_INSTALL_PREFIX 
-cmake property.
+Install moves files into your system's default location for headers and libraries (often `/usr/local/include` and `/usr/local/lib`). You can relocate installation by setting the cmake property `CMAKE_INSTALL_PREFIX`.
 
-You can run the provide unit tests with this command `make all tests`. Google test will only display if the tests did run fine or not. If you need more you can find it in 
-`<build-dir>/tests/Testing/Temporary/`. Probably you'll be interested in opening this one : `LastTest.log`.
-     
-     $ tail LastTest.log
-     ...
-     Running main() from /Users/herbert/Documents/c++/cpp-logger/cmake-build-release/googletest-src/googletest/src/gtest_main.cc
-     [==========] Running 4 tests from 1 test case.
-     [----------] Global test environment set-up.
-     [----------] 4 tests from exceptions
-     [ RUN      ] exceptions.logger_exception
-     [       OK ] exceptions.logger_exception (0 ms)
-     [ RUN      ] exceptions.logger_exception_message
-     [       OK ] exceptions.logger_exception_message (0 ms)
-     [ RUN      ] exceptions.sink_exception
-     [       OK ] exceptions.sink_exception (0 ms)
-     [ RUN      ] exceptions.facility_exception
-     [       OK ] exceptions.facility_exception (0 ms)
-     [----------] 4 tests from exceptions (0 ms total)
-     
-     [----------] Global test environment tear-down
-     [==========] 4 tests from 1 test case ran. (0 ms total)
-     [  PASSED  ] 4 tests.
-     <end of output>
-     Test time =   0.00 sec
-     ----------------------------------------------------------
-     Test Passed.
-     "sink_tests" end time: Apr 22 13:39 CEST
-     "sink_tests" time elapsed: 00:00:00
-     ----------------------------------------------------------
-     
-     End testing: Apr 22 13:39 CEST
+#### Testing
 
-The module come with some performance tests. These tests can be run manualy by issuing a command such as the following:
+Unit tests are provided in `./tests`. You can build and run them with this command `make all tests`. CTest provides full diagnostic in `<build-dir>/tests/Testing/Temporary/`. We use [GoogleTest 1.8.1](https://github.com/google/googletest). 
+The test framework is automatically downloaded and setup by the cmake package `cmake/GTestExtConfig.cmake`.
+
+> **FYI** unit testing can be switched of with the cmake option BUILD_TESTS (`cmake -DBUILD_TESTS=false .. ` turns things off)
+
+#### Documentation
+
+Doxygen documentation can be generated with this target.
+
+    make doxygen
+
+> Doxygen can be downloaded [here](http://www.doxygen.nl).
+
+Here after a list of build targets usefull to mention:
+- test : run all registered units programs.
+- package: create an archive (tar.gz)
+- doxygen: create doxygen html documentation (in <build-dir>/html)
+
+> Testing can disable by setting the BUILD_TESTS option to false.
+
+### Performance
+
+You can check performance with `./logger_performance_tests`:
      
      $ time ./logger_performance_tests --gtest_filter=logger_performance.stdout_sink
      ...
@@ -78,27 +71,6 @@ The module come with some performance tests. These tests can be run manualy by i
 
 On my Mac Mini, the performance tests shows that I can write 10000 log entries in 157 ms (around 62000 entries/s).
 
-Doxygen documentation can be generated with this target.
-
-    make doxygen
-
-> Doxygen can be downloaded [here](http://www.stack.nl/~dimitri/doxygen/index.html).
-
-The package comes with some unit testing that are built and can be run through the target **test**. The tests are depending 
-on [GoogleTest 1.8.1](https://github.com/google/googletest), the package is automatically downloaded using the CMake 
-script `cmake/GTestExtConfig.cmake`. This means you need to have access to the Internet. So if that's not an option, you can 
-disable testing by setting the option `BUILD_TESTS` to **no** like this:
-
-    mkdir build
-    cd build
-    cmake -DBUILD_TESTS=no .. && make all
-    make install
-
-Here after a list of build targets usefull to mention:
-- test : run all registered units programs.
-- package: create an archive (tar.gz)
-- doxygen: create doxygen html documentation (in <build-dir>/html)
-
 The library has been tested on:
 - Mac OS X
   - Compiler : AppleClang 10.0.1.10010046
@@ -109,15 +81,21 @@ The library has been tested on:
       - Command: time ./logger_performance_tests > /dev/null
       - Result: 0m0,272s (user: 0m0,128s,sys:0m0,031s)
 - Fedora Linux
-  - Compiler: 8.3.1 20190223 (Red Hat 8.3.1-2)
+  - Compiler: GCC 8.3.1 20190223 (Red Hat 8.3.1-2)
   - OS version: 4.20.16-100.fc28.x86_64
   - Performance: 
     - CPU: Intel(R) Celeron(R) 2957U @ 1.40GHz
     - Memory: 8GB
     - Command: time ./logger_performance_tests > /dev/null
     - Result: 0m0,249s (user: 0m0,172s,sys:0m0,056s)
-  
-> Coming soon, performance feedback on Ubuntu (32bits) 16 workstation.  
+- Ubuntu Linux
+  - Compiler: GCC 5.4.0-6 20160609 (Ubuntu Xenial)
+  - OS version: 4.15.0-48-generic #51~16.04.1-Ubuntu
+  - Performance: 
+    - CPU: Intel(R) Core(TM) i5-7300U CPU @ 2.60GHz
+    - Memory: 5GB
+    - Command: time ./logger_performance_tests > /dev/null
+    - Result: 0m0.846s (user: 0m0.313s, sys: 0m0.074s)
 
 ### How it's done
 
@@ -146,7 +124,7 @@ The logger factory functions:
 - `template logger::get<>(name, args...)` 
 - `logger::get(name)`
 
-These functions known how to create a new instance and register created one for future reuse (using `logger::regisrty::add`). The factory
+These factories know how to create a new instance and register them for reuse (using `logger::regisrty::add`). The factory
 automatically sets:
 - the program name property of the sink
 - the current logging level.
@@ -169,9 +147,9 @@ log->info("Hello, world..."); // This it not displayed as log level was set to a
 
 The library is devided into two parts:
 1. One that is ment for the library users, people that just want log things.
-1. Another that is in charge of dump messages somewhere.
+2. Another that is in charge of dump messages somewhere.
 
-The first need is adressed through the `logger::logger`interface and the factory methods. The second need is addressed by 
+The first part is adressed through the `logger::logger`interface and the factory methods. The second is addressed by 
 extending the abstract class `logger::sink`.
 
 Let's say you need to write messages using QNX's system logger facility. On QNX, logging is done by calling the [`slogf(...)`](http://www.qnx.com/developers/docs/6.3.0SP3/neutrino/lib_ref/s/slogf.html)
@@ -180,7 +158,7 @@ function. This function is expecting the following parameters:
 2. *severity*: The severity of the log message; see "Severity levels," below.
 3. *fmt*: A standard printf() string followed by printf() arguments.
 
-You might consider writing a sink that would look like this:
+You can extend `cpp-logger` by writing a sink that would look like this:
 ```cpp
 class slog_sink: public logger::sink {
 public:
@@ -238,7 +216,7 @@ private:
 };
 ```
 
-Now, this class can be instanciated and registred, like any other `logger::sink`, by using a logger factory:
+Now, the sink can be used like any other `logger::sink`:
 ```cpp
 logger::logger_ptr logger = logger::get<slog_sink>("slog_test", _SLOG_SETCODE(1, 0));
 logger->info( "Tada, you're done");
@@ -279,7 +257,6 @@ logger->info("consumer ready to handle incomming messages (status: %s)", "initia
 
 * [Project's home](https://redmine.urbix-software.fr/projects/urbix-cpp-logger)
 * [GitHub home](https://github.com/HerbertKoelman/cpp-logger)
-* [Project's doxygen]()
 
 ### misc
 
