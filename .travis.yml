@@ -31,6 +31,6 @@ script:
 
 # create coveralls.io report
 after_success:
-  - echo "PWD: `pwd`" && coveralls --root . -E ".*gtest.*" -E ".*googletest.*"  -E ".*CMakeFiles.*"
+  - coveralls --root . -E ".*gtest.*" -E ".*googletest.*"  -E ".*CMakeFiles.*" && echo "PWD: `pwd`"
 
     
