@@ -235,6 +235,8 @@ libraries provided. The package contains :
 
 ### Misc
 
+#### Using GCOV and LCOV
+
 #### Manually create a logger
 
 A logger instance can be created this way:
