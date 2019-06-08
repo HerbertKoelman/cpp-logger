@@ -1,3 +1,6 @@
+2.2.3:
+- setup caveralls.io repoprting (#114 -> this doesn't work it's too buggy)
+- added GCOV option (#115)
 2.2.2:
 - Added a contribution guide (#107)
 - Limit to master and develop (#104)
