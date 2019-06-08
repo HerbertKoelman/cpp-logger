@@ -246,7 +246,7 @@ $ cmake -DGCOV=yes ..
 $ make all test
 ```
 
-These commands will build and generate gcov related informations. These files are suffixed with `gcda`and `gcno`. These gcov files can now be used by lcov to generate the coverage reports this way:
+These commands will build and generate gcov related informations. These files are suffixed with `gcda`and `gcno` and will be used by the lcov command to report.
 
 ```
 $ lcov --directory CMakeFiles/cpp-logger-static.dir/src/ --capture --output-file coverage.info
@@ -267,14 +267,11 @@ Processing src/cpp-logger.cpp.gcda
 Finished .info-file creation
 ```
 
-The command `lcov --summary coverage.info` displays the coverage information. As you can see this include the system header files. To limit the report to your code you can remove unwanted coverage information by using the command `lcov` like this:
+The command `lcov --summary coverage.info` displays the coverage information. As you can see, this include the system header files. To limit the report to your code, you can remove unwanted coverage information by using the command `lcov` like this:
 ```
 $ lcov --remove coverage.info '/usr/*' --output-file coverage.info
 Reading tracefile coverage.info
 Removing /usr/include/c++/8/atomic
-Removing /usr/include/c++/8/bits/alloc_traits.h
-Removing /usr/include/c++/8/bits/allocator.h
-Removing /usr/include/c++/8/bits/basic_string.h
 ...
 Removing /usr/include/c++/8/tuple
 Removing /usr/include/c++/8/utility
@@ -287,7 +284,7 @@ Summary coverage rate:
   branches...: no data found
 ```
 
-The above command removed everything that comes from the `/usr/*`directory. The final report is obtained with `lcov --summary coverage.info`:
+The above command removed everything that comes from the `/usr/*`directory. The final report is obtained with `lcov --summary coverage.info` or `lcov --list coverage.info`:
 ```
 Reading tracefile coverage.info
                                      |Lines       |Functions  |Branches    
@@ -314,7 +311,7 @@ src/syslog_sink.cpp                  |93.2%     44| 100%     6|    -      0
 
 > **WARN** to use gcov and lcov, you will need to install the related packages (on Fedora `sudo dnf install lcov`)
 
-To get an html report you can use `genhtml -o coverage-report coverage.info`
+To get an html report, you can use `genhtml -o coverage-report coverage.info`. This will generate HMLT in the directory specified with the `-o`command line option.
 
 #### Manually create a logger
 
