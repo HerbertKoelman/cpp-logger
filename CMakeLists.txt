@@ -10,9 +10,13 @@ project(
   DESCRIPTION "Simple C++ logger (${GIT_LOG})")
 
 option(GCOV "Activate GCOV options")
-if (GCOV AND ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"))
-  message(STATUS "Setting GCOV compiler options")
-  add_compile_options(--coverage)
+if (GCOV )
+  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    message(STATUS "Setting GCOV compiler options")
+    add_compile_options(--coverage)
+  else()
+    message(SEND_ERROR "The GCOV option is only supported when using GNU...")
+  endif()
 endif()
 
 #find_package(Git CONFIG)

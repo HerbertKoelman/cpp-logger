@@ -31,7 +31,6 @@ script:
 
 # create coveralls.io report
 after_success:
-  - pwd
   - coveralls --root CMakeFiles/cpp-logger-static.dir/
 
     
