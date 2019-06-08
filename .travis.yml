@@ -31,6 +31,7 @@ script:
 
 # create coveralls.io report
 after_success:
-  - coveralls --root . -E ".*gtest.*" -E ".*googletest.*"  -E ".*CMakeFiles.*" && echo "PWD: `pwd`"
+  - pwd
+  - coveralls --root CMakeFiles/cpp-logger-static.dir/
 
     
