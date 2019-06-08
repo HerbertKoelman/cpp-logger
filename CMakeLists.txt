@@ -9,6 +9,12 @@ project(
   VERSION 2.2.2
   DESCRIPTION "Simple C++ logger (${GIT_LOG})")
 
+option(GCOV "Activate GCOV options")
+if (GCOV AND ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"))
+  message(STATUS "Setting GCOV compiler options")
+  add_compile_options(--coverage)
+endif()
+
 #find_package(Git CONFIG)
 #find_package(Conan)
 
