@@ -11,6 +11,8 @@ The library was first implemented for IBM's Unix: AIX. Existing libraries did no
 
 Today, this library is mainly used to train C++ beginners. That's why, I keep maintaining cpp-logger.
 
+#### Build
+
 To use this library:
 
     $ mkdir build
@@ -24,38 +26,14 @@ To use this library:
 
 Install moves files into your system's default location for headers and libraries (often `/usr/local/include` and `/usr/local/lib`). You can relocate installation by setting the cmake property `CMAKE_INSTALL_PREFIX`.
 
-Unit tests are provided in `./tests`. You can build and run them with this command `make all tests`. CTest provides full diagnostic in `<build-dir>/tests/Testing/Temporary/`. Probably you'll be interested in opening this one : `LastTest.log`.
-     
-     $ tail LastTest.log
-     ...
-     Running main() from /Users/herbert/Documents/c++/cpp-logger/cmake-build-release/googletest-src/googletest/src/gtest_main.cc
-     [==========] Running 4 tests from 1 test case.
-     [----------] Global test environment set-up.
-     [----------] 4 tests from exceptions
-     [ RUN      ] exceptions.logger_exception
-     [       OK ] exceptions.logger_exception (0 ms)
-     [ RUN      ] exceptions.logger_exception_message
-     [       OK ] exceptions.logger_exception_message (0 ms)
-     [ RUN      ] exceptions.sink_exception
-     [       OK ] exceptions.sink_exception (0 ms)
-     [ RUN      ] exceptions.facility_exception
-     [       OK ] exceptions.facility_exception (0 ms)
-     [----------] 4 tests from exceptions (0 ms total)
-     ...
-     [----------] Global test environment tear-down
-     [==========] 4 tests from 1 test case ran. (0 ms total)
-     [  PASSED  ] 4 tests.
-     <end of output>
-     Test time =   0.00 sec
-     ----------------------------------------------------------
-     Test Passed.
-     "sink_tests" end time: Apr 22 13:39 CEST
-     "sink_tests" time elapsed: 00:00:00
-     ----------------------------------------------------------
-     
-     End testing: Apr 22 13:39 CEST
+#### Testing
 
-Unit tests are using [GoogleTest 1.8.1](https://github.com/google/googletest). The test framework is automatically downloaded and setup by the cmake package `cmake/GTestExtConfig.cmake`.
+Unit tests are provided in `./tests`. You can build and run them with this command `make all tests`. CTest provides full diagnostic in `<build-dir>/tests/Testing/Temporary/`. We use [GoogleTest 1.8.1](https://github.com/google/googletest). 
+The test framework is automatically downloaded and setup by the cmake package `cmake/GTestExtConfig.cmake`.
+
+> **FYI** unit testing can be switched of with the cmake option BUILD_TESTS (`cmake -DBUILD_TESTS=false .. ` turns things off)
+
+#### Documentation
 
 Doxygen documentation can be generated with this target.
 
