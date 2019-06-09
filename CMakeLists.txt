@@ -6,11 +6,11 @@ cmake_minimum_required(VERSION 3.11)
 
 project(
   cpp-logger
-  VERSION 2.2.3
+  VERSION 2.2.4
   DESCRIPTION "Simple C++ logger (${GIT_LOG})")
 
 option(GCOV "Activate GCOV options")
-if (GCOV )
+if ( GCOV )
   if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     message(STATUS "Setting GCOV compiler options")
     add_compile_options(--coverage)

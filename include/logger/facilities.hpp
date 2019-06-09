@@ -54,7 +54,7 @@ namespace logger {
                 return _description;
             }
 
-            /** New syslog faiclity instance.
+            /** New syslog facility instance.
              *
              * @param code type of program that is logging the message (default is *1*)
              * @param keyword related keyword (default is *user*)
