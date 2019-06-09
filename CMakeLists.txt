@@ -10,7 +10,7 @@ project(
   DESCRIPTION "Simple C++ logger (${GIT_LOG})")
 
 option(GCOV "Activate GCOV options")
-if (GCOV )
+if ( GCOV )
   if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     message(STATUS "Setting GCOV compiler options")
     add_compile_options(--coverage)
