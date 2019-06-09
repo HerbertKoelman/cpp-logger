@@ -8,10 +8,9 @@ dist: xenial
 language: cpp
 compiler: gcc
 
-# install things for coverall.io
-before_install:
-  - pip install --user cpp-coveralls
-  
+env:
+  CODECOV_TOKEN="6fa05a9c-1a01-4123-b726-d493275017cd"
+
 # Run travis on these branches only...
 branches:
   only:
@@ -29,8 +28,8 @@ script:
   - cd cmake-build && cmake -DGCOV=yes ..
   - make all test 
 
-# create coveralls.io report
 after_success:
-  - coveralls --root CMakeFiles/cpp-logger-static.dir/
-
-    
+  # create gcov files
+  - find ./CMakeFiles/ -type f -name "*.gcno" -exec gcov {} -m \;
+  # upload data to codecav
+  - bash <(curl -s https://codecov.io/bash)
