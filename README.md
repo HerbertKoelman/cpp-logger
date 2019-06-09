@@ -1,4 +1,4 @@
-## cpp-logger [![Build Status](https://travis-ci.com/HerbertKoelman/cpp-logger.svg?branch=master)](https://travis-ci.com/HerbertKoelman/cpp-logger) [![Coverage Status](https://coveralls.io/repos/github/HerbertKoelman/cpp-logger/badge.svg?branch=master)](https://coveralls.io/github/HerbertKoelman/cpp-logger?branch=master) [![codecov](https://codecov.io/gh/HerbertKoelman/cpp-logger/branch/master/graph/badge.svg)](https://codecov.io/gh/HerbertKoelman/cpp-logger)
+## cpp-logger [![Build Status](https://travis-ci.com/HerbertKoelman/cpp-logger.svg?branch=master)](https://travis-ci.com/HerbertKoelman/cpp-logger) [![codecov](https://codecov.io/gh/HerbertKoelman/cpp-logger/branch/master/graph/badge.svg)](https://codecov.io/gh/HerbertKoelman/cpp-logger)
 
 ### What it does
 
