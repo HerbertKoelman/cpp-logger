@@ -26,10 +26,15 @@ To use this library:
 
 Install moves files into your system's default location for headers and libraries (often `/usr/local/include` and `/usr/local/lib`). You can relocate installation by setting the cmake property `CMAKE_INSTALL_PREFIX`.
 
+Here after a list of build targets usefull to mention:
+- test : run all registered units programs.
+- package: create an archive (tar.gz)
+- doxygen: create doxygen html documentation (in <build-dir>/html)
+
 #### Testing
 
 Unit tests are provided in `./tests`. You can build and run them with this command `make all tests`. CTest provides full diagnostic in `<build-dir>/tests/Testing/Temporary/`. We use [GoogleTest 1.8.1](https://github.com/google/googletest). 
-The test framework is automatically downloaded and setup by the cmake package `cmake/GTestExtConfig.cmake`.
+The test framework is automatically downloaded and setup by the provided cmake package `cmake/GTestExtConfig.cmake`.
 
 > **FYI** unit testing can be switched of with the cmake option BUILD_TESTS (`cmake -DBUILD_TESTS=false .. ` turns things off)
 
@@ -40,13 +45,6 @@ Doxygen documentation can be generated with this target.
     make doxygen
 
 > Doxygen can be downloaded [here](http://www.doxygen.nl).
-
-Here after a list of build targets usefull to mention:
-- test : run all registered units programs.
-- package: create an archive (tar.gz)
-- doxygen: create doxygen html documentation (in <build-dir>/html)
-
-> Testing can disable by setting the BUILD_TESTS option to false.
 
 ### Performance
 
@@ -109,18 +107,14 @@ Out of the box, the library comes with four `logger::sink` implementations:
   - `logger::stderr_sink`: send/write messages to the standard error stream (`stderr`)
 - `logger::syslog_sink`: send messages to the `syslog` facility, which is in charge of doing whatever must be done with the messages sent by your application.
 
-The library provides a set of factory methods/functions that are in charge of creating and setting up `logger::logger` instances. 
-The above code can be replaced by this:
+Factory methods/functions are in charge of creating and setting up `logger::logger` instances:
 ```cpp
 logger::logger_ptr logger = logger::get<logger::stdout_sink>("consumer-thread");
 
 logger->info("consumer ready to handle incomming messages (status: %s)", "initialized");
 ```
 
-The factory is in charge of setting things up and regsiter new instances. If an instance with the same name has already been created, 
-then the factory returns a shared pointer to that instance.
-
-The logger factory functions:
+The logger factory functions are:
 - `template logger::get<>(name, args...)` 
 - `logger::get(name)`
 
