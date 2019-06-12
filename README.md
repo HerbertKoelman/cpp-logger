@@ -1,4 +1,6 @@
-## cpp-logger [![Build Status](https://travis-ci.com/HerbertKoelman/cpp-logger.svg?branch=master)](https://travis-ci.com/HerbertKoelman/cpp-logger) [![codecov](https://codecov.io/gh/HerbertKoelman/cpp-logger/branch/master/graph/badge.svg)](https://codecov.io/gh/HerbertKoelman/cpp-logger)
+## cpp-logger 
+
+[![Build Status](https://travis-ci.com/HerbertKoelman/cpp-logger.svg?branch=master)](https://travis-ci.com/HerbertKoelman/cpp-logger) [![codecov](https://codecov.io/gh/HerbertKoelman/cpp-logger/branch/master/graph/badge.svg)](https://codecov.io/gh/HerbertKoelman/cpp-logger)
 
 ### What it does
 
@@ -123,7 +125,7 @@ automatically sets:
 - the program name property of the sink
 - the current logging level.
 
-> **WARN** it is possible to create loggers without using the factories, but using factories is our the preferred way.
+> **WARN** it is possible to create loggers without using the factories, but using factories is our preferred way.
 
 The following functions are affecting all the registered loggers.
 - `logger::set_level()`: set the current logging level of all regsitered loggers.
