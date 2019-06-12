@@ -26,10 +26,15 @@ To use this library:
 
 Install moves files into your system's default location for headers and libraries (often `/usr/local/include` and `/usr/local/lib`). You can relocate installation by setting the cmake property `CMAKE_INSTALL_PREFIX`.
 
+Here after a list of build targets usefull to mention:
+- test : run all registered units programs.
+- package: create an archive (tar.gz)
+- doxygen: create doxygen html documentation (in <build-dir>/html)
+
 #### Testing
 
 Unit tests are provided in `./tests`. You can build and run them with this command `make all tests`. CTest provides full diagnostic in `<build-dir>/tests/Testing/Temporary/`. We use [GoogleTest 1.8.1](https://github.com/google/googletest). 
-The test framework is automatically downloaded and setup by the cmake package `cmake/GTestExtConfig.cmake`.
+The test framework is automatically downloaded and setup by the provided cmake package `cmake/GTestExtConfig.cmake`.
 
 > **FYI** unit testing can be switched of with the cmake option BUILD_TESTS (`cmake -DBUILD_TESTS=false .. ` turns things off)
 
@@ -40,13 +45,6 @@ Doxygen documentation can be generated with this target.
     make doxygen
 
 > Doxygen can be downloaded [here](http://www.doxygen.nl).
-
-Here after a list of build targets usefull to mention:
-- test : run all registered units programs.
-- package: create an archive (tar.gz)
-- doxygen: create doxygen html documentation (in <build-dir>/html)
-
-> Testing can disable by setting the BUILD_TESTS option to false.
 
 ### Performance
 
@@ -99,9 +97,9 @@ The library has been tested on:
 
 ### How it's done
 
-The module is made of two distinct parts. On one side, we address the writing of log messages somewhere (`logger::logger`) and 
-on the other side, we provide a set of classes and interfaces that does the actual writting of messages (`logger::sink`). Finally, 
-a way to reuse and share logger instances is provided through a factory (`logger::registry`).
+The module is made of two distinct parts. On one side, we address the writing of log messages through the `logger::logger` interface. And 
+on the other side, we provide a set of classes and interfaces that does the actual writting of messages (`logger::sink`). Finally, a way 
+to reuse instances through factory methods (`logger::registry`).
 
 Out of the box, the library comes with four `logger::sink` implementations:
 - `logger::file_sink`: write messages into a file. The following sinks are extending this class
@@ -109,18 +107,14 @@ Out of the box, the library comes with four `logger::sink` implementations:
   - `logger::stderr_sink`: send/write messages to the standard error stream (`stderr`)
 - `logger::syslog_sink`: send messages to the `syslog` facility, which is in charge of doing whatever must be done with the messages sent by your application.
 
-The library provides a set of factory methods/functions that are in charge of creating and setting up `logger::logger` instances. 
-The above code can be replaced by this:
+Factory methods/functions are in charge of creating and setting up `logger::logger` instances:
 ```cpp
 logger::logger_ptr logger = logger::get<logger::stdout_sink>("consumer-thread");
 
 logger->info("consumer ready to handle incomming messages (status: %s)", "initialized");
 ```
 
-The factory is in charge of setting things up and regsiter new instances. If an instance with the same name has already been created, 
-then the factory returns a shared pointer to that instance.
-
-The logger factory functions:
+The logger factory functions are:
 - `template logger::get<>(name, args...)` 
 - `logger::get(name)`
 
@@ -144,13 +138,6 @@ log->info("Hello, world..."); // This it not displayed as log level was set to a
 ### How to use it
 
 #### Create your own logger sink
-
-The library is devided into two parts:
-1. One that is ment for the library users, people that just want log things.
-2. Another that is in charge of dump messages somewhere.
-
-The first part is adressed through the `logger::logger`interface and the factory methods. The second is addressed by 
-extending the abstract class `logger::sink`.
 
 Let's say you need to write messages using QNX's system logger facility. On QNX, logging is done by calling the [`slogf(...)`](http://www.qnx.com/developers/docs/6.3.0SP3/neutrino/lib_ref/s/slogf.html)
 function. This function is expecting the following parameters:
