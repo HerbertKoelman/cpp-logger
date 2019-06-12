@@ -99,7 +99,7 @@ The library has been tested on:
 
 The module is made of two distinct parts. On one side, we address the writing of log messages somewhere (`logger::logger`) and 
 on the other side, we provide a set of classes and interfaces that does the actual writting of messages (`logger::sink`). Finally, 
-a way to reuse and share logger instances is provided through a factory (`logger::registry`).
+a way to reuse and share logger instances is provided through factory methods (`logger::registry`).
 
 Out of the box, the library comes with four `logger::sink` implementations:
 - `logger::file_sink`: write messages into a file. The following sinks are extending this class
