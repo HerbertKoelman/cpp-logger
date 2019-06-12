@@ -97,9 +97,9 @@ The library has been tested on:
 
 ### How it's done
 
-The module is made of two distinct parts. On one side, we address the writing of log messages somewhere (`logger::logger`) and 
-on the other side, we provide a set of classes and interfaces that does the actual writting of messages (`logger::sink`). Finally, 
-a way to reuse and share logger instances is provided through factory methods (`logger::registry`).
+The module is made of two distinct parts. On one side, we address the writing of log messages through the `logger::logger` interface. And 
+on the other side, we provide a set of classes and interfaces that does the actual writting of messages (`logger::sink`). Finally, a way 
+to reuse instances through factory methods (`logger::registry`).
 
 Out of the box, the library comes with four `logger::sink` implementations:
 - `logger::file_sink`: write messages into a file. The following sinks are extending this class
@@ -138,13 +138,6 @@ log->info("Hello, world..."); // This it not displayed as log level was set to a
 ### How to use it
 
 #### Create your own logger sink
-
-The library is devided into two parts:
-1. One that is ment for the library users, people that just want log things.
-2. Another that is in charge of dump messages somewhere.
-
-The first part is adressed through the `logger::logger`interface and the factory methods. The second is addressed by 
-extending the abstract class `logger::sink`.
 
 Let's say you need to write messages using QNX's system logger facility. On QNX, logging is done by calling the [`slogf(...)`](http://www.qnx.com/developers/docs/6.3.0SP3/neutrino/lib_ref/s/slogf.html)
 function. This function is expecting the following parameters:
