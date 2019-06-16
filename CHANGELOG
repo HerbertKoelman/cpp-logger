@@ -1,3 +1,10 @@
+2.2.4
+  - explain how GCOV and LCOV can be used to get coverage information (#116)
+  - setup codecov (https://codecov.io/gh/HerbertKoelman/cpp-logger/) reporting (#117)
+  - Fixed bugs #118
+2.2.3:
+- setup caveralls.io repoprting (#114 -> this doesn't work it's too buggy)
+- added GCOV option (#115)
 2.2.2:
 - Added a contribution guide (#107)
 - Limit to master and develop (#104)

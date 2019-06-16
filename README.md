@@ -1,15 +1,19 @@
-## cpp-logger [![Build Status](https://travis-ci.com/HerbertKoelman/cpp-logger.svg?branch=master)](https://travis-ci.com/HerbertKoelman/cpp-logger)
+## cpp-logger 
+
+[![Build Status](https://travis-ci.com/HerbertKoelman/cpp-logger.svg?branch=master)](https://travis-ci.com/HerbertKoelman/cpp-logger) [![codecov](https://codecov.io/gh/HerbertKoelman/cpp-logger/branch/master/graph/badge.svg)](https://codecov.io/gh/HerbertKoelman/cpp-logger)
 
 ### What it does
 
 [cpp-logger](https://github.com/HerbertKoelman/cpp-logger) is a set of very simple classes that handles logging. Yes ! I know, 
 one more. And you're right.
 
-The library was first implemented for AIX IBM's Unix, on which existing libraries did not compile. So I had to write my own thing.
+The library was first implemented for IBM's Unix: AIX. Existing libraries did not compile, so I had to write my own thing.
 
 > **FYI** It's still used to log messages by programs that are in production :-)
 
 Today, this library is mainly used to train C++ beginners. That's why, I keep maintaining cpp-logger.
+
+#### Build
 
 To use this library:
 
@@ -20,44 +24,33 @@ To use this library:
     $ make install
     ...
 
-> **WARN** your compiler need to support the language standard [C++17](https://en.cppreference.com/w/cpp/compiler_support).
+> **WARN** your compiler need to support the language standard [C++11](https://en.cppreference.com/w/cpp/compiler_support) or higher.
 
-Install moves files into your system's default location for headers and libraries (often /usr/local/include and /usr/local/lib). You can relocate installation by setting CMAKE_INSTALL_PREFIX 
-cmake property.
+Install moves files into your system's default location for headers and libraries (often `/usr/local/include` and `/usr/local/lib`). You can relocate installation by setting the cmake property `CMAKE_INSTALL_PREFIX`.
 
-You can run the provide unit tests with this command `make all tests`. Google test will only display if the tests did run fine or not. If you need more you can find it in 
-`<build-dir>/tests/Testing/Temporary/`. Probably you'll be interested in opening this one : `LastTest.log`.
-     
-     $ tail LastTest.log
-     ...
-     Running main() from /Users/herbert/Documents/c++/cpp-logger/cmake-build-release/googletest-src/googletest/src/gtest_main.cc
-     [==========] Running 4 tests from 1 test case.
-     [----------] Global test environment set-up.
-     [----------] 4 tests from exceptions
-     [ RUN      ] exceptions.logger_exception
-     [       OK ] exceptions.logger_exception (0 ms)
-     [ RUN      ] exceptions.logger_exception_message
-     [       OK ] exceptions.logger_exception_message (0 ms)
-     [ RUN      ] exceptions.sink_exception
-     [       OK ] exceptions.sink_exception (0 ms)
-     [ RUN      ] exceptions.facility_exception
-     [       OK ] exceptions.facility_exception (0 ms)
-     [----------] 4 tests from exceptions (0 ms total)
-     
-     [----------] Global test environment tear-down
-     [==========] 4 tests from 1 test case ran. (0 ms total)
-     [  PASSED  ] 4 tests.
-     <end of output>
-     Test time =   0.00 sec
-     ----------------------------------------------------------
-     Test Passed.
-     "sink_tests" end time: Apr 22 13:39 CEST
-     "sink_tests" time elapsed: 00:00:00
-     ----------------------------------------------------------
-     
-     End testing: Apr 22 13:39 CEST
+Here after a list of build targets usefull to mention:
+- **test** : run all registered units programs.
+- **package**: create an archive (tar.gz)
+- **doxygen**: create doxygen html documentation (in <build-dir>/html)
 
-The module come with some performance tests. These tests can be run manualy by issuing a command such as the following:
+#### Testing
+
+Unit tests are provided in `./tests`. You can build and run them with this command `make all tests`. CTest provides full diagnostic in `<build-dir>/tests/Testing/Temporary/`. We use [GoogleTest 1.8.1](https://github.com/google/googletest). 
+The test framework is automatically downloaded and setup by the provided cmake package `cmake/GTestExtConfig.cmake`.
+
+> **FYI** unit testing can be switched off by setting option BUILD_TESTS to false (`cmake -DBUILD_TESTS=false .. `)
+
+#### Documentation
+
+Doxygen documentation can be generated with this target.
+
+    make doxygen
+
+> Doxygen can be downloaded [here](http://www.doxygen.nl).
+
+### Performance
+
+You can check performance with `./logger_performance_tests`:
      
      $ time ./logger_performance_tests --gtest_filter=logger_performance.stdout_sink
      ...
@@ -78,27 +71,6 @@ The module come with some performance tests. These tests can be run manualy by i
 
 On my Mac Mini, the performance tests shows that I can write 10000 log entries in 157 ms (around 62000 entries/s).
 
-Doxygen documentation can be generated with this target.
-
-    make doxygen
-
-> Doxygen can be downloaded [here](http://www.stack.nl/~dimitri/doxygen/index.html).
-
-The package comes with some unit testing that are built and can be run through the target **test**. The tests are depending 
-on [GoogleTest 1.8.1](https://github.com/google/googletest), the package is automatically downloaded using the CMake 
-script `cmake/GTestExtConfig.cmake`. This means you need to have access to the Internet. So if that's not an option, you can 
-disable testing by setting the option `BUILD_TESTS` to **no** like this:
-
-    mkdir build
-    cd build
-    cmake -DBUILD_TESTS=no .. && make all
-    make install
-
-Here after a list of build targets usefull to mention:
-- test : run all registered units programs.
-- package: create an archive (tar.gz)
-- doxygen: create doxygen html documentation (in <build-dir>/html)
-
 The library has been tested on:
 - Mac OS X
   - Compiler : AppleClang 10.0.1.10010046
@@ -109,21 +81,26 @@ The library has been tested on:
       - Command: time ./logger_performance_tests > /dev/null
       - Result: 0m0,272s (user: 0m0,128s,sys:0m0,031s)
 - Fedora Linux
-  - Compiler: 8.3.1 20190223 (Red Hat 8.3.1-2)
+  - Compiler: GCC 8.3.1 20190223 (Red Hat 8.3.1-2)
   - OS version: 4.20.16-100.fc28.x86_64
   - Performance: 
     - CPU: Intel(R) Celeron(R) 2957U @ 1.40GHz
     - Memory: 8GB
     - Command: time ./logger_performance_tests > /dev/null
     - Result: 0m0,249s (user: 0m0,172s,sys:0m0,056s)
-  
-> Coming soon, performance feedback on Ubuntu (32bits) 16 workstation.  
+- Ubuntu Linux
+  - Compiler: GCC 5.4.0-6 20160609 (Ubuntu Xenial)
+  - OS version: 4.15.0-48-generic #51~16.04.1-Ubuntu
+  - Performance: 
+    - CPU: Intel(R) Core(TM) i5-7300U CPU @ 2.60GHz
+    - Memory: 5GB
+    - Command: time ./logger_performance_tests > /dev/null
+    - Result: 0m0.846s (user: 0m0.313s, sys: 0m0.074s)
 
 ### How it's done
 
-The module is made of two distinct parts. On one side, we address the writing of log messages somewhere (`logger::logger`) and 
-on the other side, we provide a set of classes and interfaces that does the actual writting of messages (`logger::sink`). Finally, 
-a way to reuse and share logger instances is provided through a factory (`logger::registry`).
+The module is made of two distinct parts. On one side, we address the writing of log messages through the `logger::logger` interface. And 
+on the other side, we provide a set of classes and interfaces that does the actual writting of messages (`logger::sink`).
 
 Out of the box, the library comes with four `logger::sink` implementations:
 - `logger::file_sink`: write messages into a file. The following sinks are extending this class
@@ -131,27 +108,19 @@ Out of the box, the library comes with four `logger::sink` implementations:
   - `logger::stderr_sink`: send/write messages to the standard error stream (`stderr`)
 - `logger::syslog_sink`: send messages to the `syslog` facility, which is in charge of doing whatever must be done with the messages sent by your application.
 
-The library provides a set of factory methods/functions that are in charge of creating and setting up `logger::logger` instances. 
-The above code can be replaced by this:
+The two parts are tied together through factory functions (`logger::registry`).These functions are in charge of creating and setting up `logger::logger` instances.
+
 ```cpp
 logger::logger_ptr logger = logger::get<logger::stdout_sink>("consumer-thread");
 
 logger->info("consumer ready to handle incomming messages (status: %s)", "initialized");
 ```
 
-The factory is in charge of setting things up and regsiter new instances. If an instance with the same name has already been created, 
-then the factory returns a shared pointer to that instance.
-
-The logger factory functions:
+The logger factory functions are:
 - `template logger::get<>(name, args...)` 
 - `logger::get(name)`
 
-These functions known how to create a new instance and register created one for future reuse (using `logger::regisrty::add`). The factory
-automatically sets:
-- the program name property of the sink
-- the current logging level.
-
-> **WARN** it is possible to create loggers without using the factories, but using factories is our the preferred way.
+> **WARN** it is possible to create loggers without using the factories, but factories is our preferred way.
 
 The following functions are affecting all the registered loggers.
 - `logger::set_level()`: set the current logging level of all regsitered loggers.
@@ -160,27 +129,20 @@ The following functions are affecting all the registered loggers.
 ```cpp
 logger::set_level(logger::log_level::alert); // from now on, all loggers will only display alert messages or above.
 
-log->info("Hello, world..."); // This it not displayed as log level was set to alert and above.
+log->info("Hello, world..."); // This is not displayed, as log level was set to alert and above.
 ```
  
 ### How to use it
 
 #### Create your own logger sink
 
-The library is devided into two parts:
-1. One that is ment for the library users, people that just want log things.
-1. Another that is in charge of dump messages somewhere.
-
-The first need is adressed through the `logger::logger`interface and the factory methods. The second need is addressed by 
-extending the abstract class `logger::sink`.
-
 Let's say you need to write messages using QNX's system logger facility. On QNX, logging is done by calling the [`slogf(...)`](http://www.qnx.com/developers/docs/6.3.0SP3/neutrino/lib_ref/s/slogf.html)
 function. This function is expecting the following parameters:
-1. *opcode*: A combination of a major and minor code. Create the opcode using the `_SLOG_SETCODE(major, minor)` macro that's defined in <sys/slog.h>. The major and minor codes are defined in <sys/slogcodes.h>.
-2. *severity*: The severity of the log message; see "Severity levels," below.
-3. *fmt*: A standard printf() string followed by printf() arguments.
+1. **opcode**: A combination of a major and minor code. Create the opcode using the `_SLOG_SETCODE(major, minor)` macro that's defined in <sys/slog.h>. The major and minor codes are defined in <sys/slogcodes.h>.
+2. **severity**: The severity of the log message; see "Severity levels," below.
+3. **fmt**: A standard printf() string followed by printf() arguments.
 
-You might consider writing a sink that would look like this:
+All you need is to provide a sink that knows how to handle QNX logging. Your class might look like this:
 ```cpp
 class slog_sink: public logger::sink {
 public:
@@ -238,7 +200,7 @@ private:
 };
 ```
 
-Now, this class can be instanciated and registred, like any other `logger::sink`, by using a logger factory:
+Now, the sink can be used like any other `logger::sink`:
 ```cpp
 logger::logger_ptr logger = logger::get<slog_sink>("slog_test", _SLOG_SETCODE(1, 0));
 logger->info( "Tada, you're done");
@@ -256,6 +218,87 @@ libraries provided. The package contains :
 **More specific exemple will come soon...**
 
 ### Misc
+
+#### Using GCOV and LCOV
+
+You can generate coverage infos by using the GCOV option. When passed to cmake, it will build the code (and the unit testing programs) 
+using the `--coverage` flag. It will also add the gcov library to the test programs setup.
+
+```
+$ cmake -DGCOV=yes ..
+...
+$ make all test
+```
+
+This will build and generate **gcov** related information files (suffixed with `gcda`and `gcno`). These are used by the `lcov` command to create reports.
+
+```
+$ lcov --directory CMakeFiles/cpp-logger-static.dir/src/ --capture --output-file coverage.info
+Capturing coverage data from CMakeFiles/cpp-logger-static.dir/src/
+Found gcov version: 8.3.1
+Scanning CMakeFiles/cpp-logger-static.dir/src/ for .gcda files ...
+Found 10 data files in CMakeFiles/cpp-logger-static.dir/src/
+Processing src/file_sink.cpp.gcda
+Processing src/exceptions.cpp.gcda
+Processing src/syslog_sink.cpp.gcda
+Processing src/stdout_sink.cpp.gcda
+Processing src/stderr_sink.cpp.gcda
+Processing src/sink.cpp.gcda
+Processing src/registry.cpp.gcda
+Processing src/logger.cpp.gcda
+Processing src/facilities.cpp.gcda
+Processing src/cpp-logger.cpp.gcda
+Finished .info-file creation
+```
+
+The command `lcov --summary coverage.info` displays the coverage information. As you can see, this include information concerning system 
+header files. This is probably not something you want.
+
+To limit the report to your code, you can remove unwanted coverage information by using the command `lcov` like this:
+```
+$ lcov --remove coverage.info '/usr/*' --output-file coverage.info
+Reading tracefile coverage.info
+Removing /usr/include/c++/8/atomic
+...
+Removing /usr/include/c++/8/tuple
+Removing /usr/include/c++/8/utility
+Removing /usr/include/c++/8/x86_64-redhat-linux/bits/gthr-default.h
+Deleted 30 files
+Writing data to coverage.info
+Summary coverage rate:
+  lines......: 75.6% (214 of 283 lines)
+  functions..: 76.6% (49 of 64 functions)
+  branches...: no data found
+```
+
+The final report is obtained with `lcov --summary coverage.info` or `lcov --list coverage.info`:
+```
+Reading tracefile coverage.info
+                                     |Lines       |Functions  |Branches    
+Filename                             |Rate     Num|Rate    Num|Rate     Num
+===========================================================================
+[/shared/home/herbert/c++/cpp-logger/]
+include/logger/exceptions.hpp        | 0.0%      6| 0.0%     2|    -      0
+include/logger/facilities.hpp        |33.3%      6|33.3%     3|    -      0
+include/logger/registry.hpp          | 5.9%     17|33.3%     3|    -      0
+include/logger/sinks.hpp             | 100%      3| 100%     3|    -      0
+src/cpp-logger.cpp                   | 100%      2| 100%     1|    -      0
+src/exceptions.cpp                   | 0.0%      6| 0.0%     3|    -      0
+src/facilities.cpp                   | 100%      3| 100%     1|    -      0
+src/file_sink.cpp                    |95.1%     61|80.0%     5|    -      0
+src/logger.cpp                       | 100%     27| 100%     9|    -      0
+src/registry.cpp                     |83.0%     47|78.6%    14|    -      0
+src/sink.cpp                         |53.1%     49|80.0%    10|    -      0
+src/stderr_sink.cpp                  | 100%      6| 100%     2|    -      0
+src/stdout_sink.cpp                  | 100%      6| 100%     2|    -      0
+src/syslog_sink.cpp                  |93.2%     44| 100%     6|    -      0
+===========================================================================
+                               Total:|75.6%    283|76.6%    64|    -      0
+```
+
+> **WARN** to use gcov and lcov, you will need to install the related packages (on Fedora `sudo dnf install lcov`)
+
+To get an html report, you can use `genhtml -o coverage-report coverage.info`. This will generate HMLT in the directory specified with the `-o`command line option.
 
 #### Manually create a logger
 
@@ -279,7 +322,6 @@ logger->info("consumer ready to handle incomming messages (status: %s)", "initia
 
 * [Project's home](https://redmine.urbix-software.fr/projects/urbix-cpp-logger)
 * [GitHub home](https://github.com/HerbertKoelman/cpp-logger)
-* [Project's doxygen]()
 
 ### misc
 
