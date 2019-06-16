@@ -7,7 +7,7 @@
 [cpp-logger](https://github.com/HerbertKoelman/cpp-logger) is a set of very simple classes that handles logging. Yes ! I know, 
 one more. And you're right.
 
-The library was first implemented for IBM's Unix: AIX. Existing libraries did not compile on AIX, so I had to write my own thing.
+The library was first implemented for IBM's Unix: AIX. Existing libraries did not compile, so I had to write my own thing.
 
 > **FYI** It's still used to log messages by programs that are in production :-)
 
@@ -29,16 +29,16 @@ To use this library:
 Install moves files into your system's default location for headers and libraries (often `/usr/local/include` and `/usr/local/lib`). You can relocate installation by setting the cmake property `CMAKE_INSTALL_PREFIX`.
 
 Here after a list of build targets usefull to mention:
-- test : run all registered units programs.
-- package: create an archive (tar.gz)
-- doxygen: create doxygen html documentation (in <build-dir>/html)
+- **test** : run all registered units programs.
+- **package**: create an archive (tar.gz)
+- **doxygen**: create doxygen html documentation (in <build-dir>/html)
 
 #### Testing
 
 Unit tests are provided in `./tests`. You can build and run them with this command `make all tests`. CTest provides full diagnostic in `<build-dir>/tests/Testing/Temporary/`. We use [GoogleTest 1.8.1](https://github.com/google/googletest). 
 The test framework is automatically downloaded and setup by the provided cmake package `cmake/GTestExtConfig.cmake`.
 
-> **FYI** unit testing can be switched of with the cmake option BUILD_TESTS (`cmake -DBUILD_TESTS=false .. ` turns things off)
+> **FYI** unit testing can be switched off by setting option BUILD_TESTS to false (`cmake -DBUILD_TESTS=false .. `)
 
 #### Documentation
 
@@ -100,8 +100,7 @@ The library has been tested on:
 ### How it's done
 
 The module is made of two distinct parts. On one side, we address the writing of log messages through the `logger::logger` interface. And 
-on the other side, we provide a set of classes and interfaces that does the actual writting of messages (`logger::sink`). Finally, a way 
-to reuse instances through factory methods (`logger::registry`).
+on the other side, we provide a set of classes and interfaces that does the actual writting of messages (`logger::sink`).
 
 Out of the box, the library comes with four `logger::sink` implementations:
 - `logger::file_sink`: write messages into a file. The following sinks are extending this class
@@ -109,7 +108,8 @@ Out of the box, the library comes with four `logger::sink` implementations:
   - `logger::stderr_sink`: send/write messages to the standard error stream (`stderr`)
 - `logger::syslog_sink`: send messages to the `syslog` facility, which is in charge of doing whatever must be done with the messages sent by your application.
 
-Factory methods/functions are in charge of creating and setting up `logger::logger` instances:
+The two parts are tied together through factory functions (`logger::registry`).These functions are in charge of creating and setting up `logger::logger` instances.
+
 ```cpp
 logger::logger_ptr logger = logger::get<logger::stdout_sink>("consumer-thread");
 
@@ -120,12 +120,7 @@ The logger factory functions are:
 - `template logger::get<>(name, args...)` 
 - `logger::get(name)`
 
-These factories know how to create a new instance and register them for reuse (using `logger::regisrty::add`). The factory
-automatically sets:
-- the program name property of the sink
-- the current logging level.
-
-> **WARN** it is possible to create loggers without using the factories, but using factories is our preferred way.
+> **WARN** it is possible to create loggers without using the factories, but factories is our preferred way.
 
 The following functions are affecting all the registered loggers.
 - `logger::set_level()`: set the current logging level of all regsitered loggers.
@@ -134,7 +129,7 @@ The following functions are affecting all the registered loggers.
 ```cpp
 logger::set_level(logger::log_level::alert); // from now on, all loggers will only display alert messages or above.
 
-log->info("Hello, world..."); // This it not displayed as log level was set to alert and above.
+log->info("Hello, world..."); // This is not displayed, as log level was set to alert and above.
 ```
  
 ### How to use it
@@ -143,11 +138,11 @@ log->info("Hello, world..."); // This it not displayed as log level was set to a
 
 Let's say you need to write messages using QNX's system logger facility. On QNX, logging is done by calling the [`slogf(...)`](http://www.qnx.com/developers/docs/6.3.0SP3/neutrino/lib_ref/s/slogf.html)
 function. This function is expecting the following parameters:
-1. *opcode*: A combination of a major and minor code. Create the opcode using the `_SLOG_SETCODE(major, minor)` macro that's defined in <sys/slog.h>. The major and minor codes are defined in <sys/slogcodes.h>.
-2. *severity*: The severity of the log message; see "Severity levels," below.
-3. *fmt*: A standard printf() string followed by printf() arguments.
+1. **opcode**: A combination of a major and minor code. Create the opcode using the `_SLOG_SETCODE(major, minor)` macro that's defined in <sys/slog.h>. The major and minor codes are defined in <sys/slogcodes.h>.
+2. **severity**: The severity of the log message; see "Severity levels," below.
+3. **fmt**: A standard printf() string followed by printf() arguments.
 
-You can extend `cpp-logger` by writing a sink that would look like this:
+All you need is to provide a sink that knows how to handle QNX logging. Your class might look like this:
 ```cpp
 class slog_sink: public logger::sink {
 public:
@@ -226,8 +221,8 @@ libraries provided. The package contains :
 
 #### Using GCOV and LCOV
 
-You can generate coverage infos by using the GCOV option. When passed to cmake, it will build the code (and the unit tests) using the `--coverage`flag. It will also add the gcov library to 
-the test programs setup.
+You can generate coverage infos by using the GCOV option. When passed to cmake, it will build the code (and the unit testing programs) 
+using the `--coverage` flag. It will also add the gcov library to the test programs setup.
 
 ```
 $ cmake -DGCOV=yes ..
@@ -235,7 +230,7 @@ $ cmake -DGCOV=yes ..
 $ make all test
 ```
 
-These commands will build and generate gcov related informations. These files are suffixed with `gcda`and `gcno` and will be used by the lcov command to report.
+This will build and generate **gcov** related information files (suffixed with `gcda`and `gcno`). These are used by the `lcov` command to create reports.
 
 ```
 $ lcov --directory CMakeFiles/cpp-logger-static.dir/src/ --capture --output-file coverage.info
@@ -256,7 +251,10 @@ Processing src/cpp-logger.cpp.gcda
 Finished .info-file creation
 ```
 
-The command `lcov --summary coverage.info` displays the coverage information. As you can see, this include the system header files. To limit the report to your code, you can remove unwanted coverage information by using the command `lcov` like this:
+The command `lcov --summary coverage.info` displays the coverage information. As you can see, this include information concerning system 
+header files. This is probably not something you want.
+
+To limit the report to your code, you can remove unwanted coverage information by using the command `lcov` like this:
 ```
 $ lcov --remove coverage.info '/usr/*' --output-file coverage.info
 Reading tracefile coverage.info
@@ -273,7 +271,7 @@ Summary coverage rate:
   branches...: no data found
 ```
 
-The above command removed everything that comes from the `/usr/*`directory. The final report is obtained with `lcov --summary coverage.info` or `lcov --list coverage.info`:
+The final report is obtained with `lcov --summary coverage.info` or `lcov --list coverage.info`:
 ```
 Reading tracefile coverage.info
                                      |Lines       |Functions  |Branches    
