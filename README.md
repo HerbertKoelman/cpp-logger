@@ -1,5 +1,7 @@
 ## cpp-logger 
 
+Hello world...
+
 [![Build Status](https://travis-ci.com/HerbertKoelman/cpp-logger.svg?branch=master)](https://travis-ci.com/HerbertKoelman/cpp-logger) [![codecov](https://codecov.io/gh/HerbertKoelman/cpp-logger/branch/master/graph/badge.svg)](https://codecov.io/gh/HerbertKoelman/cpp-logger)
 
 ### What it does
