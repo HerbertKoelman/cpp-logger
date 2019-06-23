@@ -28,12 +28,12 @@ addons:
 
 matrix:
   include:
-    - name: sonar code quality checks
+    - name: coverage jobs
       env:
         BUILD_DIRECTORY=cmake-gcov-build
         CMAKE_COMMAND_LINE_ARGS="-DGCOV=yes"
         MAKE_TARGETS="all test"
-    - name: coverage jobs
+    - name: sonar code quality checks
       env:
         BUILD_DIRECTORY=cmake-sonar-build
         CMAKE_COMMAND_LINE_ARGS="-DSONAR=yes"
@@ -41,8 +41,7 @@ matrix:
 
 script:
   - mkdir $BUILD_DIRECTORY
-  - cd $BUILD_DIRECTORY && cmake $CMAKE_COMMAND_LINE_ARGS ..
-  - make $MAKE_TARGETS
+  - cd $BUILD_DIRECTORY && cmake $CMAKE_COMMAND_LINE_ARGS .. && make $MAKE_TARGETS
 
 after_success:
   # create gcov files
