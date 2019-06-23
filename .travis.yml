@@ -25,8 +25,8 @@ addons:
 
 script:
   - mkdir cmake-build
-  - cd cmake-build && cmake -DGCOV=yes ..
-  - make all test 
+  - cd cmake-build && cmake -DSONAR=yes -DGCOV=yes ..
+  - make all test code-quality
 
 after_success:
   # create gcov files

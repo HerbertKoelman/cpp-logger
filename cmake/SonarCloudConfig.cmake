@@ -1,6 +1,7 @@
 message(STATUS "Loading SonarCloud module found here: ${CMAKE_CURRENT_LIST_DIR}")
 
-option(SONAR "Generate sonar setup" ON)
+option(SONAR "Generate sonar setup" ) # default is OFF
+
 set(SONAR_CLOUD_HOME  https://sonarcloud.io  CACHE STRING "Sonar cloud home URL(default is https://sonarcloud.io)")
 set(SONAR_PROJECT_KEY        ${PROJECT_NAME} CACHE STRING "Sonar project key property (default is ${PROJECT_NAME})")
 set(SONAR_ORGANIZATION                       CACHE STRING "Organization (default is empty)")
@@ -48,6 +49,6 @@ if ( SONAR )
   endif()
 
 else()
-  message(STATUS "SONAR setup skipped, option was FALSE")
+  message(WARNING "SONAR cloud build is turned off, use -DSONAR=yes to turn in ON")
 endif()
 
