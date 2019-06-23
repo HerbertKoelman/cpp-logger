@@ -324,6 +324,9 @@ logger->info("consumer ready to handle incomming messages (status: %s)", "initia
 
 * [Project's home](https://redmine.urbix-software.fr/projects/urbix-cpp-logger)
 * [GitHub home](https://github.com/HerbertKoelman/cpp-logger)
+* Continiuous integration is done at [Travis-CI](https://travis-ci.com/HerbertKoelman/cpp-logger)
+* Unit testing code coverage is reported by [Codecov.io](https://codecov.io/gh/HerbertKoelman/cpp-logger/)
+* Code quality checking is done at [Sonarcloud.io)(https://sonarcloud.io/dashboard?id=HerbertKoelman_cpp-logger)
 
 ### misc
 
@@ -331,4 +334,5 @@ logger->info("consumer ready to handle incomming messages (status: %s)", "initia
 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=HerbertKoelman_cpp-logger&metric=bugs)](https://sonarcloud.io/dashboard?id=HerbertKoelman_cpp-logger) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=HerbertKoelman_cpp-logger&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=HerbertKoelman_cpp-logger) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=HerbertKoelman_cpp-logger&metric=security_rating)](https://sonarcloud.io/dashboard?id=HerbertKoelman_cpp-logger) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=HerbertKoelman_cpp-logger&metric=code_smells)](https://sonarcloud.io/dashboard?id=HerbertKoelman_cpp-logger) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=HerbertKoelman_cpp-logger&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=HerbertKoelman_cpp-logger)
 
+####  Authoriship
 * **Author**: herbert koelman(herbert.koelman@me.com)
