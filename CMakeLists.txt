@@ -6,10 +6,11 @@ cmake_minimum_required(VERSION 3.11)
 
 project(
   cpp-logger
-  VERSION 2.2.5
+  VERSION 2.3.0
   DESCRIPTION "Simple C++ logger (${GIT_LOG})")
 
 option(GCOV "Activate GCOV options")
+
 if ( GCOV )
   if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     message(STATUS "Setting GCOV compiler options")
@@ -21,8 +22,16 @@ endif()
 
 #find_package(Git CONFIG)
 #find_package(Conan)
+find_package(GTestExt   PATHS cmake)
 
-# main targets --------------------------------------------------
+# This part MUST be executed before the loading of the CMake package
+set(SONAR_PROPERTIES_FILE ${CMAKE_CURRENT_BINARY_DIR}/sonar-project.properties)
+message(STATUS "Generating SONAR properties file ${SONAR_PROPERTIES_FILE}")
+configure_file(${CMAKE_CURRENT_LIST_DIR}/sonar-project.properties.in ${SONAR_PROPERTIES_FILE})
+
+find_package(SonarCloud PATHS cmake)
+
+# Versionning infos  -----------------------------------------
 #
 if( CMAKE_BUILD_TYPE MATCHES Release )
   if( GIT_LOG )
@@ -38,8 +47,8 @@ else()
   endif()
 endif()
 
-# configure_file(src/config.h.in ../include/logger/config.h)
-
+# targets --------------------------------------------------
+#
 # project's public headers
 include_directories(include src)
 
@@ -59,18 +68,6 @@ set(USED_COMPILER_FEATURES
         cxx_std_11
         )
 
-# For future use
-#include(WriteCompilerDetectionHeader)
-#write_compiler_detection_header(
-#        FILE "${CMAKE_CURRENT_BINARY_DIR}/logger_compiler_detection.h"
-#        PREFIX LOGGER
-#        COMPILERS GNU AppleClang Clang
-#        PROLOG "// Requested features: ${USED_COMPILER_FEATURES}"
-#        FEATURES
-#        ${USED_COMPILER_FEATURES}
-#        cxx_variadic_templates
-#)
-
 add_library            (cpp-logger-static STATIC ${LOGGER_SOURCE})
 target_link_libraries  (cpp-logger-static pthread)
 target_compile_features(cpp-logger-static PUBLIC ${USED_COMPILER_FEATURES})
@@ -85,7 +82,6 @@ set_target_properties  (cpp-logger-shared PROPERTIES OUTPUT_NAME logger)
 #
 # Load and compile GTest
 # Aliases: GTest::GTest, GTest::gtest_main, GMock::GMock
-find_package(GTestExt PATHS cmake)
 if (GTestExt_FOUND AND BUILD_TESTS)
   enable_testing()
   message(STATUS "Adding project's unit tests (in ./tests)...")
@@ -130,3 +126,15 @@ cpack_add_install_type(develop DESCRIPTION "includes & libs (for developpers)")
 # misc ------------------------------------------------------------
 #
 find_program(RM rm)
+
+# For future use
+#include(WriteCompilerDetectionHeader)
+#write_compiler_detection_header(
+#        FILE "${CMAKE_CURRENT_BINARY_DIR}/logger_compiler_detection.h"
+#        PREFIX LOGGER
+#        COMPILERS GNU AppleClang Clang
+#        PROLOG "// Requested features: ${USED_COMPILER_FEATURES}"
+#        FEATURES
+#        ${USED_COMPILER_FEATURES}
+#        cxx_variadic_templates
+#)

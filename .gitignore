@@ -7,6 +7,9 @@ build/**
 cmake-build*/
 delivery/**
 
+# SONAR Qube related working directories
+.scannerwork
+
 # extension
 *.swp
 *.o
