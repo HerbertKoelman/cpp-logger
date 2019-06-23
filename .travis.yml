@@ -26,10 +26,23 @@ addons:
       - doxygen
       - graphviz
 
+matrix:
+  include:
+    - name: sonar code quality checks
+      env:
+        BUILD_DIRECTORY=cmake-gcov-build
+        CMAKE_COMMAND_LINE_ARGS="-DGCOV=yes"
+        MAKE_TARGETS="all test"
+    - name: coverage jobs
+      env:
+        BUILD_DIRECTORY=cmake-sonar-build
+        CMAKE_COMMAND_LINE_ARGS="-DSONAR=yes"
+        MAKE_TARGETS="all test code-quality"
+
 script:
-  - mkdir cmake-build
-  - cd cmake-build && cmake -DSONAR=yes -DGCOV=yes ..
-  - make all test code-quality
+  - mkdir $BUILD_DIRECTORY
+  - cd $BUILD_DIRECTORY && cmake $CMAKE_COMMAND_LINE_ARGS ..
+  - make $MAKE_TARGETS
 
 after_success:
   # create gcov files
