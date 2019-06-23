@@ -117,6 +117,29 @@ TEST(sink, set_get_ecid) {
     EXPECT_EQ(sink.ecid(), "- ");
 }
 
+TEST(sink, log_level_name) {
+    class test_stdout_sink: public logger::stdout_sink{
+    public:
+        void test_log_level_name(){
+
+            EXPECT_EQ(log_level_name(logger::log_level::emerg),   "EMERG");
+            EXPECT_EQ(log_level_name(logger::log_level::alert),   "ALERT");
+            EXPECT_EQ(log_level_name(logger::log_level::err),     "ERROR");
+            EXPECT_EQ(log_level_name(logger::log_level::warning), "WARNING");
+            EXPECT_EQ(log_level_name(logger::log_level::notice),  "NOTICE");
+            EXPECT_EQ(log_level_name(logger::log_level::info),    "INFO");
+            EXPECT_EQ(log_level_name(logger::log_level::debug),   "DEBUG");
+            EXPECT_EQ(log_level_name(logger::log_level::trace),   "TRACE");
+            EXPECT_EQ(log_level_name((logger::log_level) 100),    "UNKNOWN");
+
+        }
+    };
+
+    test_stdout_sink sink;
+    sink.test_log_level_name();
+}
+
+
 /** This a sample specialized sink.
  *
  */
