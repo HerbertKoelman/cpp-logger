@@ -10,6 +10,8 @@ project(
   DESCRIPTION "Simple C++ logger (${GIT_LOG})")
 
 option(GCOV "Activate GCOV options")
+option(SONAR "Generate sonar setup" ON)
+
 if ( GCOV )
   if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     message(STATUS "Setting GCOV compiler options")
@@ -38,7 +40,8 @@ else()
   endif()
 endif()
 
-# configure_file(src/config.h.in ../include/logger/config.h)
+message(STATUS "Generating SONAR properties file")
+configure_file(sonar-project.properties.in sonar-project.properties)
 
 # project's public headers
 include_directories(include src)
