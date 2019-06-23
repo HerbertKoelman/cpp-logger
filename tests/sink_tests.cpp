@@ -103,6 +103,20 @@ TEST(sink, syslog_sink) {
     logger::logger_ptr logger_2 = logger::get<logger::syslog_sink>("syslog");
 }
 
+TEST(sink, set_get_ecid) {
+
+    logger::stdout_sink sink("stdout", "app", logger::log_level::info);
+
+    EXPECT_EQ(sink.level(), logger::log_level::info);
+    EXPECT_EQ(sink.name(), "stdout");
+
+    sink.set_ecid("a-new-ecid-value");
+    EXPECT_EQ(sink.ecid(), "[M ECID=\"a-new-ecid-value\"]");
+
+    sink.set_ecid(""); // reste ECID
+    EXPECT_EQ(sink.ecid(), "- ");
+}
+
 /** This a sample specialized sink.
  *
  */
