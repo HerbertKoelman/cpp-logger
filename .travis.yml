@@ -38,10 +38,14 @@ matrix:
         BUILD_DIRECTORY=cmake-sonar-build
         CMAKE_COMMAND_LINE_ARGS="-DSONAR=yes"
         MAKE_TARGETS="code-quality"
+    - name: default
+      env:
+        BUILD_DIRECTORY=cmake-default-build
+        CMAKE_COMMAND_LINE_ARGS="-DCMAKE_BUILD_TYPE=Release"
+        MAKE_TARGETS="all doxygen package"
 
 script:
-  - mkdir $BUILD_DIRECTORY
-  - cd $BUILD_DIRECTORY && cmake $CMAKE_COMMAND_LINE_ARGS .. && make $MAKE_TARGETS
+  - mkdir $BUILD_DIRECTORY && cd $BUILD_DIRECTORY && cmake $CMAKE_COMMAND_LINE_ARGS .. && make $MAKE_TARGETS
 
 after_success:
   # create gcov files
