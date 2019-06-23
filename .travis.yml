@@ -18,6 +18,9 @@ branches:
     - develop
 
 addons:
+  sonarcloud:
+    organization: "herbertkoelman-github"
+
   apt:
     packages:
       - doxygen
