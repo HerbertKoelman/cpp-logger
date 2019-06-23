@@ -10,7 +10,6 @@ project(
   DESCRIPTION "Simple C++ logger (${GIT_LOG})")
 
 option(GCOV "Activate GCOV options")
-option(SONAR "Generate sonar setup" ON)
 
 if ( GCOV )
   if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -23,6 +22,8 @@ endif()
 
 #find_package(Git CONFIG)
 #find_package(Conan)
+find_package(GTestExt   PATHS cmake)
+find_package(SonarCloud PATHS cmake)
 
 # main targets --------------------------------------------------
 #
@@ -39,9 +40,6 @@ else()
     add_definitions( -DCPP_LOGGER_VERSION="${PROJECT_VERSION}-SNAPSHOT")
   endif()
 endif()
-
-message(STATUS "Generating SONAR properties file")
-configure_file(sonar-project.properties.in sonar-project.properties)
 
 # project's public headers
 include_directories(include src)
@@ -62,18 +60,6 @@ set(USED_COMPILER_FEATURES
         cxx_std_11
         )
 
-# For future use
-#include(WriteCompilerDetectionHeader)
-#write_compiler_detection_header(
-#        FILE "${CMAKE_CURRENT_BINARY_DIR}/logger_compiler_detection.h"
-#        PREFIX LOGGER
-#        COMPILERS GNU AppleClang Clang
-#        PROLOG "// Requested features: ${USED_COMPILER_FEATURES}"
-#        FEATURES
-#        ${USED_COMPILER_FEATURES}
-#        cxx_variadic_templates
-#)
-
 add_library            (cpp-logger-static STATIC ${LOGGER_SOURCE})
 target_link_libraries  (cpp-logger-static pthread)
 target_compile_features(cpp-logger-static PUBLIC ${USED_COMPILER_FEATURES})
@@ -88,7 +74,6 @@ set_target_properties  (cpp-logger-shared PROPERTIES OUTPUT_NAME logger)
 #
 # Load and compile GTest
 # Aliases: GTest::GTest, GTest::gtest_main, GMock::GMock
-find_package(GTestExt PATHS cmake)
 if (GTestExt_FOUND AND BUILD_TESTS)
   enable_testing()
   message(STATUS "Adding project's unit tests (in ./tests)...")
@@ -133,3 +118,15 @@ cpack_add_install_type(develop DESCRIPTION "includes & libs (for developpers)")
 # misc ------------------------------------------------------------
 #
 find_program(RM rm)
+
+# For future use
+#include(WriteCompilerDetectionHeader)
+#write_compiler_detection_header(
+#        FILE "${CMAKE_CURRENT_BINARY_DIR}/logger_compiler_detection.h"
+#        PREFIX LOGGER
+#        COMPILERS GNU AppleClang Clang
+#        PROLOG "// Requested features: ${USED_COMPILER_FEATURES}"
+#        FEATURES
+#        ${USED_COMPILER_FEATURES}
+#        cxx_variadic_templates
+#)
