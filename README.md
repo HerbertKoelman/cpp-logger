@@ -326,7 +326,7 @@ logger->info("consumer ready to handle incomming messages (status: %s)", "initia
 * [GitHub home](https://github.com/HerbertKoelman/cpp-logger)
 * Continiuous integration is done at [Travis-CI](https://travis-ci.com/HerbertKoelman/cpp-logger)
 * Unit testing code coverage is reported by [Codecov.io](https://codecov.io/gh/HerbertKoelman/cpp-logger/)
-* Code quality checking is done at [Sonarcloud.io)(https://sonarcloud.io/dashboard?id=HerbertKoelman_cpp-logger)
+* Code quality checking is done at [Sonarcloud.io](https://sonarcloud.io/dashboard?id=HerbertKoelman_cpp-logger)
 
 ### misc
 
