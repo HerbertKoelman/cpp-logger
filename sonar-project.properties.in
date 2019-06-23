@@ -1,0 +1,40 @@
+# Sonar cloud configuration fo @PROJECT_NAME@ - @PROJECT_VERSION@
+#
+# Description: @PROJECT_DESCRIPTION@
+
+# Add more detail to both client and server-side analysis logs.
+sonar.verbose=false
+
+#-----------------------------------------------------------------------------
+#
+# Sonar cloud (sonarcloud.io) related settings.
+#
+#-----------------------------------------------------------------------------
+
+# The project key that is unique for each project.
+sonar.projectKey=HerbertKoelman_cpp-logger
+sonar.organization=herbertkoelman-github
+sonar.host.url=https://sonarcloud.io
+
+# Sonar cloud access token.
+sonar.login=2b1f6109db48c393e3c42b58e47d60cb1c2e59b0
+
+# wrapper MUSt use this directory to produce it's data
+sonar.cfamily.build-wrapper-output=@CMAKE_CURRENT_BINARY_DIR@/bw-output
+
+#-----------------------------------------------------------------------------
+#
+# Project related properties.
+#
+#-----------------------------------------------------------------------------
+
+# Name of the project that will be displayed on the web interface.
+sonar.projectName=@PROJECT_NAME@
+sonar.projectVersion=@PROJECT_VERSION@
+sonar.links.homepage==https://github.com/HerbertKoelman/cpp-logger
+
+# Base directory
+sonar.projectBaseDir=@CMAKE_SOURCE_DIR@
+
+# directories that contain code to analyze
+sonar.sources=src,include
