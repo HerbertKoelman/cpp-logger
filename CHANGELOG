@@ -1,4 +1,5 @@
 2.3.0
+- fixed a bug in ./tests/CMakeLists.txt that prevented exception_tests to be run (#121)
 - activate soanrcloud checks (#120)
 2.2.4
 - explain how GCOV and LCOV can be used to get coverage information (#116)
