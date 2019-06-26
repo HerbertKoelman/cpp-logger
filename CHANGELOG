@@ -1,4 +1,5 @@
 2.3.0
+- Remove extern "C" (#127)
 - Remove commented out code (#126)
 - make logger::logger rule zero compliant (#123)
 - write more logger::sink tests (#124)
