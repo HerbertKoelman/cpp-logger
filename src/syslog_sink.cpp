@@ -59,10 +59,6 @@ namespace logger {
         // intentional
     }
 
-//    syslog_sink::~syslog_sink() {
-//        // intentional
-//    };
-
     void syslog_sink::write(log_level level, const char *fmt, ...) {
 #ifdef DEBUG
         printf("DEBUG %s _level/level: %d/%d, pattern: [%s] (%s,%d)\n", __FUNCTION__, _level, level, _pattern.c_str(), __FILE__,__LINE__);

@@ -14,15 +14,8 @@ namespace logger {
     // constructors & destructors -------------------------------------
     //
 
-    logger::logger(const std::string &name, sink *sink) : _sink(NULL), _name (name) {
-        _sink = sink;
-    }
-
-    logger::~logger() {
-        // printf("DEBUG %s destructor (%s,%d).\n", __FUNCTION__, __FILE__, __LINE__);
-        if (_sink != NULL) {
-            delete _sink;
-        }
+    logger::logger(const std::string &name, sink *sink) : _name (name) {
+        _sink.reset(sink);
     }
 
     std::string logger::ecid() {
