@@ -1,4 +1,5 @@
 2.3.0
+- make logger::logger rule zero compliant (#123)
 - write more logger::sink tests (#124)
 - fixed a bug in ./tests/CMakeLists.txt that prevented exception_tests to be run (#121)
 - activate soanrcloud checks (#120)

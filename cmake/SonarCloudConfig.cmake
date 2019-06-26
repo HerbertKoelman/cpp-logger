@@ -48,7 +48,7 @@ if ( SONAR )
     message(SEND_ERROR "Failed to find the program [sonar_scanner], make sure sonar tools are installed.")
   endif()
 
-else()
-  message(WARNING "SONAR cloud build is turned off, use -DSONAR=yes to turn in ON")
+#else()
+#  message(WARNING "SONAR cloud build is turned off, use -DSONAR=yes to turn in ON")
 endif()
 
