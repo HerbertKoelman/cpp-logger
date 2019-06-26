@@ -17,7 +17,7 @@ namespace logger {
 
  /** @return the library's current version
   */
-  extern "C" const char *cpp_logger_version();
+  const char *cpp_logger_version();
 
  /** @} */
   }

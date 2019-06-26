@@ -13,7 +13,7 @@
 
 namespace logger {
 
-    extern "C" const char *cpp_logger_version(){
+    const char *cpp_logger_version(){
 
     #ifndef CPP_LOGGER_VERSION
       return "missing CPP_LOGGER_VERSION define. Re-run configure" ;
