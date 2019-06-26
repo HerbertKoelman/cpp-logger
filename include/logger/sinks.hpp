@@ -170,8 +170,6 @@ namespace logger {
          */
         explicit file_sink(FILE *file);
 
-        // virtual ~file_sink() ;
-
         /** \copydoc sink::write()
          *
          * This sink writes messages in FILE.
@@ -293,7 +291,7 @@ namespace logger {
          */
         explicit syslog_sink();
 
-        ~syslog_sink() = default ; //override ;
+        ~syslog_sink() = default ;
 
         /** \copydoc  sink::write
          *

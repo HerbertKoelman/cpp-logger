@@ -99,7 +99,9 @@ namespace logger {
 
     registry::registry() noexcept : _level(log_levels::info), _pname("program") {
         // intentional...
-        //std::cout << "DEBUG Create regsistry instance..." << std::endl;
+#       ifdef DEBUG
+        std::cout << "DEBUG Create regsistry instance..." << std::endl;
+#       endif
     }
 
 } // namespace logger
