@@ -22,5 +22,5 @@ target_link_libraries(logger_performance_tests GTest::GTest cpp-logger-static GT
 
 add_test(NAME logger_tests   COMMAND logger_tests)
 add_test(NAME facility_tests COMMAND facility_tests)
-add_test(NAME exception_tests COMMAND facility_tests)
-add_test(NAME sink_tests COMMAND sink_tests)
+add_test(NAME exception_tests COMMAND exception_tests)
+add_test(NAME sink_tests      COMMAND sink_tests)

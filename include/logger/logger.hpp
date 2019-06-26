@@ -190,13 +190,9 @@ namespace logger {
        */
       logger( const std::string &name, sink *sink);
 
-      /** dispose of logger's ressources
-       */
-      virtual ~logger();
-
     private:
 
-      sink        *_sink; //!< logger delegate to a sink the actual magic to write log messages
+      std::unique_ptr<sink>        _sink; //!< logger delegate to a sink the actual magic to write log messages
 
       std::string _name; //!< logger's name
     }; // logger
