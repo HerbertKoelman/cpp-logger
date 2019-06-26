@@ -65,8 +65,6 @@ namespace logger {
                 // intentional...
             }
 
-            // virtual ~facility() ;
-
         private:
             const facility_code _code;
             const char         *_keyword;

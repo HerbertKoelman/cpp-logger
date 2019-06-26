@@ -147,7 +147,9 @@ namespace logger {
         template<class T, typename... Args> logger_ptr get( const std::string &name, const Args&... args){
           std::lock_guard<std::mutex> lck(_mutex);
 
-          // printf("DEBUG logger::registry.get(%s, %d);\n", name.c_str(), _level);
+#         ifdef DEBUG
+          printf("DEBUG logger::registry.get(%s, %d);\n", name.c_str(), _level);
+#         endif
 
           logger_ptr logger;
           auto search = _loggers.find(name);
@@ -178,7 +180,6 @@ namespace logger {
         };
 
         ~registry() = default;
-        // ~registry() { std::cout << "DEBUG delete registry..." << std::endl ; };
 
       private:
 

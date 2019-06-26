@@ -50,11 +50,6 @@ namespace logger {
         _lag = buffer;
     };
 
-// TODO remove this
-//    file_sink::~file_sink() {
-//        //fflush(_file_descriptor);
-//    };
-
     void file_sink::set_name(const std::string &name) {
         sink::set_name(name);
 
@@ -85,7 +80,7 @@ namespace logger {
 
             // new character vector
             // vsnprintf returns the needed characters to store the output
-            // not possible with XL C/C++ std::vector<char> buf(1+std::vsnprintf(NULL, 0, fmt, args1));
+            //NOSONAR not possible with XL C/C++ std::vector<char> buf(1+std::vsnprintf(NULL, 0, fmt, args1));
 
             // this call only returns the actual number of bytes needed to store the message.
             // It doesn't count the needed end-of-string
