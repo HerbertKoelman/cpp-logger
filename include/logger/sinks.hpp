@@ -118,7 +118,7 @@ namespace logger {
           *
           * @param name subset name.
           */
-         virtual void set_name (const std::string &name);
+         void set_name (const std::string &name);
 
     private:
 #if __cplusplus >= 201703L
@@ -175,7 +175,7 @@ namespace logger {
          * This sink writes messages in FILE.
          *
          */
-        void write(log_level level, const char *fmt, ...) override ;
+        void write(log_level level, const char *fmt, ...) ;
 
     protected:
 
@@ -183,7 +183,7 @@ namespace logger {
          *
          * @param name sink name
          */
-        void set_name(const std::string &name) override ;
+        void set_name(const std::string &name)  ;
 
         /** fill the buffer with the current date and time information
          */
@@ -301,7 +301,7 @@ namespace logger {
 
     protected:
 
-        void set_name(const std::string &name) override ;
+        void set_name(const std::string &name) ;
 
     private:
         std::string _pattern; //!< message pattern (layout)
