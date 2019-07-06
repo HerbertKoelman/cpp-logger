@@ -102,7 +102,7 @@ namespace logger {
          * @param pname program name
          * @param level initial log level (defaults to logger::log_level::info)
          */
-        explicit sink(const std::string &name = "default", const std::string &pname = "prog", log_level level = log_levels::info);
+        explicit sink(const std::string &name, const std::string &pname = "prog", log_level level = log_levels::info);
 
         /** @return display name for a given log level
          */
@@ -118,7 +118,7 @@ namespace logger {
           *
           * @param name subset name.
           */
-         void set_name (const std::string &name);
+         virtual void set_name (const std::string &name);
 
     private:
 #if __cplusplus >= 201703L
@@ -175,7 +175,7 @@ namespace logger {
          * This sink writes messages in FILE.
          *
          */
-        void write(log_level level, const char *fmt, ...) ;
+        void write(log_level level, const char *fmt, ...) override ;
 
     protected:
 
@@ -183,7 +183,7 @@ namespace logger {
          *
          * @param name sink name
          */
-        void set_name(const std::string &name)  ;
+        void set_name(const std::string &name) override ;
 
         /** fill the buffer with the current date and time information
          */
@@ -195,7 +195,7 @@ namespace logger {
         pid_t             _pid;      //!< process ID
         std::string       _lag;      //!< date time lag (i.e. +02:00)
         std::string       _hostname; //!< hostname (this will be displayed by log messages)
-        std::string   _pattern; //!< message pattern (layout)
+        std::string       _pattern;  //!< message pattern (layout)
     };
 
     /** stdout sink.
@@ -301,7 +301,7 @@ namespace logger {
 
     protected:
 
-        void set_name(const std::string &name) ;
+        void set_name(const std::string &name) override ;
 
     private:
         std::string _pattern; //!< message pattern (layout)
