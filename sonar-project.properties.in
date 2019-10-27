@@ -21,6 +21,7 @@ sonar.login=2b1f6109db48c393e3c42b58e47d60cb1c2e59b0
 
 # wrapper MUSt use this directory to produce it's data
 sonar.cfamily.build-wrapper-output=@CMAKE_CURRENT_BINARY_DIR@/bw-output
+# sonar.cfamily.gcov.reportsPath=@CMAKE_CURRENT_BINARY_DIR@
 
 #-----------------------------------------------------------------------------
 #
@@ -38,3 +39,4 @@ sonar.projectBaseDir=@CMAKE_SOURCE_DIR@
 
 # directories that contain code to analyze
 sonar.sources=src,include
+sonar.tests=tests
