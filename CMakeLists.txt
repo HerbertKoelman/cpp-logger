@@ -23,13 +23,6 @@ endif()
 find_package(Coverage PATHS cmake)
 find_package(GTestExt PATHS cmake)
 
-# This part MUST be executed before the loading of the CMake package
-set(SONAR_PROPERTIES_FILE ${CMAKE_CURRENT_BINARY_DIR}/sonar-project.properties)
-message(STATUS "Generating SONAR properties file ${SONAR_PROPERTIES_FILE}")
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/sonar-project.properties.in ${SONAR_PROPERTIES_FILE})
-
-find_package(SonarCloud PATHS cmake)
-
 # Versionning infos  -----------------------------------------
 #
 if( CMAKE_BUILD_TYPE MATCHES Release )
@@ -48,6 +41,13 @@ endif()
 
 message(STATUS "Building ${PROJECT_NAME} version ${CPP_LOGGER_VERSION}")
 add_definitions( -DCPP_LOGGER_VERSION="${CPP_LOGGER_VERSION}")
+
+# This part MUST be executed before the loading of the CMake package
+set(SONAR_PROPERTIES_FILE ${CMAKE_CURRENT_BINARY_DIR}/sonar-project.properties)
+message(STATUS "Generating SONAR properties file ${SONAR_PROPERTIES_FILE}")
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/sonar-project.properties.in ${SONAR_PROPERTIES_FILE})
+
+find_package(SonarCloud PATHS cmake)
 
 # targets --------------------------------------------------
 #
