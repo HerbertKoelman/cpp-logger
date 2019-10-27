@@ -31,7 +31,7 @@ sonar.cfamily.build-wrapper-output=@CMAKE_CURRENT_BINARY_DIR@/bw-output
 
 # Name of the project that will be displayed on the web interface.
 sonar.projectName=@PROJECT_NAME@
-sonar.projectVersion=@PROJECT_VERSION@
+sonar.projectVersion=@CPP_LOGGER_VERSION@
 sonar.links.homepage==https://github.com/HerbertKoelman/cpp-logger
 
 # Base directory
