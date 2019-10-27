@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.11)
 
 project(
   cpp-logger
-  VERSION 2.2.7
+  VERSION 2.2.8
   DESCRIPTION "Simple C++ logger")
 
 option(GCOV "Activate GCOV options")
