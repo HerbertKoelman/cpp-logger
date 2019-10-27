@@ -1,4 +1,4 @@
-# Sonar cloud configuration fo @PROJECT_NAME@ - @PROJECT_VERSION@
+# Sonar cloud configuration fo @PROJECT_NAME@ - @CPP_LOGGER_VERSION@
 #
 # Description: @PROJECT_DESCRIPTION@
 
@@ -21,6 +21,7 @@ sonar.login=2b1f6109db48c393e3c42b58e47d60cb1c2e59b0
 
 # wrapper MUSt use this directory to produce it's data
 sonar.cfamily.build-wrapper-output=@CMAKE_CURRENT_BINARY_DIR@/bw-output
+sonar.cfamily.gcov.reportsPath=@CMAKE_CURRENT_BINARY_DIR@
 
 #-----------------------------------------------------------------------------
 #
@@ -30,7 +31,7 @@ sonar.cfamily.build-wrapper-output=@CMAKE_CURRENT_BINARY_DIR@/bw-output
 
 # Name of the project that will be displayed on the web interface.
 sonar.projectName=@PROJECT_NAME@
-sonar.projectVersion=@PROJECT_VERSION@
+sonar.projectVersion=@CPP_LOGGER_VERSION@
 sonar.links.homepage==https://github.com/HerbertKoelman/cpp-logger
 
 # Base directory
@@ -38,3 +39,4 @@ sonar.projectBaseDir=@CMAKE_SOURCE_DIR@
 
 # directories that contain code to analyze
 sonar.sources=src,include
+sonar.tests=tests

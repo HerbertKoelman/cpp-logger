@@ -22,7 +22,7 @@ namespace logger {
     syslog_sink::syslog_sink(const std::string &name, const std::string &pname, log_level level, const syslog::facility &facility, int options):
             sink(name, pname, level) {
 
-        try {
+//        try {
 #ifdef DEBUG
             printf("DEBUG %s name: %s, pname: %s, level: %d, facility: %d, options: %d\n", __FUNCTION__,
                 name.c_str(),
@@ -49,9 +49,9 @@ namespace logger {
 
             openlog(program_name().c_str(), options, (int)facility.code());
 
-        } catch ( std::exception &err ){
-            throw logger_exception(err.what());
-        }
+ //       } catch ( std::exception &err ){
+ //           throw logger_exception(err.what());
+ //       }
     };
 
     syslog_sink::syslog_sink(const std::string &name, const std::string &pname, log_level level) :

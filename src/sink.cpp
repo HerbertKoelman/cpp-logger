@@ -13,7 +13,6 @@ namespace logger {
     // abstract sink class -------------------
     //
     sink::sink(const std::string &name, const std::string &pname, log_level level) :
-    // init class data
             _name(name),
             _pname(pname),
             _level(level){

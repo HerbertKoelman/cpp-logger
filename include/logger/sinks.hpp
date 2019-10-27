@@ -102,7 +102,7 @@ namespace logger {
          * @param pname program name
          * @param level initial log level (defaults to logger::log_level::info)
          */
-        explicit sink(const std::string &name = "default", const std::string &pname = "prog", log_level level = log_levels::info);
+        explicit sink(const std::string &name, const std::string &pname = "prog", log_level level = log_levels::info);
 
         /** @return display name for a given log level
          */
@@ -128,13 +128,13 @@ namespace logger {
 #endif
 
         // when _ecid is accessed, we need to do more than just set/get it's value. Therefore, we cannot use std::atomic
-        std::string   _ecid;   //!< execution control ID. Helps to track everything that was logged by one business operation
-
-        std::atomic<log_level>     _level;  //!< current logging level
+        std::string       _ecid;   //!< execution control ID. Helps to track everything that was logged by one business operation
 
         // these are read-only, we don't need to handle concurrency
-        std::string   _name;   //!< logging domain name (as for now, this is equal to the logger name)
-        std::string   _pname;  //!< program name
+        std::string       _name;   //!< logging domain name (as for now, this is equal to the logger name)
+        std::string       _pname;  //!< program name
+
+        std::atomic<log_level>     _level;  //!< current logging level
 
     }; // sink
 
@@ -195,7 +195,7 @@ namespace logger {
         pid_t             _pid;      //!< process ID
         std::string       _lag;      //!< date time lag (i.e. +02:00)
         std::string       _hostname; //!< hostname (this will be displayed by log messages)
-        std::string   _pattern; //!< message pattern (layout)
+        std::string       _pattern;  //!< message pattern (layout)
     };
 
     /** stdout sink.
