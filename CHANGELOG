@@ -1,4 +1,4 @@
-next-sprint:
+2.2.7:
 - report covergae on sonarcloud (#203)
 - fixed some code smells (#128)
 - fixed bugs: #129, #130, #31, #134, #135
