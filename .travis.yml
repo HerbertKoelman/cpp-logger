@@ -11,6 +11,11 @@ compiler: gcc
 env:
   CODECOV_TOKEN="6fa05a9c-1a01-4123-b726-d493275017cd"
 
+# Travis CI uses shallow clone to speed up build times, but a truncated SCM history may cause issues
+# when SonarCloud computes blame data.
+git:
+  depth: false
+
 # Run travis on these branches only...
 branches:
   only:
