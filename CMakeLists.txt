@@ -6,8 +6,8 @@ cmake_minimum_required(VERSION 3.11)
 
 project(
   cpp-logger
-  VERSION 2.2.6
-  DESCRIPTION "Simple C++ logger (${GIT_LOG})")
+  VERSION 2.2.7
+  DESCRIPTION "Simple C++ logger")
 
 option(GCOV "Activate GCOV options")
 
@@ -35,17 +35,20 @@ find_package(SonarCloud PATHS cmake)
 #
 if( CMAKE_BUILD_TYPE MATCHES Release )
   if( GIT_LOG )
-    add_definitions( -DCPP_LOGGER_VERSION="${PROJECT_VERSION} - ${GIT_LOG}")
+    set(CPP_LOGGER_VERSION "${PROJECT_VERSION} - ${GIT_LOG}")
   else()
-    add_definitions( -DCPP_LOGGER_VERSION="${PROJECT_VERSION}")
+    set(CPP_LOGGER_VERSION "${PROJECT_VERSION}")
   endif()
 else()
   if( GIT_LOG )
-    add_definitions( -DCPP_LOGGER_VERSION="${PROJECT_VERSION}-${GIT_LOG}-SNAPSHOT")
+    set(CPP_LOGGER_VERSION "${PROJECT_VERSION}-${GIT_LOG}-SNAPSHOT")
   else()
-    add_definitions( -DCPP_LOGGER_VERSION="${PROJECT_VERSION}-SNAPSHOT")
+    set(CPP_LOGGER_VERSION "${PROJECT_VERSION}-SNAPSHOT")
   endif()
 endif()
+
+message(STATUS "Building ${PROJECT_NAME} version ${CPP_LOGGER_VERSION}")
+add_definitions( -DCPP_LOGGER_VERSION="${CPP_LOGGER_VERSION}")
 
 # targets --------------------------------------------------
 #
@@ -92,9 +95,10 @@ endif()
 #
 find_package(Doxygen REQUIRED dot OPTIONAL_COMPONENTS mscgen dia)
 if (Doxygen_FOUND)
+  set(DOXYGEN_PROJECT_NUMBER ${CPP_LOGGER_VERSION})
   set(DOXYGEN_EXAMPLE_PATH tests)
   set(DOXYGEN_EXTRACT_ALL yes)
-  set(DOXYGEN_PROJECT_BRIEF ${PROJECT_DESCRUPTION})
+  set(DOXYGEN_PROJECT_BRIEF ${PROJECT_DESCRIPTION})
   set(DOXYGEN_USE_MDFILE_AS_MAINPAGE "${CMAKE_SOURCE_DIR}/README.md")
   doxygen_add_docs(doxygen README.md src include COMMENT "generate on-line documentation")
 endif()

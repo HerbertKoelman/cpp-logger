@@ -34,8 +34,7 @@ namespace logger {
     constexpr short MAXECIDLEN   = 64;//!< execution ID maximum size/length
     constexpr char const *LOGGER_LOG_PATTERN = "<%d>1 %s %s %s.%d.%d - %-16s";
 
-    const long HOST_NAME_MAX = sysconf(_SC_HOST_NAME_MAX); //!< hostname max size/length
-    //if (host_name_max <= 0) host_name_max = _POSIX_HOST_NAME_MAX;
+    const     long HOST_NAME_MAX = sysconf(_SC_HOST_NAME_MAX); //!< hostname max size/length
 
     class logger;
 
