@@ -1,3 +1,7 @@
+next-sprint:
+- report covergae on sonarcloud (#203)
+- fixed some code smells (#128)
+- fixed bugs: #129, #130, #31, #134, #135
 2.2.6
 - Remove extern "C" (#127)
 - Remove commented out code (#126)
