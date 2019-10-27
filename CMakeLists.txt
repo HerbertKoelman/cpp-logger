@@ -20,9 +20,8 @@ if ( GCOV )
   endif()
 endif()
 
-#find_package(Git CONFIG)
-#find_package(Conan)
-find_package(GTestExt   PATHS cmake)
+find_package(Coverage PATHS cmake)
+find_package(GTestExt PATHS cmake)
 
 # This part MUST be executed before the loading of the CMake package
 set(SONAR_PROPERTIES_FILE ${CMAKE_CURRENT_BINARY_DIR}/sonar-project.properties)
