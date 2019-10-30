@@ -1,6 +1,7 @@
 ## cpp-logger 
 
-[![Build Status](https://travis-ci.com/HerbertKoelman/cpp-logger.svg?branch=master)](https://travis-ci.com/HerbertKoelman/cpp-logger)  [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=HerbertKoelman_cpp-logger&metric=alert_status)](https://sonarcloud.io/dashboard?id=HerbertKoelman_cpp-logger)
+[![Build Status](https://travis-ci.com/HerbertKoelman/cpp-logger.svg?branch=master)](https://travis-ci.com/HerbertKoelman/cpp-logger) 
+ [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=HerbertKoelman_cpp-logger&metric=alert_status)](https://sonarcloud.io/dashboard?id=HerbertKoelman_cpp-logger) [![Coverage](https://sonarcloud.io/api/project_badges/measure?branch=develop&project=HerbertKoelman_cpp-logger&metric=coverage)](https://sonarcloud.io/dashboard?id=HerbertKoelman_cpp-logger&branch=master)
  [![codecov](https://codecov.io/gh/HerbertKoelman/cpp-logger/branch/master/graph/badge.svg)](https://codecov.io/gh/HerbertKoelman/cpp-logger)
 
 ### What it does
@@ -329,9 +330,12 @@ logger->info("consumer ready to handle incomming messages (status: %s)", "initia
 
 ### misc
 
-#### Code quality reporting
+#### Code quality reporting on branch **develop**
 
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=HerbertKoelman_cpp-logger&metric=bugs)](https://sonarcloud.io/dashboard?id=HerbertKoelman_cpp-logger) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=HerbertKoelman_cpp-logger&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=HerbertKoelman_cpp-logger) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=HerbertKoelman_cpp-logger&metric=security_rating)](https://sonarcloud.io/dashboard?id=HerbertKoelman_cpp-logger) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=HerbertKoelman_cpp-logger&metric=code_smells)](https://sonarcloud.io/dashboard?id=HerbertKoelman_cpp-logger) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=HerbertKoelman_cpp-logger&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=HerbertKoelman_cpp-logger)
+[![Develop Build Status](https://travis-ci.com/HerbertKoelman/cpp-logger.svg?branch=develop)](https://travis-ci.com/HerbertKoelman/cpp-logger) 
+ [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?branch=develop&project=HerbertKoelman_cpp-logger&metric=alert_status)](https://sonarcloud.io/dashboard?id=HerbertKoelman_cpp-logger&branch=develop)
+  [![Develop Coverage](https://sonarcloud.io/api/project_badges/measure?branch=develop&project=HerbertKoelman_cpp-logger&metric=coverage)](https://sonarcloud.io/dashboard?id=HerbertKoelman_cpp-logger&branch=develop)
+  [![Develop codecov](https://codecov.io/gh/HerbertKoelman/cpp-logger/branch/develop/graph/badge.svg)](https://codecov.io/gh/HerbertKoelman/cpp-logger)
 
 ####  Authoriship
 * **Author**: herbert koelman(herbert.koelman@me.com)
